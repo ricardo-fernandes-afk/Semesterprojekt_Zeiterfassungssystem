@@ -1,0 +1,15 @@
+Wichtige Git-Befehle, die du nun nutzen kannst:
+
+git init: Initialisiert ein neues Git-Repository.
+git clone: Klont ein bestehendes GitHub-Repository auf deinen Laptop.
+git add: Fügt Änderungen zur Staging Area hinzu.
+git commit: Speichert Änderungen lokal als Commit.
+git push: Überträgt Änderungen ins Remote-Repository (GitHub).
+git pull: Holt die neuesten Änderungen von GitHub.
+git status: Zeigt den aktuellen Status der Arbeitskopie an (was geändert wurde, was noch nicht committed ist).
+git branch und git checkout: Erstellen und Wechseln von Branches.
+git switch branchname: Zu einem bestehenden Branch Wechseln
+git switch -c neuerbranchname: Neuen Branch erstellen und wechseln
+
+Best Practices für Branches:
+- Verwende immer einen branch für jede neue Funktion oder Feature.
