@@ -1,16 +1,9 @@
-import psycopg2
-from db_config import DB_CONFIG
+from db_connection import create_connection
+from db_config import DB_CONFIG_STANDARD
 
 def create_database():
-    try:
-        # Verbindung zur Standard-Datenbank 'postgres' herstellen
-        connection = psycopg2.connect(
-            user=DB_CONFIG['user'],
-            password=DB_CONFIG['password'],
-            host=DB_CONFIG['host'],
-            port=DB_CONFIG['port'],
-            database='postgres' # Standard-Datenbank verwenden
-        )
+    connection = create_connection(DB_CONFIG_STANDARD)
+    if connection:
         connection.autocommit = True    # Automatische Commit-Option aktivieren
         cursor = connection.cursor()
         
