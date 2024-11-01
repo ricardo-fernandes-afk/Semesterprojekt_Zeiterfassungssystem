@@ -15,8 +15,5 @@ def create_database():
         cursor.close()
         connection.close()
         
-    except (Exception, psycopg2.Error) as error:
-        print("Fehler bei der Erstellung der Datenbank:", error)
-        
 if __name__ == "__main__":
     create_database()
