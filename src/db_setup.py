@@ -1,5 +1,4 @@
 from db_connection import create_connection
-from db_config import DB_CONFIG_ARC
 
 def setup_database():
     connection = create_connection()

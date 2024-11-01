@@ -1,8 +1,7 @@
 from db_connection import create_connection
-from db_config import DB_CONFIG_STANDARD
 
 def create_database():
-    connection = create_connection(DB_CONFIG_STANDARD)
+    connection = create_connection()
     if connection:
         connection.autocommit = True    # Automatische Commit-Option aktivieren
         cursor = connection.cursor()
