@@ -1,6 +1,6 @@
 import customtkinter as ctk
 from tkinter import messagebox
-from db_connection import create_connection
+from db.db_connection import create_connection
 
 # Hauptfenster für das Login
 ctk.set_appearance_mode("system")
