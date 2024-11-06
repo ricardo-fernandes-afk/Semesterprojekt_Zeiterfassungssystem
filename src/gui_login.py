@@ -1,39 +1,19 @@
 import customtkinter as ctk
 from tkinter import messagebox
-from db.db_connection import create_connection
+from db_connection import create_connection
+from gui_admin import create_admin_layout
+from gui_users import create_users_layout
 
 # Hauptfenster für das Login
 ctk.set_appearance_mode("system")
 ctk.set_default_color_theme("blue")
 
 root = ctk.CTk()
-root.geometry("400x300")
+root.geometry("600x400")
 root.title("Login mit CustomTkinter")
 
-def open_user_interface(username):
-    # Fenster für den Benutzer (User)
-    user_window = ctk.CTkToplevel()
-    user_window.title("User Interface")
-    user_window.geometry("400x300")
-    
-    welcome_text = f"Willkommen, {username}!"
-    ctk.CTkLabel(user_window, text = welcome_text).pack(pady=20)
-    # Weitere Funktionen wie das Eintragen von Stunden können hier hinzugefügt werden
-    
-    user_window.mainloop()  # Startet den Loop für das neue Fenster
-    
-def open_admin_interface(username):
-    # Fenster für den Admin
-    admin_window = ctk.CTkToplevel()
-    admin_window.title("Admin Interface")
-    admin_window.geometry("400x300")
-    
-    welcome_text = f"Willkommen, Admin {username}!"
-    ctk.CTkLabel(admin_window, text = welcome_text).pack(pady=20)
-    # Weitere Funktionen wie das Hinzufügen von Projekten oder Benutzern können hier hinzugefügt werden
-    
-    admin_window.mainloop()  # Startet den Loop für das neue Fenster
-    
+
+
 def login():
     username = username_entry.get()
     password = password_entry.get()
@@ -50,9 +30,9 @@ def login():
             root.destroy()
             
             if role == "user":
-                open_user_interface(username)
+                create_users_layout(username)
             elif role == "admin":
-                open_admin_interface(username)
+                create_admin_layout(username)
             else:
                 messagebox.showerror("Fehler", "Unbekannte Benutzerrolle")
         else:
