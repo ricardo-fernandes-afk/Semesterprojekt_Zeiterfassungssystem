@@ -1,4 +1,5 @@
 from db_connection import create_connection
+from feature_insert_sia_phases import insert_sia_phases
 
 def setup_database():
     connection = create_connection()
@@ -38,10 +39,11 @@ def setup_database():
         cursor.execute('''
                     CREATE TABLE IF NOT EXISTS sia_phases (
                         phase_id SERIAL PRIMARY KEY,
-                        phase_name VARCHAR(100) NOT NULL,
-                        description TEXT
+                        phase_name VARCHAR(100) NOT NULL
             );
         ''')
+        
+        insert_sia_phases(cursor)
 
         # Tabelle 'time_entries' erstellen, um Arbeitszeiteinträge zu speichern
         cursor.execute('''
