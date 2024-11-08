@@ -45,6 +45,9 @@ class ProjectFrame(ctk.CTkFrame):
         add_project_button.pack(pady=10)
         
     def load_projects(self):
+        for item in self.project_treeview.get_children():
+            self.project_treeview.delete(item)
+            
         connection = create_connection()
         if connection:
             cursor = connection.cursor()
@@ -58,7 +61,8 @@ class ProjectFrame(ctk.CTkFrame):
                 messagebox.showerror("Fehler", f"Fehler beim Laden der Projekte {e}")
                 
             finally:
+                cursor.close()
                 connection.close()
         
     def open_add_project_window(self):
-        add_project(self.master)
+        add_project(self.master, self.load_projects)

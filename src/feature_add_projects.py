@@ -3,7 +3,7 @@ from tkinter import messagebox
 from gui_appearance_color import appearance_color
 from db_connection import create_connection
 
-def add_project(admin_window):
+def add_project(admin_window, refresh_callback):
     appearance_color()
     
     # Neues Fenster für die Projekterstellung
@@ -41,6 +41,7 @@ def add_project(admin_window):
                     cursor.execute("INSERT INTO projects (project_id, project_name, description) VALUES (%s, %s, %s)", (project_id, project_name, description))
                     connection.commit()
                     messagebox.showinfo("Projekt erstellt", "Das Projekt wurde erfolgreich erstellt.")
+                    refresh_callback()
                     project_window.destroy() # Fenster schließen, wenn das Projekt erfolgreich hinzugefügt wurde
                 except:
                     messagebox.showerror("Fehler", "Ein Fehler ist aufgetreten. Bitte überprüfen!")
