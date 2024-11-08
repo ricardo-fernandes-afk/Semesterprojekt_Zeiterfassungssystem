@@ -1,10 +1,10 @@
 import customtkinter as ctk
 from tkinter import messagebox
+from gui_appearance_color import appearance_color
 from db_connection import create_connection
 
 def add_project(admin_window):
-    ctk.set_appearance_mode("system")
-    ctk.set_default_color_theme("green")
+    appearance_color()
     
     # Neues Fenster für die Projekterstellung
     project_window = ctk.CTkToplevel(admin_window)
@@ -33,12 +33,12 @@ def add_project(admin_window):
         description = description_entry.get()
         project_id = project_id_entry.get()
         
-        if project_name:
+        if project_id and project_name:
             connection = create_connection()
             if connection:
                 cursor = connection.cursor()
                 try:
-                    cursor.execute("INSERT INTO projects (project_name, description) VALUES (%s, %s, %s)", (project_id, project_name, description))
+                    cursor.execute("INSERT INTO projects (project_id, project_name, description) VALUES (%s, %s, %s)", (project_id, project_name, description))
                     connection.commit()
                     messagebox.showinfo("Projekt erstellt", "Das Projekt wurde erfolgreich erstellt.")
                     project_window.destroy() # Fenster schließen, wenn das Projekt erfolgreich hinzugefügt wurde

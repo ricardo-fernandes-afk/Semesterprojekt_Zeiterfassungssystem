@@ -1,10 +1,10 @@
 import customtkinter as ctk
 from tkinter import messagebox
+from gui_appearance_color import appearance_color
 from db_connection import create_connection
 
-def create_users_layout(username):
-    ctk.set_appearance_mode("dark")
-    ctk.set_default_color_theme("green")
+def start_user_gui(username):
+    appearance_color()
     # Fenster für den Benutzer (User)
     user_window = ctk.CTk()
     user_window.title("User Interface")
