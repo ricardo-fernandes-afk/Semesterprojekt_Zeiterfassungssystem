@@ -7,11 +7,11 @@ class ProjectFrame(ctk.CTkFrame):
      
     def __init__(self, master):
         super().__init__(master, corner_radius=10)
-        self.grid(row=1, column=0, rowspan=4, padx=10, pady=10, sticky="nsw")
+        self.grid(row=1, column=0, padx=1, pady=10, sticky="nsw")
     
         # Label für Projekte
         project_label = ctk.CTkLabel(master=self, text="Projekte", font=("", 18))
-        project_label.pack(pady=10)
+        project_label.grid(row=0, column=0, pady=10)
         
         # Liste der Projekte
         columns = ("ID", "Projektname", "Beschreibung")
@@ -21,7 +21,7 @@ class ProjectFrame(ctk.CTkFrame):
             self.project_treeview.heading(col, text=col)
             self.project_treeview.column(col, anchor="w")
         
-        self.project_treeview.pack(padx=10, fill="both", expand=True)
+        self.project_treeview.grid(row=1, column=0, padx=10, sticky="nsew")
         
         style = ttk.Style()
         style.theme_use('clam')
@@ -42,7 +42,7 @@ class ProjectFrame(ctk.CTkFrame):
         
         # Button zum Hinzufügen von Projekten
         add_project_button = ctk.CTkButton(master=self, text="Projekt hinzufügen", command=self.open_add_project_window)
-        add_project_button.pack(pady=10)
+        add_project_button.grid(row=1, column=0, pady=10)
         
     def load_projects(self):
         for item in self.project_treeview.get_children():

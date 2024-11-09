@@ -1,5 +1,5 @@
 import customtkinter as ctk
-from tkinter import messagebox
+from tkinter import messagebox, ttk
 from gui_appearance_color import appearance_color
 from db_connection import create_connection
 
