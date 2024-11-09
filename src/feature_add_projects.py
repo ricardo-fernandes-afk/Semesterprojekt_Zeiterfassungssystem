@@ -28,7 +28,7 @@ def add_project(admin_window, refresh_callback):
     description_entry.pack(pady=10)
     
     # Funktion, um das Projekt in die Datenbank einzufügen
-    def save_projects():
+    def save_project():
         project_name = project_name_entry.get()
         description = description_entry.get()
         project_id = project_id_entry.get()
@@ -52,6 +52,6 @@ def add_project(admin_window, refresh_callback):
             messagebox.showerror("Fehler", "Bitte geben Sie einen Projektnamen ein.")
 
     # Button zum speichern des Projekts
-    save_button = ctk.CTkButton(project_window, text="Speichern", command=save_projects)
+    save_button = ctk.CTkButton(project_window, text="Speichern", command=save_project)
     save_button.pack(pady=20)
                     
