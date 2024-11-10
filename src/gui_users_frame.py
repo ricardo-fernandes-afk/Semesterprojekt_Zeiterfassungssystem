@@ -8,21 +8,29 @@ class UserFrame(ctk.CTkFrame):
     
     def __init__(self, master):
         super().__init__(master, corner_radius=10)
-        self.grid(row=1, column=1, padx=1, pady=10, sticky="nsw")
         
         # Label für Users
         user_label = ctk.CTkLabel(master=self, text="Users", font=("", 18))
-        user_label.grid(row=0, column=0, pady=10)
+        user_label.pack(pady=10, anchor="n")
         
         # Liste der Users
         columns = ("ID", "Username", "Password", "Role")
         self.user_treeview = ttk.Treeview(master=self, columns=columns, show="headings")
         
+        self.update_idletasks()
+        frame_width = self.winfo_width()
+        
+        num_columns = len(columns)
+        if frame_width > 0:
+            column_width = frame_width // num_columns
+        else:
+            column_width = 100
+        
         for col in columns:
             self.user_treeview.heading(col, text=col)
-            self.user_treeview.column(col, anchor="w")
+            self.user_treeview.column(col, minwidth=50, width=column_width, stretch=True)
             
-        self.user_treeview.grid(row=1, column=0, padx=10, sticky="nsew")
+        self.user_treeview.pack(fill="both", expand=True, padx=10, pady=10, anchor="n")
         
         style = ttk.Style()
         style.theme_use('clam')
@@ -41,10 +49,10 @@ class UserFrame(ctk.CTkFrame):
         
         # Button zum Hinzufügen und Löschen von User
         add_button = ctk.CTkButton(self, text="Benutzer hinzufügen", command=self.open_add_user_window)
-        add_button.grid(row=2, column=0, pady=10)
+        add_button.pack(pady=10, anchor="s")
         
-        delete_button = ctk.CTkButton(self, text="Benutzer löschen", command=self.open_delete_user_window, bg_color="red")
-        delete_button.grid(row=3, column=0, pady=10)
+        delete_button = ctk.CTkButton(self, text="Benutzer löschen", command=self.open_delete_user_window, fg_color="red")
+        delete_button.pack(pady=10, anchor="s")
         
         self.load_users()
         
