@@ -2,7 +2,7 @@ import customtkinter as ctk
 from tkinter import messagebox, ttk
 from db_connection import create_connection
 from feature_add_users import add_user
-from feature_delete_users import delete_user
+from feature_delete_users import delete_user, get_selected_user_id
 
 class UserFrame(ctk.CTkFrame):
     
@@ -80,4 +80,11 @@ class UserFrame(ctk.CTkFrame):
         add_user(self.master, self.load_users)
         
     def open_delete_user_window(self):
-        delete_user(self.master, self.load_users)
+        user_id = get_selected_user_id(self.user_treeview)
+        if user_id is None:
+            messagebox.showerror("Fehler", "Bitte wählen Sie einen Benutzer aus")
+            return
+        
+        confirmation = messagebox.askyesno("Bestätigung", "Sind Sie sicher, dass Sie diesen Benutzer löschen möchten?")
+        if confirmation:
+            delete_user(user_id, self.load_users)

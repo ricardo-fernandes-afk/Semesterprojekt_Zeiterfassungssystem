@@ -2,6 +2,7 @@ import customtkinter as ctk
 from tkinter import messagebox, ttk
 from db_connection import create_connection
 from feature_add_projects import add_project
+from feature_delete_project import delete_project, get_selected_project_id
  
 class ProjectFrame(ctk.CTkFrame):
      
@@ -46,11 +47,15 @@ class ProjectFrame(ctk.CTkFrame):
                 background=[("selected", "#0078d7")],
                 foreground=[("selected", "white")])
         
-        self.load_projects()
-        
         # Button zum Hinzufügen von Projekten
         add_project_button = ctk.CTkButton(master=self, text="Projekt hinzufügen", command=self.open_add_project_window)
         add_project_button.pack(pady=10, anchor="s")
+        
+         # Button zum Löschen von Projekten
+        delete_project_button = ctk.CTkButton(master=self, text="Projekt Löchen", command=self.open_delete_project_window, fg_color="red")
+        delete_project_button.pack(pady=10, anchor="s")
+        
+        self.load_projects()
         
     def load_projects(self):
         for item in self.project_treeview.get_children():
@@ -74,3 +79,13 @@ class ProjectFrame(ctk.CTkFrame):
                 
     def open_add_project_window(self):
         add_project(self.master, self.load_projects)
+        
+    def open_delete_project_window(self):
+        project_id = get_selected_project_id(self.project_treeview)
+        if project_id is None:
+            messagebox.showerror("Fehler", "Bitte wählen Sie ein Projekt aus")
+            return
+        
+        confirmation = messagebox.askyesno("Bestätigung", "Sind Sie sicher, dass Sie dieses Projekt löschen möchten?")
+        if confirmation:
+            delete_project(project_id, self.load_projects)
