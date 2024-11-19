@@ -1,7 +1,7 @@
 import customtkinter as ctk
 from tkinter import messagebox
-from db_connection import create_connection
-from gui_appearance_color import appearance_color
+from db.db_connection import create_connection
+from gui.gui_appearance_color import appearance_color
 
 def add_user(admin_window, refresh_callback):
     appearance_color()

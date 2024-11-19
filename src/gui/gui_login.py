@@ -1,7 +1,7 @@
 import customtkinter as ctk
 from tkinter import messagebox
-from db_connection import create_connection
-from gui_appearance_color import appearance_color
+from db.db_connection import create_connection
+from gui.gui_appearance_color import appearance_color
 
 class LoginGUI:
     def __init__(self, master):
@@ -43,10 +43,10 @@ class LoginGUI:
                     self.master.destroy()
                     
                     if role == "user":
-                        from gui_users import start_user_gui
+                        from gui.gui_users import start_user_gui
                         start_user_gui(username)
                     elif role == "admin":
-                        from gui_admin import start_admin_gui
+                        from gui.gui_admin import start_admin_gui
                         start_admin_gui(username)
                     else:
                         messagebox.showerror("Fehler", f"Unbekannte Benutzerrolle: Die Rolle '{role}' ist nicht definiert.")

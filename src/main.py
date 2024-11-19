@@ -1,6 +1,6 @@
 import customtkinter as ctk
-from gui_appearance_color import appearance_color
-from gui_login import LoginGUI
+from gui.gui_appearance_color import appearance_color
+from gui.gui_login import LoginGUI
 
 
 def main():

@@ -1,5 +1,5 @@
-from db_connection import create_connection
-from feature_insert_sia_phases import insert_sia_phases
+from db.db_connection import create_connection
+from features.feature_insert_sia_phases import insert_sia_phases
 
 def setup_database():
     connection = create_connection()

@@ -1,8 +1,8 @@
 import customtkinter as ctk
 from tkinter import messagebox, ttk
-from db_connection import create_connection
-from feature_add_projects import add_project
-from feature_delete_project import delete_project, get_selected_project_id
+from db.db_connection import create_connection
+from features.feature_add_projects import add_project
+from features.feature_delete_project import delete_project, get_selected_project_id
  
 class ProjectFrame(ctk.CTkFrame):
      

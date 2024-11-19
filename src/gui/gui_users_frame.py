@@ -1,8 +1,8 @@
 import customtkinter as ctk
 from tkinter import messagebox, ttk
-from db_connection import create_connection
-from feature_add_users import add_user
-from feature_delete_users import delete_user, get_selected_user_id
+from db.db_connection import create_connection
+from features.feature_add_users import add_user
+from features.feature_delete_users import delete_user, get_selected_user_id
 
 class UserFrame(ctk.CTkFrame):
     

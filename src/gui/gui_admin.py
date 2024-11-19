@@ -1,7 +1,7 @@
 import customtkinter as ctk
-from gui_project_frame import ProjectFrame
-from gui_users_frame import UserFrame
-from gui_appearance_color import appearance_color
+from gui.gui_project_frame import ProjectFrame
+from gui.gui_users_frame import UserFrame
+from gui.gui_appearance_color import appearance_color
 
 class AdminGUI:
     

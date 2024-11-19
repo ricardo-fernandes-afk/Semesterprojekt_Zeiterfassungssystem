@@ -1,4 +1,4 @@
-from src.db_connection import create_connection
+from db.db_connection import create_connection
 
 def insert_test_data():
     connection = create_connection()
