@@ -8,12 +8,12 @@ def insert_sia_phases(cursor):
     
     try:
             
-        for phase_id, phase_name in sia_phases:
+        for phase_number, phase_name in sia_phases:
             cursor.execute('''
-                INSERT INTO sia_phases (phase_id, phase_name)
+                INSERT INTO sia_phases (phase_number, phase_name)
                 VALUES (%s, %s)
                 ON CONFLICT (phase_id) DO NOTHING;
-            ''', (phase_id, phase_name))
+            ''', (phase_number, phase_name))
         print("SIA phases erfolgreich hinzugefügt!")
         
     except Exception as e:

@@ -10,7 +10,7 @@ class ProjectFrame(ctk.CTkFrame):
         super().__init__(master, corner_radius=10)
     
         # Label für Projekte
-        project_label = ctk.CTkLabel(master=self, text="Projekte", font=("", 18))
+        project_label = ctk.CTkLabel(master=self, text="Projekte", font=("", 18, "bold"))
         project_label.pack(pady=10, anchor="n")
         
         # Liste der Projekte
