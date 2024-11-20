@@ -56,6 +56,14 @@ class UserFrame(ctk.CTkFrame):
         
         self.load_users()
         
+    def get_selected_user(self):
+        try:
+            selected_item = self.user_treeview.selection()[0]  # Die ausgewählte Item-ID abrufen
+            username = self.user_treeview.item(selected_item, 'text')  # Den Benutzernamen abrufen
+            return selected_item, username  # Sowohl ID als auch Namen zurückgeben
+        except IndexError:
+            return None, None  # Keine Auswahl
+        
     def load_users(self):
         for item in self.user_treeview.get_children():
             self.user_treeview.delete(item)

@@ -3,7 +3,7 @@ from tkinter import ttk
 from tkinter import messagebox
 from db.db_connection import create_connection
 
-def get_selected_project_id(treeview):
+def get_selected_project_number(treeview):
     selected_item = treeview.selection()    # Liefert die ID des ausgewählten Treeview-Eintrags
     if not selected_item:
         return None
@@ -17,12 +17,12 @@ def get_selected_project_id(treeview):
         return project_values[0]
     return None      
 
-def delete_project(project_id, refresh_callback):
+def delete_project(project_number, refresh_callback):
     connection = create_connection()
     if connection:
         try:
             with connection.cursor() as cursor:
-                cursor.execute("DELETE FROM projects WHERE project_id = %s", (project_id,))
+                cursor.execute("DELETE FROM projects WHERE project_number = %s", (project_number,))
                 connection.commit()
                 messagebox.showinfo("Erfolg", "Projekt erfolgreich gelöscht.")
                 refresh_callback()

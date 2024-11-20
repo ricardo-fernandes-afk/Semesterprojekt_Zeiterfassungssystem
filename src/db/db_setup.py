@@ -21,6 +21,7 @@ def setup_database():
         cursor.execute('''
             CREATE TABLE IF NOT EXISTS projects (
                 project_id SERIAL PRIMARY KEY,
+                project_number VARCHAR(50) NOT NULL,
                 project_name VARCHAR(100) NOT NULL,
                 description TEXT
             );

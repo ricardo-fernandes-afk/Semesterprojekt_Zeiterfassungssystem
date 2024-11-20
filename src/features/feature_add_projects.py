@@ -12,10 +12,10 @@ def add_project(admin_window, refresh_callback):
     project_window.geometry("400x400")
     
     # Eingabefelder für den Projektnamen und die Beschreibung
-    project_id_label = ctk.CTkLabel(project_window, text="Projektnummer:")
-    project_id_label.pack(pady=10)
-    project_id_entry = ctk.CTkEntry(project_window)
-    project_id_entry.pack(pady=10)
+    project_number_label = ctk.CTkLabel(project_window, text="Projektnummer:")
+    project_number_label.pack(pady=10)
+    project_number_entry = ctk.CTkEntry(project_window)
+    project_number_entry.pack(pady=10)
     
     project_name_label = ctk.CTkLabel(project_window, text="Projektnamen:")
     project_name_label.pack(pady=10)
@@ -31,14 +31,14 @@ def add_project(admin_window, refresh_callback):
     def save_project():
         project_name = project_name_entry.get()
         description = description_entry.get()
-        project_id = project_id_entry.get()
+        project_number = project_number_entry.get()
         
-        if project_id and project_name:
+        if project_number and project_name:
             connection = create_connection()
             if connection:
                 cursor = connection.cursor()
                 try:
-                    cursor.execute("INSERT INTO projects (project_id, project_name, description) VALUES (%s, %s, %s)", (project_id, project_name, description))
+                    cursor.execute("INSERT INTO projects (project_number, project_name, description) VALUES (%s, %s, %s)", (project_number, project_name, description))
                     connection.commit()
                     messagebox.showinfo("Projekt erstellt", "Das Projekt wurde erfolgreich erstellt.")
                     refresh_callback()

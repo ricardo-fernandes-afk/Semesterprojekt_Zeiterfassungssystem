@@ -2,7 +2,7 @@ import customtkinter as ctk
 from tkinter import messagebox, ttk
 from db.db_connection import create_connection
 from features.feature_add_projects import add_project
-from features.feature_delete_project import delete_project, get_selected_project_id
+from features.feature_delete_project import delete_project, get_selected_project_number
  
 class ProjectFrame(ctk.CTkFrame):
      
@@ -14,7 +14,7 @@ class ProjectFrame(ctk.CTkFrame):
         project_label.pack(pady=10, anchor="n")
         
         # Liste der Projekte
-        columns = ("ID", "Projektname", "Beschreibung")
+        columns = ("Projektnummer", "Projektname", "Beschreibung")
         self.project_treeview = ttk.Treeview(master=self, columns=columns, show="headings")
         
         self.update_idletasks()
@@ -57,6 +57,16 @@ class ProjectFrame(ctk.CTkFrame):
         
         self.load_projects()
         
+    def get_selected_project_number(self):
+        try:
+            selected_item = self.project_treeview.selection()[0]  # Die ID des ausgewählten Elements abrufen
+            project_values = self.project_treeview.item(selected_item, 'values')  # Die Werte des ausgewählten Projekts abrufen
+            if len(project_values) >= 2:
+                return project_values[0], project_values[1]  # `project_number` und `project_name` zurückgeben
+            return None, None
+        except IndexError:
+            return None, None  # Keine Auswahl
+        
     def load_projects(self):
         for item in self.project_treeview.get_children():
             self.project_treeview.delete(item)
@@ -65,7 +75,7 @@ class ProjectFrame(ctk.CTkFrame):
         if connection:
             cursor = connection.cursor()
             try:
-                cursor.execute("SELECT project_id, project_name, description FROM projects")
+                cursor.execute("SELECT project_number, project_name, description FROM projects")
                 projects = cursor.fetchall()
                 for project in projects:
                     self.project_treeview.insert("", "end", values=(project[0], project[1], project[2]))
@@ -81,11 +91,11 @@ class ProjectFrame(ctk.CTkFrame):
         add_project(self.master, self.load_projects)
         
     def open_delete_project_window(self):
-        project_id = get_selected_project_id(self.project_treeview)
-        if project_id is None:
+        project_number = get_selected_project_number(self.project_treeview)
+        if project_number is None:
             messagebox.showerror("Fehler", "Bitte wählen Sie ein Projekt aus")
             return
         
         confirmation = messagebox.askyesno("Bestätigung", "Sind Sie sicher, dass Sie dieses Projekt löschen möchten?")
         if confirmation:
-            delete_project(project_id, self.load_projects)
+            delete_project(project_number, self.load_projects)
