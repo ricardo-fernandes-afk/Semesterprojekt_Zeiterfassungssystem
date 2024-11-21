@@ -21,13 +21,21 @@ class SelectedFrame(ctk.CTkFrame):
             widget.destroy()
 
         # Neue Projektdetails anzeigen
-        self.selected_id = selected_id
-        self.selected_name = selected_name
+        if selected_id is not None:
+            # Wenn es sich um ein Projekt handelt
+            self.title_label = ctk.CTkLabel(self, text=f"{selected_id} - {selected_name}", font=("", 18, "bold"))
+        else:
+            # Wenn es sich um einen Benutzer handelt
+            self.title_label = ctk.CTkLabel(self, text=f"{selected_name}", font=("", 18, "bold"))
+
+        self.title_label.pack(pady=(10,1))
+        
         self.description = description
 
-        self.title_label = ctk.CTkLabel(self, text=f"{self.selected_id} - {self.selected_name}", font=("", 18, "bold"))        
-        self.title_label.pack(pady=(10,1))
-
         if self.description:
-            ctk.CTkLabel(self, text=self.description, font=("", 12)).pack()
+            print(f"Anzeige der Beschreibung: {self.description}")  # Debugging-Ausgabe hinzufügen
+            self.description_label = ctk.CTkLabel(self, text=self.description, font=("", 16), wraplength=300)
+            self.description_label.pack()
+        else:
+            print("Keine Beschreibung vorhanden")
         

@@ -31,22 +31,25 @@ class EventHandlers:
     def on_user_double_click(self, event):
         # Überprüfen, ob ein Benutzer ausgewählt wurde und die relevanten Daten abrufen
         user_id, username = self.admin_frame.users_frame.get_selected_user()
-        user_id = "".join(filter(str.isdigit, user_id))
         
-        if user_id:
-            # Verbindung zur Datenbank herstellen, um zusätzliche Details abzurufen
-            connection = create_connection()
-            if connection:
-                cursor = connection.cursor()
-                try:
-                    cursor.execute("SELECT username FROM users WHERE user_id = %s", (user_id,))
-                    user_details = cursor.fetchone()
-                    if user_details:
-                        username = user_details[0]
-                        # Den `SelectedFrame` mit den abgerufenen Details öffnen und aktualisieren
-                        self.admin_frame.open_selected_frame(user_id, username, None)
-                except Exception as e:
-                    print(f"Fehler beim Abrufen der Benutzerdetails: {e}")
-                finally:
-                    cursor.close()
-                    connection.close()
+        if not user_id:
+            print("Fehler: Kein Benutzer ausgewählt.")
+            return
+
+        # Verbindung zur Datenbank herstellen, um zusätzliche Details abzurufen
+        connection = create_connection()
+        if connection:
+            cursor = connection.cursor()
+            try:
+                cursor.execute("SELECT username FROM users WHERE user_id = %s", (user_id,))
+                user_details = cursor.fetchone()
+                if user_details:
+                    # Den `SelectedFrame` mit den abgerufenen Details öffnen und aktualisieren
+                    self.admin_frame.open_selected_frame(None, user_details[0], None)
+                else:
+                    print("Fehler: Keine Benutzerdaten gefunden.")
+            except Exception as e:
+                print(f"Fehler beim Abrufen der Benutzerdetails: {e}")
+            finally:
+                cursor.close()
+                connection.close()

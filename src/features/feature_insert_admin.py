@@ -1,5 +1,5 @@
 def insert_admin(cursor): 
-    start_admin = [("admin", 0000, "admin")]
+    start_admin = [("admin", 123, "admin")]
     
     try:
             
