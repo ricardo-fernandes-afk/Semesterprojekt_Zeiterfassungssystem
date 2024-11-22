@@ -10,6 +10,7 @@ class SIAPhasenSollStundenFrame(ctk.CTkFrame):
         self.soll_stunden_entries = {}
         self.create_widgets()
         self.is_editable = False
+        self.load_soll_stunden()
 
     def create_widgets(self):
         sia_phases = load_sia_phases()
