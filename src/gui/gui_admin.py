@@ -24,7 +24,6 @@ class AdminGUI:
         self.master.grid_columnconfigure(0, weight=1)
         self.master.grid_columnconfigure(1, weight=1)
         self.master.grid_columnconfigure(2, weight=2)
-        self.master.grid_columnconfigure(3, weight=2)
         self.master.grid_rowconfigure(1, weight=1)
  
         # Frames initialisieren
@@ -35,7 +34,7 @@ class AdminGUI:
         self.users_frame.grid(row=1, column=1, columnspan=1, padx=10, pady=10, sticky="nsew")
         
         self.selected_frame = SelectedFrame(self.master, None, None)
-        self.selected_frame.grid(row=1, column=2, columnspan=2, padx=10, pady=10, sticky="nsew")
+        self.selected_frame.grid(row=1, column=2, columnspan=1, padx=10, pady=10, sticky="nsew")
         
         # Event-Handler initialisieren
         self.event_handlers = EventHandlers(self)
