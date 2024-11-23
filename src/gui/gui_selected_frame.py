@@ -1,6 +1,8 @@
 import customtkinter as ctk
 from gui.gui_sia_phasen_soll_stunden_frame import SIAPhasenSollStundenFrame
 from gui.gui_user_to_project_frame import UserToProjectFrame
+from gui.gui_stunden_uebersicht_frame import StundenUebersichtFrame
+from gui.gui_kalender_frame import KalenderFrame
 
 class SelectedFrame(ctk.CTkFrame):
     def __init__(self, master, selected_id=None, selected_name=None, description=None):
@@ -58,6 +60,12 @@ class SelectedFrame(ctk.CTkFrame):
             
             self.user_to_project_frame = UserToProjectFrame(self, project_number=selected_id)
             self.user_to_project_frame.grid(row=3, column=0, padx=10, pady=10, sticky="nsew")
+            
+            self.stunden_uebersicht_frame = StundenUebersichtFrame(self, project_number=selected_id)
+            self.stunden_uebersicht_frame.grid(row=3, column=1, columnspan=3, padx=10, pady=10, sticky="nsew")
+            
+            self.test_frame = ctk.CTkFrame(self)
+            self.test_frame.grid(row=4, columnspan=4, padx=10, pady=10, sticky="nsew")
 
         else:
             self.title_label.configure(text=f"{selected_name}")
