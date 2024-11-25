@@ -1,8 +1,9 @@
 import customtkinter as ctk
 from gui.gui_sia_phasen_soll_stunden_frame import SIAPhasenSollStundenFrame
 from gui.gui_user_to_project_frame import UserToProjectFrame
-from gui.gui_stunden_uebersicht_frame import StundenUebersichtFrame
-from gui.gui_kalender_frame import KalenderFrame
+from gui.gui_stunden_uebersicht_project import StundenUebersichtProjectFrame
+from gui.gui_grundinfos_user import GrundinfosUser
+from gui.gui_stunden_uebersicht_user import StundenUebersichtUserFrame
 
 class SelectedFrame(ctk.CTkFrame):
     def __init__(self, master, selected_id=None, selected_name=None, description=None):
@@ -35,7 +36,7 @@ class SelectedFrame(ctk.CTkFrame):
     def create_title_label(self):
         title_text = f"{self.selected_id} {self.selected_name}" if self.selected_name else "Wählen Sie ein Projekt oder einen Benutzer"
         title_label = ctk.CTkLabel(self, text=title_text, font=("", 18, "bold"))
-        title_label.grid(row=0, columnspan=4, sticky="nsew")
+        title_label.grid(row=0, columnspan=4, pady=5, sticky="nsew")
         return title_label
 
     def create_description_label(self):
@@ -61,16 +62,28 @@ class SelectedFrame(ctk.CTkFrame):
             self.user_to_project_frame = UserToProjectFrame(self, project_number=selected_id)
             self.user_to_project_frame.grid(row=3, column=0, padx=10, pady=10, sticky="nsew")
             
-            self.stunden_uebersicht_frame = StundenUebersichtFrame(self, project_number=selected_id)
-            self.stunden_uebersicht_frame.grid(row=3, column=1, columnspan=3, padx=10, pady=10, sticky="nsew")
+            self.stunden_uebersicht_project_frame = StundenUebersichtProjectFrame(self, project_number=selected_id)
+            self.stunden_uebersicht_project_frame.grid(row=3, column=1, columnspan=3, padx=10, pady=10, sticky="nsew")
             
-            self.test_frame = ctk.CTkFrame(self)
-            self.test_frame.grid(row=4, columnspan=4, padx=10, pady=10, sticky="nsew")
+            self.diagram_frame = ctk.CTkFrame(self)
+            self.diagram_frame.grid(row=4, columnspan=4, padx=10, pady=10, sticky="nsew")
 
         else:
+            self.selected_id = selected_id
+            self.selected_name = selected_name
+            
             self.title_label.configure(text=f"{selected_name}")
             self.description_label.configure(text="")
-            if self.sia_phases_frame is not None:
-                self.sia_phases_frame.destroy()
-            if self.user_to_project_frame is not None:
-                self.user_to_project_frame.destroy()
+            
+            self.grundinfos_user_frame = GrundinfosUser(self)
+            self.grundinfos_user_frame.grid(row=2, columnspan=4, padx=10, pady=10, sticky="nsew")
+            
+            self.stunden_uebersicht_user_frame = StundenUebersichtUserFrame(self, user_id=selected_id)
+            self.stunden_uebersicht_user_frame.grid(row=3, columnspan=4, padx=10, pady=10, sticky="nsew")
+            
+            self.diagram_frame = ctk.CTkFrame(self)
+            self.diagram_frame.grid(row=4, columnspan=4, padx=10, pady=10, sticky="nsew")
+            
+            
+            
+            
