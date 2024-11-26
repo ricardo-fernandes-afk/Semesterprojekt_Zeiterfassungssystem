@@ -16,28 +16,31 @@ class SIAPhasenSollStundenFrame(ctk.CTkFrame):
         sia_phases = load_sia_phases()
         
         self.title = ctk.CTkLabel(self, text="Soll Stunden pro SIA-Phase", font=("", 16, "bold"))
-        self.title.grid(row=0, columnspan=4, pady=5, sticky="nsew")
+        self.title.pack(padx=10, pady=(10,0))
+        
+        sia_phase_frame = ctk.CTkFrame(self)
+        sia_phase_frame.pack(padx=10, pady=10, fill="x")
 
         # SIA-Phasen nebeneinander anordnen
         for col, phase in enumerate(sia_phases):
-            phase_label = ctk.CTkLabel(self, text=phase, font=("", 14))
-            phase_label.grid(row=1, column=col, pady=(5,0), sticky="nsew")
+            phase_label = ctk.CTkLabel(sia_phase_frame, text=phase, font=("", 14))
+            phase_label.grid(row=0, column=col, pady=10, sticky="nsew")
 
-            entry = ctk.CTkEntry(self, placeholder_text="Soll-Stunden")
-            entry.grid(row=2, column=col, padx=20, sticky="nsew")
+            entry = ctk.CTkEntry(sia_phase_frame, placeholder_text="Soll-Stunden")
+            entry.grid(row=1, column=col, padx=20, sticky="nsew")
             self.soll_stunden_entries[phase] = entry
 
         # Spalten gleichmäßig verteilen
         for col in range(0,4):
-            self.grid_columnconfigure(col, weight=1)
+            sia_phase_frame.grid_columnconfigure(col, weight=1)
 
         # Speichern-Button in der dritten Zeile
-        self.save_button = ctk.CTkButton(self, text="Soll-Stunden speichern", command=self.save_soll_stunden)
-        self.save_button.grid(row=3, columnspan=4, pady=5)
+        self.save_button = ctk.CTkButton(sia_phase_frame, text="Soll-Stunden speichern", command=self.save_soll_stunden)
+        self.save_button.grid(row=2, column=1, padx=5, pady=10, sticky="e")
         
         # Bearbeiten-Button in der dritten Zeile
-        self.edit_button = ctk.CTkButton(self, text="Soll-Stunden bearbeiten", command=self.edit_soll_stunden, fg_color="#000fff")
-        self.edit_button.grid(row=4, columnspan=4, pady=5)
+        self.edit_button = ctk.CTkButton(sia_phase_frame, text="Soll-Stunden bearbeiten", command=self.edit_soll_stunden, fg_color="#000fff")
+        self.edit_button.grid(row=2, column=2, padx=5, pady=10, sticky="w")
 
     def save_soll_stunden(self):
         save_soll_stunden(self)

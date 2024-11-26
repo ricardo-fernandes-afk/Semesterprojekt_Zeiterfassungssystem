@@ -31,22 +31,7 @@ class ProjectFrame(ctk.CTkFrame):
             self.project_treeview.column(col, minwidth=50, width=column_width, stretch=True)
         
         self.project_treeview.pack(fill="both", expand=True, padx=10, pady=10, anchor="n")
-        
-        style = ttk.Style()
-        style.theme_use('clam')
-        
-        bg_color = "#2e2e2e"  # Dark background color
-        fg_color = "white"
-        
-        style.configure("Treeview",
-                        background=bg_color,
-                        foreground=fg_color,
-                        rowheight=25,
-                        fieldbackground=bg_color)
-        style.map("Treeview",
-                background=[("selected", "#0078d7")],
-                foreground=[("selected", "white")])
-        
+
         # Button zum Hinzufügen von Projekten
         add_project_button = ctk.CTkButton(master=self, text="Projekt hinzufügen", command=self.open_add_project_window)
         add_project_button.pack(pady=10, anchor="s")

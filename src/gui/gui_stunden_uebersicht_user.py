@@ -15,61 +15,61 @@ class StundenUebersichtUserFrame(ctk.CTkFrame):
     def create_widgets(self):
         # Filter-Dropdowns für Monat, Jahr, Projektname und Phase
         filter_frame = ctk.CTkFrame(self)
-        filter_frame.grid(row=0, column=0, padx=10, pady=10, sticky="nsew")
+        filter_frame.pack(padx=10, pady=10, fill="x")
         
         for col in range(8):
             filter_frame.grid_columnconfigure(col, weight=1)
 
         # Monat-Auswahl
         month_label = ctk.CTkLabel(filter_frame, text="Monat:")
-        month_label.grid(row=0, column=0, padx=5, pady=5, sticky="nsew")
+        month_label.grid(row=0, column=0, padx=10, pady=10, sticky="w")
 
         self.month_combo = ctk.CTkComboBox(filter_frame, values=list(calendar.month_name)[1:])
         self.month_combo.set(calendar.month_name[self.selected_month])
-        self.month_combo.grid(row=0, column=1, padx=5, pady=5, sticky="nsew")
+        self.month_combo.grid(row=0, column=1, padx=10, pady=10, sticky="nsew")
         
         # Jahr-Auswahl
         year_label = ctk.CTkLabel(filter_frame, text="Jahr:")
-        year_label.grid(row=0, column=2, padx=5, pady=5, sticky="nsew")
+        year_label.grid(row=0, column=2, padx=10, pady=10, sticky="w")
 
         self.year_combo = ctk.CTkComboBox(filter_frame, values=[str(year) for year in range(2024, datetime.now().year + 1)])
         self.year_combo.set(str(self.selected_year))
-        self.year_combo.grid(row=0, column=3, padx=5, pady=5, sticky="nsew")
+        self.year_combo.grid(row=0, column=3, padx=10, pady=10, sticky="nsew")
 
         # Projekt-Auswahl
         project_label = ctk.CTkLabel(filter_frame, text="Projekt:")
-        project_label.grid(row=0, column=4, padx=5, pady=5, sticky="nsew")
+        project_label.grid(row=0, column=4, padx=10, pady=10, sticky="w")
 
         self.project_combo = ctk.CTkComboBox(filter_frame)
-        self.project_combo.grid(row=0, column=5, padx=5, pady=5, sticky="nsew")
+        self.project_combo.grid(row=0, column=5, padx=10, pady=10, sticky="nsew")
         
         # Phase-Auswahl
         phase_label = ctk.CTkLabel(filter_frame, text="Phase:")
-        phase_label.grid(row=0, column=6, padx=5, pady=5, sticky="nsew")
+        phase_label.grid(row=0, column=6, padx=10, pady=10, sticky="w")
 
         self.phase_combo = ctk.CTkComboBox(filter_frame)
-        self.phase_combo.grid(row=0, column=7, padx=5, pady=5, sticky="nsew")
+        self.phase_combo.grid(row=0, column=7, padx=10, pady=10, sticky="nsew")
 
         # Aktualisieren-Button
-        update_button = ctk.CTkButton(filter_frame, text="Filtern", command=self.update_projects)
-        update_button.grid(row=1, columnspan=8, padx=5, pady=5)
+        filter_button = ctk.CTkButton(filter_frame, text="Filtern", command=self.update_projects)
+        filter_button.grid(row=1, columnspan=8, padx=10, pady=(0,10))
 
         # Treeview für die Projekteübersicht
         tree_frame = ctk.CTkFrame(self)
-        tree_frame.grid(row=1, column=0, columnspan=2, padx=10, pady=10, sticky="nsew")
+        tree_frame.pack(padx=10, pady=(0,10), fill="both", expand=True)
         
         columns = ("Projektname", "Phase", "Stunden")
-        self.project_treeview = ttk.Treeview(tree_frame, columns=columns, show="headings", style="Custom.Treeview")
+        self.project_treeview = ttk.Treeview(tree_frame, columns=columns, show="headings", height=5)
         
         for col in columns:
             self.project_treeview.heading(col, text=col)
-            self.project_treeview.column(col, minwidth=10, width=150, stretch=True)
+            self.project_treeview.column(col, width=100)
         self.project_treeview.pack(side="left", fill="both", expand=True, padx=10, pady=10)
 
         # Scrollbar hinzufügen
-        scrollbar = ctk.CTkScrollbar(tree_frame, command=self.project_treeview.yview)
+        scrollbar = ctk.CTkScrollbar(tree_frame, command=self.project_treeview.yview, height=5)
         self.project_treeview.configure(yscrollcommand=scrollbar.set)
-        scrollbar.pack(side="right", fill="y")
+        scrollbar.pack(side="right", fill="y", anchor="e")
 
         # Filterwerte laden
         self.load_filter_values()
