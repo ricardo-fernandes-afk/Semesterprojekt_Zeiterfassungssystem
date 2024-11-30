@@ -27,8 +27,8 @@ def add_user(admin_window, refresh_callback):
     role_label = ctk.CTkLabel(user_window, text="Rolle auswählen:")
     role_label.pack(pady=10)
     
-    role_var = ctk.StringVar(value="user ")     # Standardwert auf "User " setzen
-    role_option = ctk.CTkOptionMenu(user_window, values=["user ", "admin"],
+    role_var = ctk.StringVar(value="user")     # Standardwert auf "User " setzen
+    role_option = ctk.CTkOptionMenu(user_window, values=["user", "admin"],
                                     variable=role_var)
     role_option.pack(pady=10)
     
