@@ -1,9 +1,9 @@
 import customtkinter as ctk
-from gui.gui_project_frame import ProjectFrame
-from gui.gui_users_frame import UserFrame
-from gui.gui_selected_frame import SelectedFrame
+from gui.admin.gui_project_frame import ProjectFrame
+from gui.admin.gui_users_frame import UserFrame
+from gui.admin.gui_admin_selected_frame import SelectedFrame
 from gui.gui_appearance_color import appearance_color
-from features.feature_event_handlers import EventHandlers
+from features.feature_admin_event_handlers import EventHandlers
 
 class AdminGUI:
     

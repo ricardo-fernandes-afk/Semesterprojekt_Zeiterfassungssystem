@@ -1,9 +1,9 @@
 import customtkinter as ctk
-from gui.gui_sia_phasen_soll_stunden_frame import SIAPhasenSollStundenFrame
-from gui.gui_user_to_project_frame import UserToProjectFrame
-from gui.gui_stunden_uebersicht_project import StundenUebersichtProjectFrame
-from gui.gui_grundinfos_user import GrundinfosUser
-from gui.gui_stunden_uebersicht_user import StundenUebersichtUserFrame
+from gui.admin.gui_sia_phasen_soll_stunden_frame import SIAPhasenSollStundenFrame
+from gui.admin.gui_user_to_project_frame import UserToProjectFrame
+from gui.admin.gui_stunden_uebersicht_project import StundenUebersichtProjectFrame
+from gui.admin.gui_grundinfos_user import GrundinfosUser
+from gui.admin.gui_stunden_uebersicht_user import StundenUebersichtUserFrame
 
 class SelectedFrame(ctk.CTkFrame):
     def __init__(self, master, selected_id=None, selected_name=None, description=None):

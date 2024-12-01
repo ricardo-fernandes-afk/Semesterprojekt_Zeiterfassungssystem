@@ -4,10 +4,6 @@ from gui.gui_login import LoginGUI
 
 
 def main():
-    
-    # Hauptfenster des Programms
-    appearance_color()
-    
     # Starte das Login Interface
     root = ctk.CTk()
     login_gui = LoginGUI(master=root)

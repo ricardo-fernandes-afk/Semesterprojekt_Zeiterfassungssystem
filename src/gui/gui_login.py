@@ -34,19 +34,19 @@ class LoginGUI:
             connection = create_connection()
             if connection:
                 cursor = connection.cursor()
-                cursor.execute("SELECT role FROM users WHERE username = %s AND password = %s", (username, password))
+                cursor.execute("SELECT role, user_id FROM users WHERE username = %s AND password = %s", (username, password))
                 user = cursor.fetchone()
                 if user:
-                    role = user[0]
+                    role, user_id = user
                     messagebox.showinfo("Erfolg", f"Login erfolgreich als {role}")
                     
                     self.master.destroy()
                     
                     if role == "user":
-                        from gui.gui_users import start_user_gui
-                        start_user_gui(username)
+                        from gui.user.gui_users import start_user_gui
+                        start_user_gui(username, user_id)
                     elif role == "admin":
-                        from gui.gui_admin import start_admin_gui
+                        from gui.admin.gui_admin import start_admin_gui
                         start_admin_gui(username)
                     else:
                         messagebox.showerror("Fehler", f"Unbekannte Benutzerrolle: Die Rolle '{role}' ist nicht definiert.")
