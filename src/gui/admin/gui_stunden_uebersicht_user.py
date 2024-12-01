@@ -25,8 +25,8 @@ class StundenUebersichtUserFrame(ctk.CTkFrame):
         month_label = ctk.CTkLabel(filter_frame, text="Monat:")
         month_label.grid(row=0, column=0, padx=10, pady=10, sticky="w")
 
-        self.month_combo = ctk.CTkComboBox(filter_frame, values=list(calendar.month_name)[1:])
-        self.month_combo.set(calendar.month_name[self.selected_month])
+        self.month_combo = ctk.CTkComboBox(filter_frame, values=["Alle"] + list(calendar.month_name)[1:])
+        self.month_combo.set("Alle")
         self.month_combo.grid(row=0, column=1, padx=10, pady=10, sticky="nsew")
         
         # Jahr-Auswahl
@@ -114,7 +114,7 @@ class StundenUebersichtUserFrame(ctk.CTkFrame):
             self.project_treeview.delete(item)
         
         # Monat, Jahr, Projektname und Phase aus den Dropdowns abrufen
-        selected_month = list(calendar.month_name).index(self.month_combo.get())
+        selected_month = self.month_combo.get()
         selected_year = int(self.year_combo.get())
         selected_project = self.project_combo.get()
         selected_phase = self.phase_combo.get()
@@ -130,12 +130,16 @@ class StundenUebersichtUserFrame(ctk.CTkFrame):
                     JOIN projects p ON te.project_number = p.project_number
                     JOIN sia_phases s ON te.phase_id = s.phase_id
                     WHERE te.user_id = %s
-                    AND EXTRACT(MONTH FROM te.entry_date) = %s
                     AND EXTRACT(YEAR FROM te.entry_date) = %s
                 """
-                params = [self.user_id, selected_month, selected_year]
+                params = [self.user_id, selected_year]
                 
                 print(f"Query: {query}, Params: {params}")
+                
+                if selected_month != "Alle":
+                    query += " AND EXTRACT(MONTH FROM te.entry_date) = %s"
+                    month_index = list(calendar.month_name).index(selected_month)
+                    params.append(month_index)
 
                 # Filter für Projekt anwenden
                 if selected_project != "Alle":
