@@ -19,7 +19,7 @@ class ChooseSIAPhaseFrame(ctk.CTkFrame):
         title_label.pack(padx=10, pady=(10,0))
         
         choose_frame = ctk.CTkFrame(self)
-        choose_frame.pack(padx=10, pady=10, fill="x")
+        choose_frame.pack(padx=10, pady=10, fill="x", expand=True)
         
         for col in range(4):
             choose_frame.grid_columnconfigure(col, weight=1)

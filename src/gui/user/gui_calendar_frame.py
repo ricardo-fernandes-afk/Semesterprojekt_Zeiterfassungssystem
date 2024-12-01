@@ -9,8 +9,8 @@ class CalendarFrame(ctk.CTkFrame):
 
     def create_widgets(self):
         # Kalender Widget
-        self.calendar = Calendar(self, selectmode="day", date_pattern="yyyy-mm-dd")
-        self.calendar.pack(padx=10, pady=10)
+        self.calendar = Calendar(self, selectmode="day", date_pattern="yyyy-mm-dd", font=("", 14))
+        self.calendar.pack(padx=10, pady=10, fill="both", expand=True)
         
         self.calendar.bind("<<CalendarSelected>>", self.on_date_selected)
         

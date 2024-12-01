@@ -9,17 +9,21 @@ class TimeEntryFrame(ctk.CTkFrame):
         self.create_widgets()
 
     def create_widgets(self):
+        
+        time_entry_frame = ctk.CTkFrame(self)
+        time_entry_frame.pack(pady=10, padx=10, fill="both", expand=True)
+        
         # Label für das Datum
-        self.date_label = ctk.CTkLabel(self, text="Datum: --", font=("", 14, "bold"))
-        self.date_label.pack(padx=10, pady=(10, 5))
+        self.date_label = ctk.CTkLabel(time_entry_frame, text="Datum: --", font=("", 14, "bold"))
+        self.date_label.pack(padx=10, pady=(10, 0), side="top")
 
         # Eingabefeld für Stunden
-        self.hours_entry = ctk.CTkEntry(self, placeholder_text="Stunden eingeben")
-        self.hours_entry.pack(padx=10, pady=(5, 10))
+        self.hours_entry = ctk.CTkEntry(time_entry_frame, placeholder_text="Stunden eingeben")
+        self.hours_entry.pack(padx=10, pady=10, anchor="center")
 
         # Button zum Speichern
-        save_button = ctk.CTkButton(self, text="Speichern", command=self.save_time_entry)
-        save_button.pack(pady=10)
+        save_button = ctk.CTkButton(time_entry_frame, text="Speichern", command=self.save_time_entry)
+        save_button.pack(pady=(0,10), side="bottom")
 
     def update_date(self, selected_date):
         self.selected_date = selected_date
