@@ -11,6 +11,7 @@ class StundenUebersichtUserFrame(ctk.CTkFrame):
         self.selected_month = datetime.now().month
         self.selected_year = datetime.now().year
         self.create_widgets()
+        print(f"Initial user_id: {self.user_id}")
 
     def create_widgets(self):
         # Filter-Dropdowns für Monat, Jahr, Projektname und Phase
@@ -133,6 +134,8 @@ class StundenUebersichtUserFrame(ctk.CTkFrame):
                     AND EXTRACT(YEAR FROM te.entry_date) = %s
                 """
                 params = [self.user_id, selected_month, selected_year]
+                
+                print(f"Query: {query}, Params: {params}")
 
                 # Filter für Projekt anwenden
                 if selected_project != "Alle":
@@ -151,6 +154,7 @@ class StundenUebersichtUserFrame(ctk.CTkFrame):
 
                 # Daten in die Treeview einfügen
                 for entry in entries:
+                    print(f"Inserting into Treeview: {entry}")
                     self.project_treeview.insert("", "end", values=entry)
                     total_filtered_hours += entry[2]
                 

@@ -7,8 +7,9 @@ from features.feature_admin_event_handlers import EventHandlers
 
 class AdminGUI:
     
-    def __init__(self, master, username):
+    def __init__(self, master, username, user_id):
         self.master = master
+        self.user_id = user_id
         appearance_color()
         
         # Fenster für den Admin
@@ -33,7 +34,7 @@ class AdminGUI:
         self.users_frame = UserFrame(self.master)
         self.users_frame.grid(row=1, column=1, padx=10, pady=10, sticky="nsew")
         
-        self.selected_frame = SelectedFrame(self.master, None, None)
+        self.selected_frame = SelectedFrame(self.master, self.user_id, None, None)
         self.selected_frame.grid(row=1, column=2, padx=10, pady=10, sticky="nsew")
         
         # Event-Handler initialisieren
@@ -47,10 +48,10 @@ class AdminGUI:
         self.selected_frame.update_project_details(selected_id, selected_name, description)
         
     
-def start_admin_gui(username):
+def start_admin_gui(username, user_id):
     try:
         root = ctk.CTk()
-        admin_gui = AdminGUI(root, username)
+        admin_gui = AdminGUI(root, username, user_id)
         root.mainloop()
     except Exception as e:
         print(f"Ein Fehler ist aufgetreten: {e}")

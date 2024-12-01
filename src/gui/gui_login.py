@@ -47,7 +47,7 @@ class LoginGUI:
                         start_user_gui(username, user_id)
                     elif role == "admin":
                         from gui.admin.gui_admin import start_admin_gui
-                        start_admin_gui(username)
+                        start_admin_gui(username, user_id)
                     else:
                         messagebox.showerror("Fehler", f"Unbekannte Benutzerrolle: Die Rolle '{role}' ist nicht definiert.")
                 else:

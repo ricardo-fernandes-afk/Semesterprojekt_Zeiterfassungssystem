@@ -45,7 +45,7 @@ class EventHandlers:
                 user_details = cursor.fetchone()
                 if user_details:
                     # Den `SelectedFrame` mit den abgerufenen Details öffnen und aktualisieren
-                    self.admin_frame.open_selected_frame(None, user_details[0], None)
+                    self.admin_frame.selected_frame.update_user_details(user_id, user_details[0])
                 else:
                     print("Fehler: Keine Benutzerdaten gefunden.")
             except Exception as e:

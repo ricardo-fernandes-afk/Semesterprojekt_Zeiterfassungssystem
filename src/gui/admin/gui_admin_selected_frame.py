@@ -6,8 +6,9 @@ from gui.admin.gui_grundinfos_user import GrundinfosUser
 from gui.admin.gui_stunden_uebersicht_user import StundenUebersichtUserFrame
 
 class SelectedFrame(ctk.CTkFrame):
-    def __init__(self, master, selected_id=None, selected_name=None, description=None):
+    def __init__(self, master, user_id=None, selected_id=None, selected_name=None, description=None):
         super().__init__(master, corner_radius=10)
+        self.user_id = user_id
         self.selected_id = selected_id
         self.selected_name = selected_name
         self.description = description
@@ -47,43 +48,43 @@ class SelectedFrame(ctk.CTkFrame):
     def update_project_details(self, selected_id, selected_name, description=None):
         self.clear_widgets()
         self.create_widgets()
+        
+        self.selected_id = selected_id
+        self.selected_name = selected_name
+        self.description = description        
 
-        if selected_id is not None:
-            self.selected_id = selected_id
-            self.selected_name = selected_name
-            self.description = description        
+        self.title_label.configure(text=f"{selected_id} - {selected_name}")
+        self.description_label.configure(text=self.description if self.description else "")
 
-            self.title_label.configure(text=f"{selected_id} - {selected_name}")
-            self.description_label.configure(text=self.description if self.description else "")
+        self.sia_phases_frame = SIAPhasenSollStundenFrame(self, project_number=selected_id)
+        self.sia_phases_frame.grid(row=2, columnspan=4, padx=10, pady=10, sticky="nsew")
+        
+        self.user_to_project_frame = UserToProjectFrame(self, project_number=selected_id)
+        self.user_to_project_frame.grid(row=3, column=0, padx=10, pady=10, sticky="nsew")
+        
+        self.stunden_uebersicht_project_frame = StundenUebersichtProjectFrame(self, project_number=selected_id)
+        self.stunden_uebersicht_project_frame.grid(row=3, column=1, columnspan=3, padx=10, pady=10, sticky="nsew")
+        
+        self.diagram_frame = ctk.CTkFrame(self)
+        self.diagram_frame.grid(row=4, columnspan=4, padx=10, pady=10, sticky="nsew")
 
-            self.sia_phases_frame = SIAPhasenSollStundenFrame(self, project_number=selected_id)
-            self.sia_phases_frame.grid(row=2, columnspan=4, padx=10, pady=10, sticky="nsew")
-            
-            self.user_to_project_frame = UserToProjectFrame(self, project_number=selected_id)
-            self.user_to_project_frame.grid(row=3, column=0, padx=10, pady=10, sticky="nsew")
-            
-            self.stunden_uebersicht_project_frame = StundenUebersichtProjectFrame(self, project_number=selected_id)
-            self.stunden_uebersicht_project_frame.grid(row=3, column=1, columnspan=3, padx=10, pady=10, sticky="nsew")
-            
-            self.diagram_frame = ctk.CTkFrame(self)
-            self.diagram_frame.grid(row=4, columnspan=4, padx=10, pady=10, sticky="nsew")
+    def update_user_details(self, selected_user_id, selected_username):
+        self.clear_widgets()
+        self.create_widgets()
 
-        else:
-            self.selected_id = selected_id
-            self.selected_name = selected_name
-            
-            self.title_label.configure(text=f"{selected_name}")
-            self.description_label.configure(text="")
-            
-            self.grundinfos_user_frame = GrundinfosUser(self)
-            self.grundinfos_user_frame.grid(row=2, columnspan=4, padx=10, pady=10, sticky="nsew")
-            
-            self.stunden_uebersicht_user_frame = StundenUebersichtUserFrame(self, user_id=selected_id)
-            self.stunden_uebersicht_user_frame.grid(row=3, columnspan=4, padx=10, pady=10, sticky="nsew")
-            
-            self.diagram_frame = ctk.CTkFrame(self)
-            self.diagram_frame.grid(row=4, columnspan=4, padx=10, pady=10, sticky="nsew")
-            
-            
+        self.selected_id = selected_user_id
+        self.selected_name = selected_username
+
+        self.title_label.configure(text=f"{selected_username}")
+        self.description_label.configure(text="")
+
+        self.grundinfos_user_frame = GrundinfosUser(self)
+        self.grundinfos_user_frame.grid(row=2, columnspan=4, padx=10, pady=10, sticky="nsew")
+
+        self.stunden_uebersicht_user_frame = StundenUebersichtUserFrame(self, user_id=selected_user_id)
+        self.stunden_uebersicht_user_frame.grid(row=3, columnspan=4, padx=10, pady=10, sticky="nsew")
+
+        self.diagram_frame = ctk.CTkFrame(self)
+        self.diagram_frame.grid(row=4, columnspan=4, padx=10, pady=10, sticky="nsew")
             
             
