@@ -16,19 +16,19 @@ class TimeEntryFrame(ctk.CTkFrame):
         
         # Label für das Datum
         self.date_label = ctk.CTkLabel(time_entry_frame, text="Datum: --", font=("", 14, "bold"))
-        self.date_label.pack(padx=10, pady=(10, 0), side="top")
+        self.date_label.pack(padx=10, pady=10, side="top")
 
         # Eingabefeld für Stunden
         self.hours_entry = ctk.CTkEntry(time_entry_frame, placeholder_text="Stunden eingeben")
-        self.hours_entry.pack(padx=10, pady=10)
+        self.hours_entry.pack(padx=10)
         
         # Label für die Gesamtstunden an diesem Tag
         self.phase_hours_label = ctk.CTkLabel(time_entry_frame, text="", font=("", 12))
-        self.phase_hours_label.pack(padx=10)
+        self.phase_hours_label.pack(padx=10, pady=10)
         
         # Button zum Speichern
         save_button = ctk.CTkButton(time_entry_frame, text="Speichern", command=self.save_time_entry)
-        save_button.pack(pady=10, anchor="s")
+        save_button.pack()
         
         # Button zum Löschen der Stunden
         self.delete_button = ctk.CTkButton(time_entry_frame, text="Löschen", command=self.delete_time_entry, fg_color="red")

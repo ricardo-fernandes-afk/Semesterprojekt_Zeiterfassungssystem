@@ -59,7 +59,7 @@ class StundenUebersichtUserFrame(ctk.CTkFrame):
         tree_frame = ctk.CTkFrame(self)
         tree_frame.pack(padx=10, pady=(0,10), fill="both", expand=True)
         
-        columns = ("Projektname", "Phase", "Stunden")
+        columns = ("Projekt", "Phase", "Stunden")
         self.project_treeview = ttk.Treeview(tree_frame, columns=columns, show="headings", height=5)
         
         for col in columns:
@@ -85,13 +85,13 @@ class StundenUebersichtUserFrame(ctk.CTkFrame):
             cursor = connection.cursor()
             try:
                 cursor.execute("""
-                    SELECT DISTINCT p.project_name 
+                    SELECT DISTINCT p.project_number, p.project_name 
                     FROM projects p
                     JOIN user_projects up ON p.project_number = up.project_number
                     WHERE up.user_id = %s
                 """, (self.user_id,))
                 projects = cursor.fetchall()
-                project_names = [project[0] for project in projects]
+                project_names = [f"{project[0]} - {project[1]}" for project in projects]
                 self.project_combo.configure(values=["Alle"] + project_names)
                 self.project_combo.set("Alle")
                 
@@ -125,7 +125,7 @@ class StundenUebersichtUserFrame(ctk.CTkFrame):
             cursor = connection.cursor()
             try:
                 query = """
-                    SELECT p.project_name, s.phase_name, te.hours
+                    SELECT p.project_number, p.project_name, s.phase_name, te.hours
                     FROM time_entries te
                     JOIN projects p ON te.project_number = p.project_number
                     JOIN sia_phases s ON te.phase_id = s.phase_id
@@ -143,8 +143,9 @@ class StundenUebersichtUserFrame(ctk.CTkFrame):
 
                 # Filter für Projekt anwenden
                 if selected_project != "Alle":
-                    query += " AND p.project_name = %s"
-                    params.append(selected_project)
+                    project_number = selected_project.split(" - ")[0]
+                    query += " AND p.project_number = %s"
+                    params.append(project_number)
 
                 # Filter für Phase anwenden
                 if selected_phase != "Alle":
@@ -159,7 +160,8 @@ class StundenUebersichtUserFrame(ctk.CTkFrame):
                 # Daten in die Treeview einfügen
                 for entry in entries:
                     print(f"Inserting into Treeview: {entry}")
-                    self.project_treeview.insert("", "end", values=entry)
+                    combined_project = f"{entry[0]} - {entry[1]}"
+                    self.project_treeview.insert("", "end", values=(combined_project, entry[2], entry[3]))
                     total_filtered_hours += entry[2]
                 
                 # Gesamtstunden für den Filter anzeigen
