@@ -1,4 +1,5 @@
 import customtkinter as ctk
+from tkinter import messagebox
 from features.feature_save_time_entry import save_hours
 from db.db_connection import create_connection
 
@@ -19,11 +20,19 @@ class TimeEntryFrame(ctk.CTkFrame):
 
         # Eingabefeld für Stunden
         self.hours_entry = ctk.CTkEntry(time_entry_frame, placeholder_text="Stunden eingeben")
-        self.hours_entry.pack(padx=10, pady=10, anchor="center")
-
+        self.hours_entry.pack(padx=10, pady=10)
+        
+        # Label für die Gesamtstunden an diesem Tag
+        self.phase_hours_label = ctk.CTkLabel(time_entry_frame, text="", font=("", 12))
+        self.phase_hours_label.pack(padx=10)
+        
         # Button zum Speichern
         save_button = ctk.CTkButton(time_entry_frame, text="Speichern", command=self.save_time_entry)
-        save_button.pack(pady=(0,10), side="bottom")
+        save_button.pack(pady=10, anchor="s")
+        
+        # Button zum Löschen der Stunden
+        self.delete_button = ctk.CTkButton(time_entry_frame, text="Löschen", command=self.delete_time_entry, fg_color="red")
+        self.delete_button.pack(pady=10, side="bottom")        
 
     def update_date(self, selected_date):
         self.selected_date = selected_date
@@ -32,32 +41,73 @@ class TimeEntryFrame(ctk.CTkFrame):
         
     def load_hours(self):
         """Lädt vorhandene Stunden für das ausgewählte Datum aus der Datenbank."""
-        if not self.selected_date or not self.master.selected_project_number or not self.master.choose_sia_phase_frame.selected_phase_id:
+        if not self.selected_date:
             return
 
         connection = create_connection()
         if connection:
             cursor = connection.cursor()
             try:
-                query = """
-                SELECT hours FROM time_entries
-                WHERE user_id = %s AND project_number = %s AND phase_id = %s AND entry_date = %s
+                phase_query = """
+                SELECT s.phase_name, te.hours
+                FROM time_entries te
+                JOIN sia_phases s ON te.phase_id = s.phase_id
+                WHERE te.user_id = %s AND te.entry_date = %s
                 """
-                cursor.execute(query, (
-                    self.master.user_id,
-                    self.master.selected_project_number,
-                    self.master.choose_sia_phase_frame.selected_phase_id,
-                    self.selected_date
-                ))
-                result = cursor.fetchone()
-                if result:
-                    self.hours_entry.delete(0, "end")
-                    self.hours_entry.insert(0, str(result[0]))
+                cursor.execute(phase_query, (self.master.user_id, self.selected_date))
+                results = cursor.fetchall()
+
+                if results:
+                    # Erstellen eines Texts mit allen Phasenstunden
+                    phase_hours_text = ""
+                    for phase_name, hours in results:
+                        phase_hours_text += f"{phase_name} - {hours:.2f} h\n"
+
+                    # Anzeige des Texts im Label
+                    self.phase_hours_label.configure(text=phase_hours_text)
                 else:
-                    self.hours_entry.delete(0, "end")
+                    self.phase_hours_label.configure(text="")
+
+            except Exception as e:
+                print(f"Fehler beim Laden der Stunden: {e}")
             finally:
                 cursor.close()
                 connection.close()
+        
+    def delete_time_entry(self):
+        """Löscht die eingetragenen Stunden für das ausgewählte Datum aus der Datenbank."""
+        if not self.selected_date:
+            messagebox.showerror("Fehler", "Kein Datum ausgewählt.")
+            return
+        
+        confirm = messagebox.askyesno("Löschen bestätigen", "Bist du sicher, dass du die Stunden für diesen Tag löschen möchtest?")
+        if not confirm:
+            return
+
+        connection = create_connection()
+        if connection:
+            cursor = connection.cursor()
+            try:
+                # Löschen der Stunden für den ausgewählten Tag
+                delete_query = """
+                DELETE FROM time_entries
+                WHERE user_id = %s AND entry_date = %s
+                """
+                cursor.execute(delete_query, (self.master.user_id, self.selected_date))
+                connection.commit()
+                messagebox.showinfo("Erfolgreich", f"Stunden für {self.selected_date} erfolgreich gelöscht.")
+                
+                # Eingabefeld und Label nach dem Löschen zurücksetzen
+                self.hours_entry.configure(state="normal")
+                self.hours_entry.delete(0, "end")
+                self.phase_hours_label.configure(text="")
+
+            except Exception as e:
+                messagebox.showerror("Fehler", f"Fehler beim Löschen der Stunden: {e}")
+            finally:
+                cursor.close()
+                connection.close()
+        self.load_hours()
 
     def save_time_entry(self):
         hours = self.hours_entry.get()
@@ -69,7 +119,7 @@ class TimeEntryFrame(ctk.CTkFrame):
         print(f"entry_date: {self.selected_date}")
         
         if not hours or not self.selected_date:
-            print("Fehler: Datum oder Stunden fehlen.")
+            messagebox.showerror("Fehler", "Datum, Stunden oder Phase fehlen.")
             return
 
         user_id = self.master.user_id
@@ -78,9 +128,8 @@ class TimeEntryFrame(ctk.CTkFrame):
 
         success = save_hours(user_id, project_number, phase_id, hours, self.selected_date)
         if success:
-            print(f"Stunden für {self.selected_date} erfolgreich gespeichert.")
+            messagebox.showinfo("Erfolgreich", f"Stunden für {self.selected_date} erfolgreich gespeichert.")
             self.hours_entry.delete(0, "end")
+            self.load_hours()
         else:
-            print(f"Fehler beim Speichern der Stunden für {self.selected_date}.")
-        
-        print(f"Nach Aktualisierung - project_number: {self.master.selected_project_number}")
+            messagebox.showerror("Fehler", f"Fehler beim Speichern der Stunden für {self.selected_date}.")
