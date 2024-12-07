@@ -10,7 +10,7 @@ class UserFrame(ctk.CTkFrame):
         super().__init__(master, corner_radius=10)
         
         # Label für Users
-        user_label = ctk.CTkLabel(master=self, text="Users", font=("", 18, "bold"))
+        user_label = ctk.CTkLabel(master=self, text="Benutzer", font=("", 18, "bold"))
         user_label.pack(pady=10, anchor="n")
         
         # Liste der Users

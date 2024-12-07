@@ -59,7 +59,7 @@ class StundenUebersichtProjectFrame(ctk.CTkFrame):
         tree_frame = ctk.CTkFrame(self)
         tree_frame.pack(padx=10, pady=(0,10), fill="both", expand=True)
         
-        columns = ("Benutzername", "Phase", "Stunden")
+        columns = ("Benutzername", "Datum", "Phase", "Stunden")
         self.stunden_treeview = ttk.Treeview(tree_frame, columns=columns, show="headings", height=5)
         
         for col in columns:
@@ -125,7 +125,7 @@ class StundenUebersichtProjectFrame(ctk.CTkFrame):
             cursor = connection.cursor()
             try:
                 query = """
-                    SELECT u.username, s.phase_name, te.hours
+                    SELECT u.username, s.phase_name, te.hours, te.entry_date
                     FROM time_entries te
                     JOIN users u ON te.user_id = u.user_id
                     JOIN sia_phases s ON te.phase_id = s.phase_id
@@ -152,11 +152,15 @@ class StundenUebersichtProjectFrame(ctk.CTkFrame):
                 cursor.execute(query, params)
                 
                 entries = cursor.fetchall()
+                
+                # Sortieren der Einträge nach Datum (entry_date)
+                entries.sort(key=lambda x: x[3])
+                
                 total_filtered_hours = 0
 
                 # Daten in die Treeview einfügen
                 for entry in entries:
-                    self.stunden_treeview.insert("", "end", values=entry)
+                    self.stunden_treeview.insert("", "end", values=(entry[0], entry[3], entry[1], entry[2]))
                     total_filtered_hours += entry[2]
                 
                 # Gesamtstunden für den Filter anzeigen
