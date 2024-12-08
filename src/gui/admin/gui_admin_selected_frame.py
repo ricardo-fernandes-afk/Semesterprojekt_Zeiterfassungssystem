@@ -41,7 +41,7 @@ class SelectedFrame(ctk.CTkFrame):
         return title_label
 
     def create_description_label(self):
-        description_label = ctk.CTkLabel(self, text="", font=("", 16), wraplength=300)
+        description_label = ctk.CTkLabel(self, text="", font=("", 16), wraplength=500)
         description_label.grid(row=1, columnspan=4, sticky="nsew")
         return description_label
 

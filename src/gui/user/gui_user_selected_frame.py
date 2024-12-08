@@ -25,6 +25,10 @@ class UserSelectedFrame(ctk.CTkFrame):
     def clear_widgets(self):
         for widget in self.winfo_children():
             widget.destroy()
+        self.time_entry_frame = None
+        self.choose_sia_phase_frame = None
+        self.calendar_frame = None
+        self.diagram_frame = None
 
     def create_widgets(self):
         self.title_label = self.create_title_label()
@@ -37,7 +41,7 @@ class UserSelectedFrame(ctk.CTkFrame):
         return title_label
 
     def create_description_label(self):
-        description_label = ctk.CTkLabel(self, text="", font=("", 16), wraplength=300)
+        description_label = ctk.CTkLabel(self, text="", font=("", 16), wraplength=500)
         description_label.grid(row=1, columnspan=2, sticky="nsew")
         return description_label
 
