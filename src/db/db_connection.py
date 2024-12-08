@@ -1,5 +1,5 @@
 import psycopg2
-from db_config import DB_CONFIG
+from db.db_config import DB_CONFIG
 
 # Verbindung zur PostgreSQL-Datenbank herstellen
 

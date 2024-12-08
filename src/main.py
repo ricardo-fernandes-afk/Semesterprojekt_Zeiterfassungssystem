@@ -1,15 +1,13 @@
 import customtkinter as ctk
-from gui_login import create_login_layout
+from gui.gui_appearance_color import appearance_color
+from gui.gui_login import LoginGUI
 
 
 def main():
-    
-    # Hauptfenster des Programms
-    ctk.set_appearance_mode("dark")
-    ctk.set_default_color_theme("green")
-    
     # Starte das Login Interface
-    create_login_layout()
+    root = ctk.CTk()
+    login_gui = LoginGUI(master=root)
+    root.mainloop() 
     
 if __name__ == "__main__":
     main()
