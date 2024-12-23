@@ -3,19 +3,23 @@ from tkinter import messagebox, ttk
 from db.db_connection import create_connection
 from features.feature_add_users import add_user
 from features.feature_delete_users import delete_user, get_selected_user_id
+from gui.gui_appearance_color import appearance_color, get_default_styles, apply_treeview_style
 
 class UserFrame(ctk.CTkFrame):
-    
     def __init__(self, master):
-        super().__init__(master, corner_radius=10)
+        self.colors = appearance_color()
+        self.styles = get_default_styles()
+        
+        super().__init__(master, corner_radius=10, fg_color=self.colors["background"])
         
         # Label für Users
-        user_label = ctk.CTkLabel(master=self, text="Benutzer", font=("", 18, "bold"))
+        user_label = ctk.CTkLabel(master=self, text="Benutzer", **self.styles["title"])
         user_label.pack(pady=10, anchor="n")
         
         # Liste der Users
         columns = ("ID", "Username", "Password", "Role")
         self.user_treeview = ttk.Treeview(master=self, columns=columns, show="headings")
+        apply_treeview_style(self.colors)
         
         self.update_idletasks()
         frame_width = self.winfo_width()
@@ -33,10 +37,21 @@ class UserFrame(ctk.CTkFrame):
         self.user_treeview.pack(fill="both", expand=True, padx=10, pady=10, anchor="n")
         
         # Button zum Hinzufügen und Löschen von User
-        add_button = ctk.CTkButton(self, text="Benutzer hinzufügen", command=self.open_add_user_window)
+        add_button = ctk.CTkButton(
+            self,
+            text="Benutzer hinzufügen",
+            command=self.open_add_user_window,
+            **self.styles["button"]
+        )
         add_button.pack(pady=10, anchor="s")
         
-        delete_button = ctk.CTkButton(self, text="Benutzer löschen", command=self.open_delete_user_window, fg_color="red")
+        delete_button = ctk.CTkButton(
+            self,
+            text="Benutzer löschen",
+            command=self.open_delete_user_window,
+            fg_color=self.colors["error"],
+            hover_color=self.colors["warning"],
+        )
         delete_button.pack(pady=10, anchor="s")
         
         self.load_users()

@@ -1,26 +1,32 @@
 import customtkinter as ctk
-from tkinter import messagebox
+from tkinter import messagebox, PhotoImage
+from PIL import Image, ImageTk
 from db.db_connection import create_connection
-from gui.gui_appearance_color import appearance_color
+from gui.gui_appearance_color import appearance_color, get_default_styles
 
 class LoginGUI:
     def __init__(self, master):
         self.master = master
-        appearance_color()
+        colors = appearance_color()
+        styles = get_default_styles()
         
         self.master.geometry("600x400")
-        self.master.title("Login mit CustomTkinter")
+        self.master.title("TimeArch - More Time for Visions")
+        self.master.configure(bg=colors["background"])
         
-        self.label = ctk.CTkLabel(self.master, text="Login", font=("", 24))
+        icon_path = "C:/Users/ricar/OneDrive/Dokumente/VS_Projects/Semesterprojekt_Zeiterfassungssystem/docs/Logo_TimeArch.ico"
+        self.master.iconbitmap(icon_path)
+        
+        self.label = ctk.CTkLabel(self.master, text="Login", **styles["title"])
         self.label.pack(pady=12)
         
-        self.username_entry = ctk.CTkEntry(self.master, placeholder_text="Benutzername")
+        self.username_entry = ctk.CTkEntry(self.master, placeholder_text="Benutzername", **styles["entry"])
         self.username_entry.pack(pady=20)
         
-        self.password_entry = ctk.CTkEntry(self.master, placeholder_text="Passwort", show="*")
+        self.password_entry = ctk.CTkEntry(self.master, placeholder_text="Passwort", show="*", **styles["entry"])
         self.password_entry.pack(pady=10)
         
-        self.login_button = ctk.CTkButton(self.master, text="Login", command=self.login)
+        self.login_button = ctk.CTkButton(self.master, text="Login", **styles["button"], command=self.login)
         self.login_button.pack(pady=10)
         
     def login(self):

@@ -3,19 +3,25 @@ from tkinter import messagebox, ttk
 from db.db_connection import create_connection
 from features.feature_add_projects import add_project
 from features.feature_delete_project import delete_project, get_selected_project_number
+from gui.gui_appearance_color import appearance_color, get_default_styles, apply_treeview_style
  
 class ProjectFrame(ctk.CTkFrame):
      
     def __init__(self, master):
-        super().__init__(master, corner_radius=10)
+        self.colors = appearance_color()
+        self.styles = get_default_styles()
+        
+        super().__init__(master, corner_radius=10, fg_color=self.colors["background"])
     
         # Label für Projekte
-        project_label = ctk.CTkLabel(master=self, text="Projekte", font=("", 18, "bold"))
+        project_label = ctk.CTkLabel(master=self, text="Projekte", **self.styles["title"])
         project_label.pack(pady=10, anchor="n")
         
         # Liste der Projekte
         columns = ("Projektnummer", "Projektname", "Beschreibung")
         self.project_treeview = ttk.Treeview(master=self, columns=columns, show="headings")
+        
+        apply_treeview_style(self.colors)
         
         self.update_idletasks()
         frame_width = self.winfo_width()
@@ -33,11 +39,22 @@ class ProjectFrame(ctk.CTkFrame):
         self.project_treeview.pack(fill="both", expand=True, padx=10, pady=10, anchor="n")
 
         # Button zum Hinzufügen von Projekten
-        add_project_button = ctk.CTkButton(master=self, text="Projekt hinzufügen", command=self.open_add_project_window)
+        add_project_button = ctk.CTkButton(
+            master=self,
+            text="Projekt hinzufügen",
+            command=self.open_add_project_window,
+            **self.styles["button"],
+        )
         add_project_button.pack(pady=10, anchor="s")
         
          # Button zum Löschen von Projekten
-        delete_project_button = ctk.CTkButton(master=self, text="Projekt Löchen", command=self.open_delete_project_window, fg_color="red")
+        delete_project_button = ctk.CTkButton(
+            master=self,
+            text="Projekt Löchen",
+            command=self.open_delete_project_window,
+            fg_color=self.colors["error"],
+            hover_color=self.colors["warning"],
+        )
         delete_project_button.pack(pady=10, anchor="s")
         
         self.load_projects()

@@ -2,23 +2,29 @@ import customtkinter as ctk
 from gui.admin.gui_project_frame import ProjectFrame
 from gui.admin.gui_users_frame import UserFrame
 from gui.admin.gui_admin_selected_frame import SelectedFrame
-from gui.gui_appearance_color import appearance_color
+from gui.gui_appearance_color import appearance_color, get_default_styles
 from features.feature_admin_event_handlers import EventHandlers
+from tkinter import PhotoImage
 
 class AdminGUI:
     
     def __init__(self, master, username, user_id):
+        self.colors = appearance_color()
+        self.styles = get_default_styles()
         self.master = master
         self.user_id = user_id
-        appearance_color()
         
         # Fenster für den Admin
-        self.master.title("Admin Interface")
         self.master.geometry("1200x800")
+        self.master.title("TimeArch - More Time for Visions")
+        self.master.configure(bg=self.colors["background"])
+        
+        icon_image = PhotoImage(file=r"C:\Users\ricar\OneDrive\Dokumente\VS_Projects\Semesterprojekt_Zeiterfassungssystem\docs\Logo_TimeArch.gif")
+        self.master.iconphoto(False, icon_image)
         
         # Willkommen Label für den Admin
         welcome_text = f"Willkommen, Admin {username}!"
-        welcome_label = ctk.CTkLabel(master=self.master, text = welcome_text, font=("", 20))
+        welcome_label = ctk.CTkLabel(master=self.master, text = welcome_text, **self.styles["title"])
         welcome_label.grid(row=0, column=0, columnspan=4, pady=10, padx=10, sticky="nw")
         
         # Admin Frame in 4 columns aufteilen

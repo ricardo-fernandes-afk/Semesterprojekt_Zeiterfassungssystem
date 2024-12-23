@@ -2,10 +2,14 @@ import customtkinter as ctk
 from gui.user.gui_choose_sia_phase_frame import ChooseSIAPhaseFrame
 from gui.user.gui_calendar_frame import CalendarFrame
 from gui.user.gui_time_entry_frame import TimeEntryFrame
+from gui.gui_appearance_color import appearance_color, get_default_styles
 
 class UserSelectedFrame(ctk.CTkFrame):
     def __init__(self, master, user_id, selected_id=None, selected_name=None, description=None):
-        super().__init__(master, corner_radius=10)
+        self.colors = appearance_color()
+        self.styles = get_default_styles()
+        
+        super().__init__(master, corner_radius=10, fg_color=self.colors["background"])
         self.user_id = user_id
         self.selected_id = selected_id
         self.selected_name = selected_name
@@ -36,12 +40,12 @@ class UserSelectedFrame(ctk.CTkFrame):
 
     def create_title_label(self):
         title_text = f"{self.selected_id} {self.selected_name}" if self.selected_name else "Wählen Sie ein Projekt"
-        title_label = ctk.CTkLabel(self, text=title_text, font=("", 18, "bold"))
+        title_label = ctk.CTkLabel(self, text=title_text, **self.styles["title"])
         title_label.grid(row=0, columnspan=2, pady=5, sticky="nsew")
         return title_label
 
     def create_description_label(self):
-        description_label = ctk.CTkLabel(self, text="", font=("", 16), wraplength=500)
+        description_label = ctk.CTkLabel(self, text="", **self.styles["description"], wraplength=500)
         description_label.grid(row=1, columnspan=2, sticky="nsew")
         return description_label
 

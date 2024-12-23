@@ -3,10 +3,14 @@ from db.db_connection import create_connection
 from tkinter import messagebox, ttk
 from features.feature_load_users import load_users
 from features.feature_load_project_users import load_project_users
+from gui.gui_appearance_color import appearance_color, get_default_styles, apply_treeview_style
 
 class UserToProjectFrame(ctk.CTkFrame):
     def __init__(self, master, project_number):
-        super().__init__(master, corner_radius=10)
+        self.colors = appearance_color()
+        self.styles = get_default_styles()
+        
+        super().__init__(master, corner_radius=10, fg_color=self.colors["alt_background"])
         self.project_number = project_number
         self.available_users = []
         self.project_users = []
@@ -16,23 +20,29 @@ class UserToProjectFrame(ctk.CTkFrame):
 
     def create_widgets(self):
         # Label für User-Zuweisung
-        self.label = ctk.CTkLabel(self, text="Benutzer zu Projekt zuweisen", font=("", 16, "bold"))
+        self.label = ctk.CTkLabel(self, text="Benutzer zuweisen", **self.styles["subtitle"])
         self.label.pack(pady=10, padx=10)
         
         # User-Auswahl Dropdown
-        self.user_dropdown = ctk.CTkComboBox(self)
+        self.user_dropdown = ctk.CTkComboBox(self, **self.styles["combobox"])
         self.user_dropdown.pack(padx=10, fill="x", expand=False)
         
         # Zuweisen-Button
-        self.assign_button = ctk.CTkButton(self, text="Benutzer zuweisen", command=self.assign_user_to_project)
+        self.assign_button = ctk.CTkButton(
+            self,
+            text="Benutzer zuweisen",
+            command=self.assign_user_to_project,
+            **self.styles["button"]
+        )
         self.assign_button.pack(padx=10, pady=10)
         
         # Treeview für die Liste der Benutzer im Projekt
-        treeview_frame = ctk.CTkFrame(self)
+        treeview_frame = ctk.CTkFrame(self, fg_color=self.colors["alt_background"])
         treeview_frame.pack(padx=10, fill="both", expand=True)
         
         columns = ("Benutzer-ID", "Benutzername")
         self.users_treeview = ttk.Treeview(treeview_frame, columns=columns, show="headings", height=5)
+        apply_treeview_style(self.colors)
         
         for col in columns:
             self.users_treeview.heading(col, text=col)
@@ -40,12 +50,24 @@ class UserToProjectFrame(ctk.CTkFrame):
         self.users_treeview.pack(side="left", fill="both", expand=True, padx=10, pady=10)
         
         # Scrollbar hinzufügen
-        scrollbar = ctk.CTkScrollbar(treeview_frame, command=self.users_treeview.yview, height=5)
+        scrollbar = ctk.CTkScrollbar(
+            treeview_frame,
+            command=self.users_treeview.yview,
+            height=5,
+            fg_color=self.colors["alt_background"],
+            button_color=self.colors["background_light"]
+        )
         self.users_treeview.configure(yscrollcommand=scrollbar.set)
         scrollbar.pack(side="right", fill="y", anchor="e")
         
         # Löschen-Button
-        self.delete_button = ctk.CTkButton(self, text="Benutzer entfernen", fg_color="red", command=self.delete_user_from_project)
+        self.delete_button = ctk.CTkButton(
+            self,
+            text="Benutzer entfernen",
+            command=self.delete_user_from_project,
+            fg_color=self.colors["error"],
+            hover_color=self.colors["warning"]
+        )
         self.delete_button.pack(pady=10, padx=10)
 
     def load_users(self):

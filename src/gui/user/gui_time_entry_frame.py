@@ -2,36 +2,51 @@ import customtkinter as ctk
 from tkinter import messagebox
 from features.feature_save_time_entry import save_hours
 from db.db_connection import create_connection
+from gui.gui_appearance_color import appearance_color, get_default_styles
 
 class TimeEntryFrame(ctk.CTkFrame):
     def __init__(self, master):
-        super().__init__(master, corner_radius=10)
+        self.colors=appearance_color()
+        self.styles=get_default_styles()
+        
+        super().__init__(master, corner_radius=10, fg_color=self.colors["alt_background"])
         self.selected_date = None
         self.create_widgets()
-
+        
     def create_widgets(self):
         
-        time_entry_frame = ctk.CTkFrame(self)
+        time_entry_frame = ctk.CTkFrame(self, fg_color=self.colors["alt_background"])
         time_entry_frame.pack(pady=10, padx=10, fill="both", expand=True)
         
         # Label für das Datum
-        self.date_label = ctk.CTkLabel(time_entry_frame, text="Datum: --", font=("", 14, "bold"))
+        self.date_label = ctk.CTkLabel(time_entry_frame, text="Datum: --", **self.styles["small_text"])
         self.date_label.pack(padx=10, pady=10, side="top")
 
         # Eingabefeld für Stunden
-        self.hours_entry = ctk.CTkEntry(time_entry_frame, placeholder_text="Stunden eingeben")
+        self.hours_entry = ctk.CTkEntry(time_entry_frame, placeholder_text="Stunden eingeben", **self.styles["entry"])
         self.hours_entry.pack(padx=10)
         
         # Label für die Gesamtstunden an diesem Tag
-        self.phase_hours_label = ctk.CTkLabel(time_entry_frame, text="", font=("", 12))
+        self.phase_hours_label = ctk.CTkLabel(time_entry_frame, text="", **self.styles["text"])
         self.phase_hours_label.pack(padx=10, pady=10)
         
         # Button zum Speichern
-        save_button = ctk.CTkButton(time_entry_frame, text="Speichern", command=self.save_time_entry)
+        save_button = ctk.CTkButton(
+            time_entry_frame,
+            text="Speichern",
+            command=self.save_time_entry,
+            **self.styles["button"],
+        )
         save_button.pack()
         
         # Button zum Löschen der Stunden
-        self.delete_button = ctk.CTkButton(time_entry_frame, text="Löschen", command=self.delete_time_entry, fg_color="red")
+        self.delete_button = ctk.CTkButton(
+            time_entry_frame,
+            text="Löschen",
+            command=self.delete_time_entry,
+            fg_color=self.colors["error"],
+            hover_color=self.colors["warning"],
+        )
         self.delete_button.pack(pady=10, side="bottom")        
 
     def update_date(self, selected_date):

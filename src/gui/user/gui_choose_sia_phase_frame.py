@@ -1,10 +1,13 @@
 from features.features_load_sia_phases import load_sia_phases
 from db.db_connection import create_connection
+from gui.gui_appearance_color import appearance_color, get_default_styles
 import customtkinter as ctk
 
 class ChooseSIAPhaseFrame(ctk.CTkFrame):
     def __init__(self, master, project_number=None):
-        super().__init__(master, corner_radius=10)
+        self.colors = appearance_color()
+        self.styles = get_default_styles()
+        super().__init__(master, corner_radius=10, fg_color=self.colors["alt_background"])
         self.project_number = project_number
         self.selected_phase = None
         self.selected_phase_id = None
@@ -15,10 +18,10 @@ class ChooseSIAPhaseFrame(ctk.CTkFrame):
 
     def create_widgets(self):
         # Titel für den Frame
-        title_label = ctk.CTkLabel(self, text="Wähle eine SIA Phase:", font=("", 16, "bold"))
+        title_label = ctk.CTkLabel(self, text="Wähle eine SIA Phase:", **self.styles["subtitle"])
         title_label.pack(padx=10, pady=(10,0))
         
-        choose_frame = ctk.CTkFrame(self)
+        choose_frame = ctk.CTkFrame(self, fg_color=self.colors["alt_background"])
         choose_frame.pack(padx=10, pady=10, fill="x", expand=True)
         
         for col in range(4):
@@ -28,12 +31,17 @@ class ChooseSIAPhaseFrame(ctk.CTkFrame):
         phases = load_sia_phases()
         for index, phase in enumerate(phases):
             # Button für die Phase
-            button = ctk.CTkButton(choose_frame, text=phase, command=lambda p=phase: self.select_phase(p))
+            button = ctk.CTkButton(
+                choose_frame,
+                text=phase,
+                command=lambda p=phase: self.select_phase(p),
+                **self.styles["button"],
+            )
             button.grid(row=0, column=index, padx=5, pady=5)
             self.buttons[phase] = button
 
             # Label für die Sollstunden unter dem Button
-            soll_label = ctk.CTkLabel(choose_frame, text="", font=("", 12))
+            soll_label = ctk.CTkLabel(choose_frame, text="", **self.styles["text"])
             soll_label.grid(row=1, column=index, padx=5, pady=5)
             self.soll_stunden_labels[phase] = soll_label
 
@@ -42,9 +50,9 @@ class ChooseSIAPhaseFrame(ctk.CTkFrame):
         self.selected_phase = phase
         self.selected_phase_id = self.get_phase_id(phase)
         for btn_phase, button in self.buttons.items():
-            button.configure(fg_color="gray")
+            button.configure(fg_color=self.colors["disabled"])
         if phase in self.buttons:
-            self.buttons[phase].configure(fg_color="red")
+            self.buttons[phase].configure(fg_color=self.colors["primary"])
             
     def get_phase_id(self, phase_name):
         connection = create_connection()

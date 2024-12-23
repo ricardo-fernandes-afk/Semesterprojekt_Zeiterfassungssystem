@@ -1,13 +1,17 @@
 # Datei: gui_stunden_uebersicht_frame.py
 import customtkinter as ctk
 from db.db_connection import create_connection
+from gui.gui_appearance_color import appearance_color, get_default_styles, apply_treeview_style
 import calendar
 from datetime import datetime
 from tkinter import ttk
 
 class StundenUebersichtProjectFrame(ctk.CTkFrame):
     def __init__(self, master, project_number=None):
-        super().__init__(master, corner_radius=10)
+        self.colors = appearance_color()
+        self.styles = get_default_styles()
+        
+        super().__init__(master, corner_radius=10, fg_color=self.colors["alt_background"])
         self.project_number = project_number
         self.selected_month = datetime.now().month
         self.selected_year = datetime.now().year
@@ -15,52 +19,66 @@ class StundenUebersichtProjectFrame(ctk.CTkFrame):
 
     def create_widgets(self):
         # Filter-Dropdowns für Monat, Jahr, Benutzername und Phase
-        filter_frame = ctk.CTkFrame(self)
+        filter_frame = ctk.CTkFrame(self, fg_color=self.colors["alt_background"])
         filter_frame.pack(padx=10, pady=10, fill="x")
         
-        for col in range(8):
+        for col in range(4):
             filter_frame.grid_columnconfigure(col, weight=1)
 
         # Monat-Auswahl
-        month_label = ctk.CTkLabel(filter_frame, text="Monat:")
-        month_label.grid(row=0, column=0, padx=10, pady=10, sticky="w")
+        month_label = ctk.CTkLabel(filter_frame, text="Monat", **self.styles["text"])
+        month_label.grid(row=0, column=0, padx=10, pady=10, sticky="nsew")
 
-        self.month_combo = ctk.CTkComboBox(filter_frame, values=["Alle"] + list(calendar.month_name)[1:])
+        self.month_combo = ctk.CTkComboBox(
+            filter_frame,
+            values=["Alle"] + list(calendar.month_name)[1:],
+            **self.styles["combobox"],
+        )
         self.month_combo.set("Alle")
-        self.month_combo.grid(row=0, column=1, padx=10, pady=10, sticky="nsew")
+        self.month_combo.grid(row=1, column=0, padx=10, sticky="nsew")
         
         # Jahr-Auswahl
-        year_label = ctk.CTkLabel(filter_frame, text="Jahr:")
-        year_label.grid(row=0, column=2, padx=10, pady=10, sticky="w")
+        year_label = ctk.CTkLabel(filter_frame, text="Jahr", **self.styles["text"])
+        year_label.grid(row=0, column=1, padx=10, pady=10, sticky="nsew")
 
-        self.year_combo = ctk.CTkComboBox(filter_frame, values=[str(year) for year in range(2024, datetime.now().year + 1)])
+        self.year_combo = ctk.CTkComboBox(
+            filter_frame,
+            values=[str(year) for year in range(2024, datetime.now().year + 1)],
+            **self.styles["combobox"],
+        )
         self.year_combo.set(str(self.selected_year))
-        self.year_combo.grid(row=0, column=3, padx=10, pady=10, sticky="nsew")
+        self.year_combo.grid(row=1, column=1, padx=10, sticky="nsew")
 
         # Benutzername-Auswahl
-        user_label = ctk.CTkLabel(filter_frame, text="Benutzername:")
-        user_label.grid(row=0, column=4, padx=10, pady=10, sticky="w")
+        user_label = ctk.CTkLabel(filter_frame, text="Benutzername", **self.styles["text"])
+        user_label.grid(row=0, column=2, padx=10, pady=10, sticky="nsew")
 
-        self.user_combo = ctk.CTkComboBox(filter_frame)
-        self.user_combo.grid(row=0, column=5, padx=10, pady=10, sticky="nsew")
+        self.user_combo = ctk.CTkComboBox(filter_frame, **self.styles["combobox"])
+        self.user_combo.grid(row=1, column=2, padx=10, sticky="nsew")
         
         # Phase-Auswahl
-        phase_label = ctk.CTkLabel(filter_frame, text="Phase:")
-        phase_label.grid(row=0, column=6, padx=10, pady=10, sticky="w")
+        phase_label = ctk.CTkLabel(filter_frame, text="Phase", **self.styles["text"])
+        phase_label.grid(row=0, column=3, padx=10, pady=10, sticky="nsew")
 
-        self.phase_combo = ctk.CTkComboBox(filter_frame)
-        self.phase_combo.grid(row=0, column=7, padx=10, pady=10, sticky="nsew")
+        self.phase_combo = ctk.CTkComboBox(filter_frame, **self.styles["combobox"])
+        self.phase_combo.grid(row=1, column=3, padx=10, sticky="nsew")
 
         # Aktualisieren-Button
-        filter_button = ctk.CTkButton(filter_frame, text="Filtern", command=self.update_stunden)
-        filter_button.grid(row=1, columnspan=8, padx=10, pady=(0,10))
+        filter_button = ctk.CTkButton(
+            filter_frame,
+            text="Filtern",
+            command=self.update_stunden,
+            **self.styles["button"],
+        )
+        filter_button.grid(row=2, columnspan=4, padx=10, pady=(10,0))
 
         # Treeview für die Stundenübersicht mit Filter-Möglichkeit
-        tree_frame = ctk.CTkFrame(self)
+        tree_frame = ctk.CTkFrame(self, fg_color=self.colors["alt_background"])
         tree_frame.pack(padx=10, pady=(0,10), fill="both", expand=True)
         
         columns = ("Benutzername", "Datum", "Phase", "Stunden")
-        self.stunden_treeview = ttk.Treeview(tree_frame, columns=columns, show="headings", height=5)
+        self.stunden_treeview = ttk.Treeview(tree_frame, columns=columns, show="headings", height=6)
+        apply_treeview_style(self.colors)
         
         for col in columns:
             self.stunden_treeview.heading(col, text=col)
@@ -68,7 +86,13 @@ class StundenUebersichtProjectFrame(ctk.CTkFrame):
         self.stunden_treeview.pack(side="left", fill="both", expand=True, padx=10, pady=10)
 
         # Scrollbar hinzufügen
-        scrollbar = ctk.CTkScrollbar(tree_frame, command=self.stunden_treeview.yview, height=5)
+        scrollbar = ctk.CTkScrollbar(
+            tree_frame,
+            command=self.stunden_treeview.yview,
+            height=6,
+            fg_color=self.colors["alt_background"],
+            button_color=self.colors["background_light"],
+        )
         self.stunden_treeview.configure(yscrollc=scrollbar.set)
         scrollbar.pack(side="right", fill="y", anchor="e")
 

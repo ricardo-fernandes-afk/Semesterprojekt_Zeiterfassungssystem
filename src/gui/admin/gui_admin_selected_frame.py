@@ -4,10 +4,14 @@ from gui.admin.gui_user_to_project_frame import UserToProjectFrame
 from gui.admin.gui_stunden_uebersicht_project import StundenUebersichtProjectFrame
 from gui.admin.gui_grundinfos_user import GrundinfosUser
 from gui.admin.gui_stunden_uebersicht_user import StundenUebersichtUserFrame
+from gui.gui_appearance_color import appearance_color, get_default_styles
 
 class SelectedFrame(ctk.CTkFrame):
     def __init__(self, master, user_id=None, selected_id=None, selected_name=None, description=None):
-        super().__init__(master, corner_radius=10)
+        self.colors = appearance_color()
+        self.styles = get_default_styles()
+        
+        super().__init__(master, corner_radius=10, fg_color=self.colors["background"])
         self.user_id = user_id
         self.selected_id = selected_id
         self.selected_name = selected_name
@@ -36,12 +40,12 @@ class SelectedFrame(ctk.CTkFrame):
 
     def create_title_label(self):
         title_text = f"{self.selected_id} {self.selected_name}" if self.selected_name else "Wählen Sie ein Projekt oder einen Benutzer"
-        title_label = ctk.CTkLabel(self, text=title_text, font=("", 18, "bold"))
+        title_label = ctk.CTkLabel(self, text=title_text, **self.styles["title"])
         title_label.grid(row=0, columnspan=4, pady=5, sticky="nsew")
         return title_label
 
     def create_description_label(self):
-        description_label = ctk.CTkLabel(self, text="", font=("", 16), wraplength=500)
+        description_label = ctk.CTkLabel(self, text="", **self.styles["description"], wraplength=500)
         description_label.grid(row=1, columnspan=4, sticky="nsew")
         return description_label
 
