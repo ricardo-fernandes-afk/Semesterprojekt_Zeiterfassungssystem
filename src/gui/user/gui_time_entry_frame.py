@@ -26,6 +26,20 @@ class TimeEntryFrame(ctk.CTkFrame):
         self.hours_entry = ctk.CTkEntry(time_entry_frame, placeholder_text="Stunden eingeben", **self.styles["entry"])
         self.hours_entry.pack(padx=10)
         
+        # Dropdown für die Aktivität
+        if self.master.selected_project_number == "0000":
+            activity_options = ["IT Arbeiten", "Besprechung", "Büroadmin", "Event", "Absenz", "Ferien", "Allgemeines", "Acquisition"]
+        else:
+            activity_options = ["Planung", "Besprechung", "Korrespondenz", "Bauadmin", "Bauleitung", "Verkauf"]
+        
+        self.activity_dropdown = ctk.CTkComboBox(time_entry_frame, values=activity_options, **self.styles["combobox"])
+        self.activity_dropdown.set(activity_options[0])
+        self.activity_dropdown.pack(padx=10, pady=10)
+        
+        # Notizfeld
+        self.notes_entry = ctk.CTkEntry(time_entry_frame, placeholder_text="Notizen", **self.styles["entry"])
+        self.notes_entry.pack(padx=10)
+        
         # Label für die Gesamtstunden an diesem Tag
         self.phase_hours_label = ctk.CTkLabel(time_entry_frame, text="", **self.styles["text"])
         self.phase_hours_label.pack(padx=10, pady=10)
@@ -126,25 +140,22 @@ class TimeEntryFrame(ctk.CTkFrame):
 
     def save_time_entry(self):
         hours = self.hours_entry.get()
+        activity = self.activity_dropdown.get()
+        note = self.notes_entry.get() if self.notes_entry.get() else None
         
-        print(f"user_id: {self.master.user_id}")
-        print(f"project_number: {self.master.selected_project_number}")
-        print(f"phase_id: {self.master.choose_sia_phase_frame.selected_phase_id}")
-        print(f"hours: {hours}")
-        print(f"entry_date: {self.selected_date}")
-        
-        if not hours or not self.selected_date:
-            messagebox.showerror("Fehler", "Datum, Stunden oder Phase fehlen.")
+        if not hours or not activity or not self.selected_date:
+            messagebox.showerror("Fehler", "Datum, Stunden, Phase oder Tätigkeit fehlen.")
             return
 
         user_id = self.master.user_id
         project_number = self.master.selected_project_number
-        phase_id = self.master.choose_sia_phase_frame.selected_phase_id
+        phase_id = self.master.choose_sia_phase_frame.selected_phase_id if hasattr(self.master, "choose_sia_phase_frame") else None
 
-        success = save_hours(user_id, project_number, phase_id, hours, self.selected_date)
+        success = save_hours(user_id, project_number, phase_id, hours, activity, note, self.selected_date)
         if success:
             messagebox.showinfo("Erfolgreich", f"Stunden für {self.selected_date} erfolgreich gespeichert.")
             self.hours_entry.delete(0, "end")
+            self.notes_entry.delete(0, "end")
             self.load_hours()
         else:
             messagebox.showerror("Fehler", f"Fehler beim Speichern der Stunden für {self.selected_date}.")

@@ -19,10 +19,9 @@ class UserGUI:
         self.master.title("TimeArch - More Time for Visions")
         self.master.configure(bg=colors['background'])
         
-        icon_image = PhotoImage(file=r"C:\Users\ricar\OneDrive\Dokumente\VS_Projects\Semesterprojekt_Zeiterfassungssystem\docs\Logo_TimeArch.gif")
-        self.master.iconphoto(False, icon_image)
+        icon_path = "C:/Users/ricar/OneDrive/Dokumente/VS_Projects/Semesterprojekt_Zeiterfassungssystem/docs/Logo_TimeArch.ico"
+        self.master.iconbitmap(icon_path)
 
-        
         # Willkommen Label für den Admin
         welcome_text = f"Willkommen, {username}!"
         welcome_label = ctk.CTkLabel(master=self.master, text = welcome_text, **styles["title"])

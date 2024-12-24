@@ -29,6 +29,13 @@ def setup_database():
                 description TEXT
             );
         ''')
+        
+        # Büro Intern Projekt einfügen
+        cursor.execute('''
+            INSERT INTO projects (project_number, project_name, description)
+            VALUES ('0000', 'Büro Intern', 'Stunden für interne Büroaktivitäten')
+            ON CONFLICT (project_number) DO NOTHING;
+        ''')
 
         # Tabelle 'sia_phases' erstellen, um die Struktur nach Norm aufzubauen
         cursor.execute('''
@@ -68,7 +75,9 @@ def setup_database():
                 project_number VARCHAR(50) REFERENCES projects(project_number),
                 phase_id INTEGER REFERENCES sia_phases(phase_id),
                 hours DECIMAL(5, 2),
-                entry_date DATE DEFAULT CURRENT_DATE
+                entry_date DATE DEFAULT CURRENT_DATE,
+                activity VARCHAR(100) NOT NULL,
+                note TEXT
             );
         ''')
         

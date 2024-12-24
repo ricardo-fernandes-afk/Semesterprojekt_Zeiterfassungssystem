@@ -12,6 +12,7 @@ class SelectedFrame(ctk.CTkFrame):
         self.styles = get_default_styles()
         
         super().__init__(master, corner_radius=10, fg_color=self.colors["background"])
+        self.grid_propagate(False)
         self.user_id = user_id
         self.selected_id = selected_id
         self.selected_name = selected_name
@@ -60,8 +61,12 @@ class SelectedFrame(ctk.CTkFrame):
         self.title_label.configure(text=f"{selected_id} - {selected_name}")
         self.description_label.configure(text=self.description if self.description else "")
 
-        self.sia_phases_frame = SIAPhasenSollStundenFrame(self, project_number=selected_id)
-        self.sia_phases_frame.grid(row=2, columnspan=4, padx=10, pady=10, sticky="nsew")
+        if selected_id != "0000":
+            self.sia_phases_frame = SIAPhasenSollStundenFrame(self, project_number=selected_id)
+            self.sia_phases_frame.grid(row=2, columnspan=4, padx=10, pady=10, sticky="nsew")
+        else:
+            self.sia_phases_frame = ctk.CTkFrame(self, fg_color=self.colors["alt_background"])
+            self.sia_phases_frame.grid(row=2, columnspan=4, padx=10, pady=10, sticky="nsew")
         
         self.user_to_project_frame = UserToProjectFrame(self, project_number=selected_id)
         self.user_to_project_frame.grid(row=3, column=0, padx=10, pady=10, sticky="nsew")

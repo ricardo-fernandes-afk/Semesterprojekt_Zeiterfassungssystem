@@ -19,8 +19,8 @@ class AdminGUI:
         self.master.title("TimeArch - More Time for Visions")
         self.master.configure(bg=self.colors["background"])
         
-        icon_image = PhotoImage(file=r"C:\Users\ricar\OneDrive\Dokumente\VS_Projects\Semesterprojekt_Zeiterfassungssystem\docs\Logo_TimeArch.gif")
-        self.master.iconphoto(False, icon_image)
+        icon_path = "C:/Users/ricar/OneDrive/Dokumente/VS_Projects/Semesterprojekt_Zeiterfassungssystem/docs/Logo_TimeArch.ico"
+        self.master.iconbitmap(icon_path)
         
         # Willkommen Label für den Admin
         welcome_text = f"Willkommen, Admin {username}!"
@@ -30,7 +30,7 @@ class AdminGUI:
         # Admin Frame in 4 columns aufteilen
         self.master.grid_columnconfigure(0, weight=1)
         self.master.grid_columnconfigure(1, weight=1)
-        self.master.grid_columnconfigure(2, weight=3)
+        self.master.grid_columnconfigure(2, weight=2)
         self.master.grid_rowconfigure(1, weight=1)
  
         # Frames initialisieren

@@ -18,6 +18,11 @@ def get_selected_project_number(treeview):
     return None      
 
 def delete_project(project_number, refresh_callback):
+    # Verhindern, dass das Büro Intern Projekt gelöscht wird
+    if project_number == "0000":
+        messagebox.showerror("Fehler", "Das Büro Intern Projekt kann nicht gelöscht werden.")
+        return
+    
     connection = create_connection()
     if connection:
         try:

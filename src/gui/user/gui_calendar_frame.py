@@ -16,7 +16,8 @@ class CalendarFrame(ctk.CTkFrame):
         self.calendar = Calendar(
             self, 
             selectmode="day",
-            date_pattern="yyyy-mm-dd",  
+            date_pattern="yyyy-mm-dd",
+            font="Arial, 14", 
             background=self.colors["background_light"],
             foreground=self.colors["text_dark"],
             headersbackground=self.colors["background_light"],

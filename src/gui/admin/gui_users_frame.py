@@ -11,6 +11,7 @@ class UserFrame(ctk.CTkFrame):
         self.styles = get_default_styles()
         
         super().__init__(master, corner_radius=10, fg_color=self.colors["background"])
+        self.grid_propagate(False)
         
         # Label für Users
         user_label = ctk.CTkLabel(master=self, text="Benutzer", **self.styles["title"])
