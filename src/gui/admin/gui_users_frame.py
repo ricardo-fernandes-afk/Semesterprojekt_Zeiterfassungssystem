@@ -17,8 +17,11 @@ class UserFrame(ctk.CTkFrame):
         user_label.pack(pady=10, anchor="n")
         
         # Liste der Users
+        tree_frame = ctk.CTkFrame(master=self, fg_color=self.colors["alt_background"])
+        tree_frame.pack(padx=10, fill="both", expand=True)
+        
         columns = ("ID", "Username", "Password", "Role")
-        self.user_treeview = ttk.Treeview(master=self, columns=columns, show="headings")
+        self.user_treeview = ttk.Treeview(tree_frame, columns=columns, show="headings")
         apply_treeview_style(self.colors)
         
         self.update_idletasks()
@@ -34,7 +37,17 @@ class UserFrame(ctk.CTkFrame):
             self.user_treeview.heading(col, text=col)
             self.user_treeview.column(col, minwidth=50, width=column_width, stretch=True)
             
-        self.user_treeview.pack(fill="both", expand=True, padx=10, pady=10, anchor="n")
+        self.user_treeview.pack(side="left", fill="both", expand=True, padx=10, pady=10)
+        
+        # Scrollbar hinzufügen
+        scrollbar = ctk.CTkScrollbar(
+            tree_frame,
+            command=self.user_treeview.yview,
+            fg_color=self.colors["alt_background"],
+            button_color=self.colors["background_light"],
+        )
+        self.user_treeview.configure(yscrollc=scrollbar.set)
+        scrollbar.pack(side="right", fill="y", anchor="e")
         
         # Button zum Hinzufügen und Löschen von User
         add_button = ctk.CTkButton(

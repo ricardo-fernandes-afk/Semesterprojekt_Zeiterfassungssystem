@@ -27,7 +27,7 @@ class StundenUebersichtUserFrame(ctk.CTkFrame):
 
         # Monat-Auswahl
         month_label = ctk.CTkLabel(filter_frame, text="Monat", **self.styles["text"])
-        month_label.grid(row=0, column=0, padx=10, pady=10, sticky="nsew")
+        month_label.grid(row=0, column=0, padx=10, sticky="s")
 
         self.month_combo = ctk.CTkComboBox(
             filter_frame,
@@ -39,7 +39,7 @@ class StundenUebersichtUserFrame(ctk.CTkFrame):
         
         # Jahr-Auswahl
         year_label = ctk.CTkLabel(filter_frame, text="Jahr", **self.styles["text"])
-        year_label.grid(row=0, column=1, padx=10, pady=10, sticky="nsew")
+        year_label.grid(row=0, column=1, padx=10, sticky="s")
 
         self.year_combo = ctk.CTkComboBox(
             filter_frame,
@@ -51,14 +51,14 @@ class StundenUebersichtUserFrame(ctk.CTkFrame):
 
         # Projekt-Auswahl
         project_label = ctk.CTkLabel(filter_frame, text="Projekt", **self.styles["text"])
-        project_label.grid(row=0, column=2, padx=10, pady=10, sticky="nsew")
+        project_label.grid(row=0, column=2, padx=10, sticky="s")
 
         self.project_combo = ctk.CTkComboBox(filter_frame, **self.styles["combobox"])
         self.project_combo.grid(row=1, column=2, padx=10, pady=10, sticky="nsew")
         
         # Phase-Auswahl
         phase_label = ctk.CTkLabel(filter_frame, text="Phase", **self.styles["text"])
-        phase_label.grid(row=0, column=3, padx=10, pady=10, sticky="nsew")
+        phase_label.grid(row=0, column=3, padx=10, sticky="s")
 
         self.phase_combo = ctk.CTkComboBox(filter_frame, **self.styles["combobox"])
         self.phase_combo.grid(row=1, column=3, padx=10, pady=10, sticky="nsew")
@@ -70,7 +70,7 @@ class StundenUebersichtUserFrame(ctk.CTkFrame):
             command=self.update_projects,
             **self.styles["button"],
         )
-        filter_button.grid(row=2, columnspan=4, padx=10, pady=(10,0))
+        filter_button.grid(row=2, columnspan=4, padx=10)
 
         # Treeview für die Projekteübersicht
         tree_frame = ctk.CTkFrame(self, fg_color=self.colors["alt_background"])

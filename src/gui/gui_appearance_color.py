@@ -4,17 +4,17 @@ from tkinter import ttk
 def appearance_color():
     # Farbschema definieren
     colors = {
-        "primary": "#5B8E54",       # Grün für Hauptaktionen
-        "secondary": "#56828C",     # Blau für unterstützende Aktionen
-        "background": "#414141",    # Dunkler Hintergrund
-        "alt_background": "#5E5E5E",  # Alternative für Container
-        "background_light": "#D3D3D3",  # Heller Hintergrund
+        "primary": "#0F8100",       # Grün für Hauptaktionen
+        "secondary": "#0010A2",     # Blau für unterstützende Aktionen
+        "background": "#333333",    # Dunkler Hintergrund
+        "alt_background": "#404040",  # Alternative für Container
+        "background_light": "#F2F2F2",  # Heller Hintergrund
         "text_light": "#FFFFFF",    # Helle Schrift
         "text_dark": "#000000",     # Dunkle Schrift
         "error": "#B31200",         # Rot für Fehler
         "warning": "#5B0900",       # Gelb für Warnungen
-        "hover": "#365532",         # Hover-Farbe
-        "hover_secondary": "#324C52",  # Hover-Farbe für sekundäre Buttons
+        "hover": "#084800",         # Hover-Farbe
+        "hover_secondary": "#00084E",  # Hover-Farbe für sekundäre Buttons
         "scrollbar": "#D3D3D3",     # Scrollbar-Farbe
         "disabled": "#A6A6A6"       # Deaktivierte Elemente
     }

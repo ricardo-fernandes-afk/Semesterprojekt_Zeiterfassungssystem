@@ -18,9 +18,11 @@ class ProjectFrame(ctk.CTkFrame):
         project_label.pack(pady=10, anchor="n")
         
         # Liste der Projekte
-        columns = ("Projektnummer", "Projektname", "Beschreibung")
-        self.project_treeview = ttk.Treeview(master=self, columns=columns, show="headings")
+        tree_frame = ctk.CTkFrame(master=self, fg_color=self.colors["alt_background"])
+        tree_frame.pack(padx=10, fill="both", expand=True)
         
+        columns = ("Projektnummer", "Projektname", "Beschreibung")
+        self.project_treeview = ttk.Treeview(tree_frame, columns=columns, show="headings")
         apply_treeview_style(self.colors)
         
         self.update_idletasks()
@@ -36,7 +38,17 @@ class ProjectFrame(ctk.CTkFrame):
             self.project_treeview.heading(col, text=col)
             self.project_treeview.column(col, minwidth=50, width=column_width, stretch=True)
         
-        self.project_treeview.pack(fill="both", expand=True, padx=10, pady=10, anchor="n")
+        self.project_treeview.pack(side="left", fill="both", expand=True, padx=10, pady=10)
+        
+        # Scrollbar hinzufügen
+        scrollbar = ctk.CTkScrollbar(
+            tree_frame,
+            command=self.project_treeview.yview,
+            fg_color=self.colors["alt_background"],
+            button_color=self.colors["background_light"],
+        )
+        self.project_treeview.configure(yscrollc=scrollbar.set)
+        scrollbar.pack(side="right", fill="y", anchor="e")
 
         # Button zum Hinzufügen von Projekten
         add_project_button = ctk.CTkButton(
