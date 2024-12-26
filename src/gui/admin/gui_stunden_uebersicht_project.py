@@ -76,13 +76,13 @@ class StundenUebersichtProjectFrame(ctk.CTkFrame):
         tree_frame = ctk.CTkFrame(self, fg_color=self.colors["alt_background"])
         tree_frame.pack(padx=10, pady=(0,10), fill="both", expand=True)
         
-        columns = ("Benutzername", "Datum", "Phase", "Stunden")
+        columns = ("Benutzername", "Datum", "Phase", "Aktivität", "Notiz", "Stunden")
         self.stunden_treeview = ttk.Treeview(tree_frame, columns=columns, show="headings", height=6)
         apply_treeview_style(self.colors)
         
         for col in columns:
             self.stunden_treeview.heading(col, text=col)
-            self.stunden_treeview.column(col, width=100)
+            self.stunden_treeview.column(col, width=0, stretch=True)
         self.stunden_treeview.pack(side="left", fill="both", expand=True, padx=10, pady=10)
 
         # Scrollbar hinzufügen
@@ -149,12 +149,12 @@ class StundenUebersichtProjectFrame(ctk.CTkFrame):
             cursor = connection.cursor()
             try:
                 query = """
-                    SELECT u.username, s.phase_name, te.hours, te.entry_date
-                    FROM time_entries te
-                    JOIN users u ON te.user_id = u.user_id
-                    JOIN sia_phases s ON te.phase_id = s.phase_id
-                    WHERE te.project_number = %s
-                    AND EXTRACT(YEAR FROM te.entry_date) = %s
+                SELECT u.username, s.phase_name, te.hours, te.entry_date, te.activity, te.note
+                FROM time_entries te
+                JOIN users u ON te.user_id = u.user_id
+                LEFT JOIN sia_phases s ON te.phase_id = s.phase_id
+                WHERE te.project_number = %s
+                AND EXTRACT(YEAR FROM te.entry_date) = %s
                 """
                 params = [self.project_number, selected_year]
                 
@@ -184,7 +184,7 @@ class StundenUebersichtProjectFrame(ctk.CTkFrame):
 
                 # Daten in die Treeview einfügen
                 for entry in entries:
-                    self.stunden_treeview.insert("", "end", values=(entry[0], entry[3], entry[1], entry[2]))
+                    self.stunden_treeview.insert("", "end", values=(entry[0], entry[3], entry[1], entry[4], entry[5], entry[2]))
                     total_filtered_hours += entry[2]
                 
                 # Gesamtstunden für den Filter anzeigen

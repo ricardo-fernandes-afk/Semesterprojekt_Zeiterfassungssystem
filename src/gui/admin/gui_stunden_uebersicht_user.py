@@ -76,13 +76,13 @@ class StundenUebersichtUserFrame(ctk.CTkFrame):
         tree_frame = ctk.CTkFrame(self, fg_color=self.colors["alt_background"])
         tree_frame.pack(padx=10, pady=10, fill="both", expand=True)
         
-        columns = ("Projekt", "Datum", "Phase", "Stunden")
+        columns = ("Projekt", "Datum", "Phase", "Aktivität", "Notiz", "Stunden")
         self.project_treeview = ttk.Treeview(tree_frame, columns=columns, show="headings", height=6)
         apply_treeview_style(self.colors)
         
         for col in columns:
             self.project_treeview.heading(col, text=col)
-            self.project_treeview.column(col, width=100)
+            self.project_treeview.column(col, width=0, stretch=True)
         self.project_treeview.pack(side="left", fill="both", expand=True, padx=10, pady=10)
 
         # Scrollbar hinzufügen
@@ -149,10 +149,10 @@ class StundenUebersichtUserFrame(ctk.CTkFrame):
             cursor = connection.cursor()
             try:
                 query = """
-                    SELECT p.project_number, p.project_name, s.phase_name, te.hours, te.entry_date
+                    SELECT p.project_number, p.project_name, s.phase_name, te.hours, te.entry_date, te.activity, te.note
                     FROM time_entries te
                     JOIN projects p ON te.project_number = p.project_number
-                    JOIN sia_phases s ON te.phase_id = s.phase_id
+                    LEFT JOIN sia_phases s ON te.phase_id = s.phase_id
                     WHERE te.user_id = %s
                     AND EXTRACT(YEAR FROM te.entry_date) = %s
                 """
@@ -189,7 +189,7 @@ class StundenUebersichtUserFrame(ctk.CTkFrame):
                 for entry in entries:
                     print(f"Inserting into Treeview: {entry}")
                     combined_project = f"{entry[0]} - {entry[1]}"
-                    self.project_treeview.insert("", "end", values=(combined_project, entry[4], entry[2], entry[3]))
+                    self.project_treeview.insert("", "end", values=(combined_project, entry[4], entry[2], entry[5], entry[6], entry[3]))
                     total_filtered_hours += entry[3]
                 
                 # Gesamtstunden für den Filter anzeigen
