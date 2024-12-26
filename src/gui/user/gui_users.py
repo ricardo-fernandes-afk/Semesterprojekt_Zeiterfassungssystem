@@ -28,8 +28,8 @@ class UserGUI:
         welcome_label.grid(row=0, column=0, columnspan=3, pady=10, padx=10, sticky="nw")
         
         # Admin Frame in 4 columns aufteilen
-        self.master.grid_columnconfigure(0, weight=1)
-        self.master.grid_columnconfigure(1, weight=2)
+        self.master.grid_columnconfigure(0, minsize=600, weight=0)
+        self.master.grid_columnconfigure(1, weight=3)
         self.master.grid_rowconfigure(1, weight=1)
         
         # Frames initialisieren

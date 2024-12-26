@@ -19,10 +19,10 @@ class UserSelectedFrame(ctk.CTkFrame):
         self.selected_project_number = None
         self.create_widgets()
         
-        self.grid_rowconfigure(0, weight=1)
-        self.grid_rowconfigure(1, weight=1)
-        self.grid_rowconfigure(2, weight=1)
-        self.grid_rowconfigure(3, weight=2)
+        self.grid_rowconfigure(0, minsize=50, weight=1)
+        self.grid_rowconfigure(1, minsize=50, weight=1)
+        self.grid_rowconfigure(2, minsize=250, weight=1)
+        self.grid_rowconfigure(3, minsize=550, weight=2)
         self.grid_rowconfigure(4, weight=2)
         for col in range(2):
             self.grid_columnconfigure(col, weight=1)
@@ -67,7 +67,8 @@ class UserSelectedFrame(ctk.CTkFrame):
         else:
             self.choose_sia_phase_frame = ctk.CTkFrame(self, fg_color=self.colors["alt_background"])
             self.choose_sia_phase_frame.grid(row=2, columnspan=2, padx=10, pady=10, sticky="nsew")
-        
+            self.choose_sia_phase_frame.configure(height=0)
+                
         self.calendar_frame = CalendarFrame(self, stunden_uebersicht_frame=self)
         self.calendar_frame.grid(row=3, column=0, padx=10, pady=10, sticky="nsew")
         self.calendar_frame.on_date_selected(None)
