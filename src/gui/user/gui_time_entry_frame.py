@@ -146,12 +146,19 @@ class TimeEntryFrame(ctk.CTkFrame):
         if not hours or not activity or not self.selected_date:
             messagebox.showerror("Fehler", "Datum, Stunden, Phase oder Tätigkeit fehlen.")
             return
+        
+        phase_id = None
 
         user_id = self.master.user_id
         project_number = self.master.selected_project_number
-        phase_id = self.master.choose_sia_phase_frame.selected_phase_id if hasattr(self.master, "choose_sia_phase_frame") else None
+        
+        if hasattr(self.master, "choose_sia_phase_frame") and hasattr(self.master.choose_sia_phase_frame, "selected_phase_id"):
+            phase_id = self.master.choose_sia_phase_frame.selected_phase_id
+                
+        print(f"DEBUG: Stunden={hours}, Tätigkeit={activity}, Notiz={note}, Datum={self.selected_date}, PhaseID={phase_id}")
+        print(f"DEBUG: Benutzer-ID={user_id}, Projekt-ID={project_number}, Phase-ID={phase_id}")
 
-        success = save_hours(user_id, project_number, phase_id, hours, activity, note, self.selected_date)
+        success = save_hours(user_id, project_number, phase_id, hours, self.selected_date, activity, note)
         if success:
             messagebox.showinfo("Erfolgreich", f"Stunden für {self.selected_date} erfolgreich gespeichert.")
             self.hours_entry.delete(0, "end")
@@ -159,3 +166,5 @@ class TimeEntryFrame(ctk.CTkFrame):
             self.load_hours()
         else:
             messagebox.showerror("Fehler", f"Fehler beim Speichern der Stunden für {self.selected_date}.")
+            
+        

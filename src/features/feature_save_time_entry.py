@@ -2,7 +2,7 @@ from db.db_connection import create_connection
 
 def save_hours(user_id, project_number, phase_id, hours, entry_date, activity, note=None):
     """Speichert die Stunden in der Datenbank."""
-    if not all([user_id, project_number, phase_id, hours, entry_date, activity]):
+    if not all([user_id, project_number, hours, entry_date, activity]):
         print("Fehler: Unvollständige Informationen zum Speichern der Stunden.")
         return False
 
