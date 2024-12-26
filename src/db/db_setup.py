@@ -20,6 +20,17 @@ def setup_database():
         
         insert_admin(cursor)
         
+        # Tabelle user_informations erstellen
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS user_settings (
+            id SERIAL PRIMARY KEY,
+            user_id INTEGER REFERENCES users(user_id),
+            default_hours_per_day DECIMAL(4, 2) DEFAULT 8.5,
+            employment_percentage INTEGER DEFAULT 100,
+            vacation_hours DECIMAL(6,2) DEFAULT 212.50
+            );
+        ''')
+        
         # Tabelle 'projects' erstellen
         cursor.execute('''
             CREATE TABLE IF NOT EXISTS projects (
