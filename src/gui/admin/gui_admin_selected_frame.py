@@ -2,7 +2,7 @@ import customtkinter as ctk
 from gui.admin.gui_sia_phasen_soll_stunden_frame import SIAPhasenSollStundenFrame
 from gui.admin.gui_user_to_project_frame import UserToProjectFrame
 from gui.admin.gui_stunden_uebersicht_project import StundenUebersichtProjectFrame
-from gui.admin.gui_grundinfos_user import GrundinfosUser
+from gui.admin.gui_grundinfos_user import GrundInfosUser
 from gui.admin.gui_stunden_uebersicht_user import StundenUebersichtUserFrame
 from gui.gui_appearance_color import appearance_color, get_default_styles
 
@@ -87,7 +87,7 @@ class SelectedFrame(ctk.CTkFrame):
         self.title_label.configure(text=f"{selected_username}")
         self.description_label.configure(text="")
 
-        self.grundinfos_user_frame = GrundinfosUser(self)
+        self.grundinfos_user_frame = GrundInfosUser(self)
         self.grundinfos_user_frame.grid(row=2, columnspan=4, padx=10, pady=10, sticky="nsew")
 
         self.stunden_uebersicht_user_frame = StundenUebersichtUserFrame(self, user_id=selected_user_id)
