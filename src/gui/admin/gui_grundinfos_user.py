@@ -43,9 +43,29 @@ class GrundInfosUser(ctk.CTkFrame):
         self.vacation_entry = ctk.CTkEntry(eingabe_frame, placeholder_text="20", **self.styles["entry"])
         self.vacation_entry.grid(row=1, column=2, padx=10)
         
+        button_frame = ctk.CTkFrame(eingabe_frame, fg_color=self.colors["alt_background"])
+        button_frame.grid(row=2, columnspan=3, padx=10, pady=10)
+        
         # Speichern_Button
-        self.save_button = ctk.CTkButton(eingabe_frame, text="Speichern", command=self.save_user_settings, **self.styles["button"])
-        self.save_button.grid(row=2, columnspan=3, padx=10, pady=10)
+        self.save_button = ctk.CTkButton(
+            button_frame,
+            text="Speichern",
+            command=self.save_user_settings,
+            **self.styles["button"],
+        )
+        self.save_button.pack(side="left", padx=10)
+        
+        # Bearbeiten_Button
+        self.edit_button = ctk.CTkButton(
+            button_frame,
+            text="Bearbeiten",
+            command=self.edit_user_settings,
+            fg_color=self.colors["secondary"],
+            hover_color=self.colors["hover_secondary"],
+        )
+        self.edit_button.pack(side="right", padx=10)
+        
+        self.toggle_entries(state="disabled")
     
     def save_user_settings(self):
         default_hours = self.hours_entry.get() or 8.5
@@ -77,6 +97,7 @@ class GrundInfosUser(ctk.CTkFrame):
                     cursor.execute(insert_query, (self.user_id, default_hours, percentage, vacation_hours))
                     
                 connection.commit()
+                self.toggle_entries(state="normal")
                 messagebox.showinfo("Erfolg", "Einstellungen wurden gespeichert.")
             except Exception as e:
                 messagebox.showerror("Fehler", str(e))
@@ -117,4 +138,13 @@ class GrundInfosUser(ctk.CTkFrame):
             finally:
                 cursor.close()
                 connection.close()
+    
+    def toggle_entries(self, state="normal"):
+        self.hours_entry.configure(state=state)
+        self.percentage_entry.configure(state=state)
+        self.vacation_entry.configure(state=state)
+    
+    def edit_user_settings(self):
+        self.toggle_entries(state="normal")
+        self.is_editable = True
 
