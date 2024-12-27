@@ -87,7 +87,7 @@ class SelectedFrame(ctk.CTkFrame):
         self.title_label.configure(text=f"{selected_username}")
         self.description_label.configure(text="")
 
-        self.grundinfos_user_frame = GrundInfosUser(self)
+        self.grundinfos_user_frame = GrundInfosUser(self, user_id=selected_user_id)
         self.grundinfos_user_frame.grid(row=2, columnspan=4, padx=10, pady=10, sticky="nsew")
 
         self.stunden_uebersicht_user_frame = StundenUebersichtUserFrame(self, user_id=selected_user_id)

@@ -1,4 +1,5 @@
 import customtkinter as ctk
+from tkinter import messagebox
 from db.db_connection import create_connection
 from gui.gui_appearance_color import appearance_color, get_default_styles
 
@@ -10,6 +11,8 @@ class GrundInfosUser(ctk.CTkFrame):
         
         self.user_id = user_id
         self.create_widgets()
+        if self.user_id:
+            self.load_user_settings()   # Vorhandene Daten laden oder Standardwerte setzen
         
     def create_widgets(self):
         
@@ -45,27 +48,73 @@ class GrundInfosUser(ctk.CTkFrame):
         self.save_button.grid(row=2, columnspan=3, padx=10, pady=10)
     
     def save_user_settings(self):
-        default_hours = self.hours_entry.get()
-        percentage = self.percentage_entry.get()
-        vacation_days = self.vacation_entry.get()
+        default_hours = self.hours_entry.get() or 8.5
+        percentage = self.percentage_entry.get() or 100
+        vacation_days = self.vacation_entry.get() or 20
         vacation_hours = float(vacation_days) * float(default_hours)
         
         connection = create_connection()
         if connection:
             cursor = connection.cursor()
             try:
-                query = """
-                UPDATE users
-                SET default_hours_per_day = %s,
-                employment_percentage = %s,
-                vacation_hours = %s
-                WHERE user_id = %s
-                """
-                cursor.execute(query, (default_hours, percentage, vacation_hours, self.user_id))
+                check_query = "SELECT COUNT (*) FROM user_settings WHERE user_id = %s"
+                cursor.execute(check_query, (self.user_id,))
+                exists = cursor.fetchone()[0] > 0
+                if exists:
+                    update_query = """
+                    UPDATE user_settings
+                    SET default_hours_per_day = %s,
+                    employment_percentage = %s,
+                    vacation_hours = %s
+                    WHERE user_id = %s
+                    """
+                    cursor.execute(update_query, (default_hours, percentage, vacation_hours, self.user_id))
+                else:
+                    insert_query = """
+                    INSERT INTO user_settings (user_id, default_hours_per_day, employment_percentage, vacation_hours)
+                    VALUES (%s, %s, %s, %s)
+                    """
+                    cursor.execute(insert_query, (self.user_id, default_hours, percentage, vacation_hours))
+                    
                 connection.commit()
-                ctk.CTkMessagebox.showinfo("Erfolg", "Einstellungen wurden gespeichert.")
+                messagebox.showinfo("Erfolg", "Einstellungen wurden gespeichert.")
             except Exception as e:
-                ctk.CTkMessagebox.showerror("Fehler", str(e))
+                messagebox.showerror("Fehler", str(e))
             finally:
                 cursor.close()
                 connection.close()
+    
+    def load_user_settings(self):
+        if not self.user_id:
+            messagebox.showerror("Fehler", "Keine Benutzer-ID angegeben.")
+            return
+        
+        connection = create_connection()
+        if connection:
+            cursor = connection.cursor()
+            try:
+                query = """
+                SELECT default_hours_per_day, employment_percentage, vacation_hours
+                FROM user_settings
+                WHERE user_id = %s
+                """
+                cursor.execute(query, (self.user_id,))
+                result = cursor.fetchone()
+
+                if result:
+                    # Daten aus der Datenbank anzeigen
+                    self.hours_entry.insert(0, str(result[0]))
+                    self.percentage_entry.insert(0, str(result[1]))
+                    vacation_days = float(result[2]) / float(result[0])  # Stunden in Tage umrechnen
+                    self.vacation_entry.insert(0, str(vacation_days))
+                else:
+                    # Standardwerte anzeigen
+                    self.hours_entry.insert(0, "8.5")
+                    self.percentage_entry.insert(0, "100")
+                    self.vacation_entry.insert(0, "20")
+            except Exception as e:
+                messagebox.showerror("Fehler", str(e))
+            finally:
+                cursor.close()
+                connection.close()
+
