@@ -22,7 +22,7 @@ class SelectedFrame(ctk.CTkFrame):
         self.user_to_project_frame = None
         self.create_widgets()
         
-        self.grid_rowconfigure(0, minsize=50, weight=1)
+        self.grid_rowconfigure(0, minsize=100, weight=1)
         self.grid_rowconfigure(1, minsize=50, weight=1)
         self.grid_rowconfigure(2, weight=1)
         self.grid_rowconfigure(3, weight=3)

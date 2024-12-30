@@ -109,7 +109,7 @@ class TimeEntryFrame(ctk.CTkFrame):
                         hours = result[3]
                         phase_hours_text += f"{project_number}: {phase_name}    {activity}   {hours}h\n"
                 else:
-                    phase_hours_text += "Keine Stunden an diesem Tag."
+                    phase_hours_text += "Keinen Eintrag an diesem Tag."
 
                 # Anzeige des Texts im Label
                 self.phase_hours_label.configure(text=phase_hours_text)
