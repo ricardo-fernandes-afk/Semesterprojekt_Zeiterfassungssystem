@@ -193,7 +193,7 @@ class StundenUebersichtUserFrame(ctk.CTkFrame):
                     total_filtered_hours += entry[3]
                 
                 # Gesamtstunden für den Filter anzeigen
-                self.project_treeview.insert("", "end", values=("", "Gesamtstunden (Filter)", total_filtered_hours), tags=('filter_total',))
+                self.project_treeview.insert("", "end", values=("", "", "", "", "Filter:", total_filtered_hours), tags=('filter_total',))
                 
                 # Gesamtstunden für alle Projekte des Benutzers abrufen
                 cursor.execute("""
@@ -203,7 +203,7 @@ class StundenUebersichtUserFrame(ctk.CTkFrame):
                 """, (self.user_id,))
                 
                 total_user_hours = cursor.fetchone()[0] or 0
-                self.project_treeview.insert("", "end", values=("", "Gesamtstunden (Benutzer)", total_user_hours), tags=('user_total',))
+                self.project_treeview.insert("", "end", values=("", "", "", "", "Benutzer:", total_user_hours), tags=('user_total',))
 
                 # Styling für die Gesamtzeilen
                 self.project_treeview.tag_configure('filter_total', background='#d1d1d1', font=('', 14, 'bold'))
