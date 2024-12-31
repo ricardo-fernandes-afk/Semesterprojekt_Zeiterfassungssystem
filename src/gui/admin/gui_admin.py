@@ -9,9 +9,10 @@ from tkinter import PhotoImage
 class AdminGUI:
     
     def __init__(self, master, username, user_id):
+        self.master = master
+        self.master.protocol("WM_DELETE_WINDOW", self.on_closing)
         self.colors = appearance_color()
         self.styles = get_default_styles()
-        self.master = master
         self.user_id = user_id
         
         # Fenster für den Admin
@@ -52,6 +53,9 @@ class AdminGUI:
         
     def open_selected_frame(self, selected_id, selected_name, description=None):
         self.selected_frame.update_project_details(selected_id, selected_name, description)
+    
+    def on_closing(self):
+        self.master.destroy()
         
     
 def start_admin_gui(username, user_id):
@@ -61,3 +65,4 @@ def start_admin_gui(username, user_id):
         root.mainloop()
     except Exception as e:
         print(f"Ein Fehler ist aufgetreten: {e}")
+    

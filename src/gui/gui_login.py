@@ -7,6 +7,7 @@ from gui.gui_appearance_color import appearance_color, get_default_styles
 class LoginGUI:
     def __init__(self, master):
         self.master = master
+        self.master.protocol("WM_DELETE_WINDOW", self.on_closing)
         colors = appearance_color()
         styles = get_default_styles()
         
@@ -66,3 +67,6 @@ class LoginGUI:
             if connection:   
                 cursor.close()
                 connection.close()
+    
+    def on_closing(self):
+        self.master.destroy()

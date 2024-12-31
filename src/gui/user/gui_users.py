@@ -9,6 +9,7 @@ class UserGUI:
     
     def __init__(self, master, username, user_id):
         self.master = master
+        self.master.protocol("WM_DELETE_WINDOW", self.on_closing)
         self.username = username
         self.user_id = user_id
         colors = appearance_color()
@@ -48,6 +49,8 @@ class UserGUI:
     def open_selected_frame(self, selected_id, selected_name, description=None):
         self.selected_frame.update_project_details(selected_id, selected_name, description)
     
+    def on_closing(self):
+        self.master.destroy()    
         
 def start_user_gui(username, user_id):
     try:
@@ -56,3 +59,4 @@ def start_user_gui(username, user_id):
         root.mainloop()
     except Exception as e:
         print(f"Ein Fehler ist aufgetreten: {e}")
+    
