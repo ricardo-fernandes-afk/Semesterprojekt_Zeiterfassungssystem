@@ -71,18 +71,14 @@ class UserSelectedFrame(ctk.CTkFrame):
             self.choose_sia_phase_frame.grid(row=2, columnspan=2, padx=10, pady=10, sticky="nsew")
             self.choose_sia_phase_frame.configure(height=0)
                 
-        self.calendar_frame = CalendarFrame(self, stunden_uebersicht_frame=self, diagram_frame=None)
+        self.calendar_frame = CalendarFrame(self, time_entry_frame=None, diagram_frame=None)
         self.calendar_frame.grid(row=3, column=0, padx=10, pady=10, sticky="nsew")
         
         self.time_entry_frame = TimeEntryFrame(self)
         self.time_entry_frame.grid(row=3, column=1, padx=10, pady=10, sticky="nsew")
         
-        self.diagram_frame = DiagramFrame(self, self.user_id)
+        self.diagram_frame = DiagramFrame(self, self.user_id, project_number=selected_id)
         self.diagram_frame.grid(row=4, columnspan=2, padx=10, pady=10, sticky="nsew")
         
-        self.calendar_frame.diagram_frame = self.diagram_frame
-        
-    def update_date(self, selected_date):
-        if self.time_entry_frame:
-            self.time_entry_frame.update_date(selected_date)
+        self.calendar_frame.load_for_today()
 

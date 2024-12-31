@@ -3,13 +3,13 @@ from tkcalendar import Calendar
 from gui.gui_appearance_color import appearance_color, get_default_styles
 
 class CalendarFrame(ctk.CTkFrame):
-    def __init__(self, master, stunden_uebersicht_frame=None, diagram_frame=None):
+    def __init__(self, master,time_entry_frame=None, diagram_frame=None):
         self.colors = appearance_color()
         self.styles = get_default_styles
              
         super().__init__(master, corner_radius=10, fg_color=self.colors["alt_background"])
         self.diagram_frame = diagram_frame
-        self.stunden_uebersicht_frame = stunden_uebersicht_frame
+        self.time_entry_frame = time_entry_frame
         self.create_widgets()
 
     def create_widgets(self):
@@ -32,9 +32,17 @@ class CalendarFrame(ctk.CTkFrame):
         
         self.calendar.bind("<<CalendarSelected>>", self.on_date_selected)
         
+    def load_for_today(self):
+        """Lädt die Daten auf das aktuelle Datum."""
+        today = self.calendar.get_date()
+        if self.master.time_entry_frame:
+            self.master.time_entry_frame.update_date(today)
+        if hasattr(self.master.diagram_frame, "user_hours_diagram"):
+            self.master.diagram_frame.user_hours_diagram.refresh_diagram(today)
+        
     def on_date_selected(self, event=None):
         selected_date = self.calendar.get_date()
-        if self.stunden_uebersicht_frame:
-            self.stunden_uebersicht_frame.update_date(selected_date)
-        if self.diagram_frame and hasattr(self.diagram_frame, "user_hours_diagram"):
-            self.diagram_frame.user_hours_diagram.load_hours_from_db(selected_date)
+        if self.master.time_entry_frame:
+            self.master.time_entry_frame.update_date(selected_date)
+        if hasattr(self.master.diagram_frame, "user_hours_diagram"):
+            self.master.diagram_frame.user_hours_diagram.refresh_diagram(selected_date)

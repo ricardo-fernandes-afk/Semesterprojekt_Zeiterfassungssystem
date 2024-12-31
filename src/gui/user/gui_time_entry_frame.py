@@ -22,9 +22,15 @@ class TimeEntryFrame(ctk.CTkFrame):
         self.date_label = ctk.CTkLabel(time_entry_frame, text="Datum: --", **self.styles["small_text"])
         self.date_label.pack(padx=10)
 
+        eingabe_frame = ctk.CTkFrame(time_entry_frame, fg_color=self.colors["alt_background"])
+        eingabe_frame.pack(pady=10, padx=10, fill="x", expand=False, anchor="n")
+        
+        for col in range(3):
+            eingabe_frame.grid_columnconfigure(col, weight=1)
+            
         # Eingabefeld für Stunden
-        self.hours_entry = ctk.CTkEntry(time_entry_frame, placeholder_text="Stunden eingeben", **self.styles["entry"])
-        self.hours_entry.pack(padx=10, pady=10)
+        self.hours_entry = ctk.CTkEntry(eingabe_frame, placeholder_text="Stunden eingeben", **self.styles["entry"])
+        self.hours_entry.grid(row=0, column=0, padx=10, pady=10, sticky="ew")
         
         # Dropdown für die Aktivität
         if self.master.selected_project_number == "0000":
@@ -32,21 +38,13 @@ class TimeEntryFrame(ctk.CTkFrame):
         else:
             activity_options = ["Planung", "Besprechung", "Korrespondenz", "Bauadmin", "Bauleitung", "Verkauf"]
         
-        self.activity_dropdown = ctk.CTkComboBox(time_entry_frame, values=activity_options, **self.styles["combobox"])
+        self.activity_dropdown = ctk.CTkComboBox(eingabe_frame, values=activity_options, **self.styles["combobox"])
         self.activity_dropdown.set(activity_options[0])
-        self.activity_dropdown.pack(padx=10)
+        self.activity_dropdown.grid(row=0, column=1, padx=10, pady=10, sticky="ew")
         
         # Notizfeld
-        self.notes_entry = ctk.CTkEntry(time_entry_frame, placeholder_text="Notizen", **self.styles["entry"])
-        self.notes_entry.pack(padx=10, pady=10)
-        
-        # Label für die Stunden an diesem Tag
-        self.phase_hours_label = ctk.CTkLabel(time_entry_frame, text="", justify="left", **self.styles["text"])
-        self.phase_hours_label.pack(padx=10)
-        
-        # Label für die Gesamtstunden an diesem Tag
-        self.total_hours_label = ctk.CTkLabel(time_entry_frame, text="", justify="left", font=("Arial", 14, "bold"))
-        self.total_hours_label.pack(padx=10, pady=10)
+        self.notes_entry = ctk.CTkEntry(eingabe_frame, placeholder_text="Notizen", **self.styles["entry"])
+        self.notes_entry.grid(row=0, column=2, padx=10, pady=10, sticky="ew")
         
         # Button zum Speichern
         save_button = ctk.CTkButton(
@@ -55,7 +53,7 @@ class TimeEntryFrame(ctk.CTkFrame):
             command=self.save_time_entry,
             **self.styles["button"],
         )
-        save_button.pack(pady=10)
+        save_button.pack(pady=10, anchor="n")
         
         # Button zum Löschen der Stunden
         self.delete_button = ctk.CTkButton(
@@ -65,7 +63,11 @@ class TimeEntryFrame(ctk.CTkFrame):
             fg_color=self.colors["error"],
             hover_color=self.colors["warning"],
         )
-        self.delete_button.pack()        
+        self.delete_button.pack(pady=10, anchor="n")        
+        
+        # Label für die Stunden an diesem Tag
+        self.phase_hours_label = ctk.CTkLabel(time_entry_frame, text="", justify="left", **self.styles["text"])
+        self.phase_hours_label.pack(padx=10, pady=10, anchor="s")
 
     def update_date(self, selected_date):
         self.selected_date = selected_date
@@ -90,15 +92,6 @@ class TimeEntryFrame(ctk.CTkFrame):
                 cursor.execute(phase_query, (self.master.user_id, self.selected_date))
                 results = cursor.fetchall()
                 
-                # Abfrage für die Gesamtstunden
-                total_hours_query = """
-                SELECT COALESCE(SUM(te.hours), 0)
-                FROM time_entries te
-                WHERE te.user_id = %s AND te.entry_date = %s
-                """
-                cursor.execute(total_hours_query, (self.master.user_id, self.selected_date))
-                total_hours = cursor.fetchone()[0]
-                
                 phase_hours_text = ""
                 if results:
                     # Erstellen eines Texts mit allen Phasenstunden
@@ -113,7 +106,6 @@ class TimeEntryFrame(ctk.CTkFrame):
 
                 # Anzeige des Texts im Label
                 self.phase_hours_label.configure(text=phase_hours_text)
-                self.total_hours_label.configure(text=f"Gesamtstunden:  {total_hours:.2f}h")
 
             except Exception as e:
                 print(f"Fehler beim Laden der Stunden: {e}")
@@ -188,6 +180,13 @@ class TimeEntryFrame(ctk.CTkFrame):
             self.hours_entry.delete(0, "end")
             self.notes_entry.delete(0, "end")
             self.load_hours()
+            
+            # Diagramme aktualisieren
+            if self.master.diagram_frame:
+                if hasattr(self.master.diagram_frame, "project_phase_diagram"):
+                    self.master.diagram_frame.project_phase_diagram.refresh_chart()
+                if hasattr(self.master.diagram_frame, "user_hours_diagram"):
+                    self.master.diagram_frame.user_hours_diagram.refresh_diagram(self.selected_date)
         else:
             messagebox.showerror("Fehler", f"Fehler beim Speichern der Stunden für {self.selected_date}.")
             
