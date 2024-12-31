@@ -4,6 +4,7 @@ from gui.admin.gui_user_to_project_frame import UserToProjectFrame
 from gui.admin.gui_stunden_uebersicht_project import StundenUebersichtProjectFrame
 from gui.admin.gui_grundinfos_user import GrundInfosUser
 from gui.admin.gui_stunden_uebersicht_user import StundenUebersichtUserFrame
+from features.feature_diagram_admin_project import AdminProjectDiagram
 from gui.gui_appearance_color import appearance_color, get_default_styles
 
 class SelectedFrame(ctk.CTkFrame):
@@ -20,13 +21,14 @@ class SelectedFrame(ctk.CTkFrame):
         self.soll_stunden_entries = {}
         self.sia_phases_frame = None
         self.user_to_project_frame = None
+        
         self.create_widgets()
         
         self.grid_rowconfigure(0, minsize=100, weight=1)
         self.grid_rowconfigure(1, minsize=50, weight=1)
-        self.grid_rowconfigure(2, weight=1)
-        self.grid_rowconfigure(3, weight=3)
-        self.grid_rowconfigure(4, weight=2)
+        self.grid_rowconfigure(2, minsize=300, weight=1)
+        self.grid_rowconfigure(3, minsize=500, weight=3)
+        self.grid_rowconfigure(4, weight=1)
         for col in range(0,4):
             self.grid_columnconfigure(col, weight=1)
             
@@ -74,7 +76,7 @@ class SelectedFrame(ctk.CTkFrame):
         self.stunden_uebersicht_project_frame = StundenUebersichtProjectFrame(self, project_number=selected_id)
         self.stunden_uebersicht_project_frame.grid(row=3, column=1, columnspan=3, padx=10, pady=10, sticky="nsew")
         
-        self.diagram_frame = ctk.CTkFrame(self)
+        self.diagram_frame = AdminProjectDiagram(self, project_number=selected_id, filter_frame=self.stunden_uebersicht_project_frame)
         self.diagram_frame.grid(row=4, columnspan=4, padx=10, pady=10, sticky="nsew")
 
     def update_user_details(self, selected_user_id, selected_username):

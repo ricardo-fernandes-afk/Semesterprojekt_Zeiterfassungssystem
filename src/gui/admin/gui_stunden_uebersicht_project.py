@@ -67,7 +67,7 @@ class StundenUebersichtProjectFrame(ctk.CTkFrame):
         filter_button = ctk.CTkButton(
             filter_frame,
             text="Filtern",
-            command=self.update_stunden,
+            command= lambda: [self.update_stunden(), self.master.diagram_frame.refresh_chart()],
             **self.styles["button"],
         )
         filter_button.grid(row=2, columnspan=4, padx=10)
@@ -201,8 +201,8 @@ class StundenUebersichtProjectFrame(ctk.CTkFrame):
                 self.stunden_treeview.insert("", "end", values=("", "Gesamtstunden (Projekt)", total_project_hours), tags=('project_total',))
 
                 # Styling für die Gesamtzeilen
-                self.stunden_treeview.tag_configure('filter_total', background='#d1d1d1', font=('', 10, 'bold'))
-                self.stunden_treeview.tag_configure('project_total', background='#b0b0b0', font=('', 10, 'bold'))
+                self.stunden_treeview.tag_configure('filter_total', background='#d1d1d1', font=('', 14, 'bold'))
+                self.stunden_treeview.tag_configure('project_total', background='#b0b0b0', font=('', 14, 'bold'))
                     
             except Exception as e:
                 print(f"Fehler beim Laden der Stunden: {e}")

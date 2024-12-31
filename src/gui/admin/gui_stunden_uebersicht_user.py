@@ -206,8 +206,8 @@ class StundenUebersichtUserFrame(ctk.CTkFrame):
                 self.project_treeview.insert("", "end", values=("", "Gesamtstunden (Benutzer)", total_user_hours), tags=('user_total',))
 
                 # Styling für die Gesamtzeilen
-                self.project_treeview.tag_configure('filter_total', background='#d1d1d1', font=('', 10, 'bold'))
-                self.project_treeview.tag_configure('user_total', background='#b0b0b0', font=('', 10, 'bold'))
+                self.project_treeview.tag_configure('filter_total', background='#d1d1d1', font=('', 14, 'bold'))
+                self.project_treeview.tag_configure('user_total', background='#b0b0b0', font=('', 14, 'bold'))
                     
             except Exception as e:
                 print(f"Fehler beim Laden der Projekte: {e}")
