@@ -111,6 +111,8 @@ class AdminProjectDiagram(ctk.CTkFrame):
         user_colors = {user: plt.cm.tab20(i % 20) for i, user in enumerate(users)}
 
         fig, ax = plt.subplots(figsize=(6, 4))
+        fig.patch.set_facecolor(self.colors["background"])
+        ax.set_facecolor(self.colors["background"])
         bar_width = 0.8
         x = range(len(phases))
 

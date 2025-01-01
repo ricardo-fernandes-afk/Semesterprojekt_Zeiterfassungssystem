@@ -5,7 +5,8 @@ from gui.admin.gui_stunden_uebersicht_project import StundenUebersichtProjectFra
 from gui.admin.gui_grundinfos_user import GrundInfosUser
 from gui.admin.gui_stunden_uebersicht_user import StundenUebersichtUserFrame
 from features.feature_diagram_admin_project import AdminProjectDiagram
-from features.feature_diagram_vacation import AdminUserVacationDiagram
+from features.feature_diagram_vacation import VacationDiagram
+from features.feature_diagram_employment_percentage import EmploymentPercentageDiagram
 from gui.gui_appearance_color import appearance_color, get_default_styles
 
 class SelectedFrame(ctk.CTkFrame):
@@ -102,12 +103,15 @@ class SelectedFrame(ctk.CTkFrame):
         self.diagram_frame = ctk.CTkFrame(self, fg_color=self.colors["background"])
         self.diagram_frame.grid(row=4, columnspan=4, padx=10, pady=10, sticky="nsew")
         
-        self.vacation_diagram = AdminUserVacationDiagram(self.diagram_frame, user_id=selected_user_id)
+        self.vacation_diagram = VacationDiagram(self.diagram_frame, user_id=selected_user_id)
         self.vacation_diagram.grid(row=0, column=0, sticky="nsew")
         
+        self.employment_percentage_diagram = EmploymentPercentageDiagram(self.diagram_frame, user_id=selected_user_id)
+        self.employment_percentage_diagram.grid(row=0, column=1, sticky="nsew")
+        
         self.diagram_frame.grid_rowconfigure(0, weight=1)
-        self.diagram_frame.grid_columnconfigure(0, weight=1)
-        self.diagram_frame.grid_columnconfigure(1, weight=1)
+        for col in range(3):
+            self.diagram_frame.grid_columnconfigure(col, weight=1)
         
             
             
