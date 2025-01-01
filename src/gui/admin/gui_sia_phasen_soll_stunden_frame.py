@@ -23,12 +23,12 @@ class SIAPhasenSollStundenFrame(ctk.CTkFrame):
         self.title.pack(padx=10, pady=(10,0))
         
         sia_phase_frame = ctk.CTkFrame(self, fg_color=self.colors["alt_background"])
-        sia_phase_frame.pack(padx=10, pady=10, fill="x")
+        sia_phase_frame.pack(padx=10, fill="x")
 
         # SIA-Phasen nebeneinander anordnen
         for col, phase in enumerate(sia_phases):
             phase_label = ctk.CTkLabel(sia_phase_frame, text=phase, **self.styles["text"])
-            phase_label.grid(row=0, column=col, pady=10, sticky="nsew")
+            phase_label.grid(row=0, column=col, sticky="nsew")
 
             entry = ctk.CTkEntry(sia_phase_frame, placeholder_text="Soll-Stunden", **self.styles["entry"])
             entry.grid(row=1, column=col, padx=20, sticky="nsew")
