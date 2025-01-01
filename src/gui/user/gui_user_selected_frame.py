@@ -3,16 +3,18 @@ from gui.user.gui_choose_sia_phase_frame import ChooseSIAPhaseFrame
 from gui.user.gui_calendar_frame import CalendarFrame
 from gui.user.gui_time_entry_frame import TimeEntryFrame
 from gui.user.gui_diagram_frame import DiagramFrame
+from gui.user.gui_intern_infos import InternInfosFrame
 from gui.gui_appearance_color import appearance_color, get_default_styles
 
 class UserSelectedFrame(ctk.CTkFrame):
-    def __init__(self, master, user_id, selected_id=None, selected_name=None, description=None):
+    def __init__(self, master, user_id, username, selected_id=None, selected_name=None, description=None):
         self.colors = appearance_color()
         self.styles = get_default_styles()
         
         super().__init__(master, corner_radius=10, fg_color=self.colors["background"])
         self.grid_propagate(False)
         self.user_id = user_id
+        self.username = username
         self.selected_id = selected_id
         self.selected_name = selected_name
         self.description = description
@@ -36,6 +38,7 @@ class UserSelectedFrame(ctk.CTkFrame):
         self.choose_sia_phase_frame = None
         self.calendar_frame = None
         self.diagram_frame = None
+        self.inter_infos_frame = None
 
     def create_widgets(self):
         self.title_label = self.create_title_label()
@@ -64,12 +67,11 @@ class UserSelectedFrame(ctk.CTkFrame):
         self.description_label.configure(text=self.description) 
         
         if selected_id != "0000":
-            self.choose_sia_phase_frame = ChooseSIAPhaseFrame(self, project_number=selected_id)
+            self.choose_sia_phase_frame = ChooseSIAPhaseFrame(self, project_number=self.selected_id)
             self.choose_sia_phase_frame.grid(row=2, columnspan=2, padx=10, pady=10, sticky="nsew")
         else:
-            self.choose_sia_phase_frame = ctk.CTkFrame(self, fg_color=self.colors["alt_background"])
-            self.choose_sia_phase_frame.grid(row=2, columnspan=2, padx=10, pady=10, sticky="nsew")
-            self.choose_sia_phase_frame.configure(height=0)
+            self.inter_infos_frame = InternInfosFrame(self, self.user_id, self.username)
+            self.inter_infos_frame.grid(row=2, columnspan=2, padx=10, pady=10, sticky="nsew")
                 
         self.calendar_frame = CalendarFrame(self, time_entry_frame=None, diagram_frame=None)
         self.calendar_frame.grid(row=3, column=0, padx=10, pady=10, sticky="nsew")
@@ -77,7 +79,7 @@ class UserSelectedFrame(ctk.CTkFrame):
         self.time_entry_frame = TimeEntryFrame(self)
         self.time_entry_frame.grid(row=3, column=1, padx=10, pady=10, sticky="nsew")
         
-        self.diagram_frame = DiagramFrame(self, self.user_id, project_number=selected_id)
+        self.diagram_frame = DiagramFrame(self, self.user_id, project_number=self.selected_id)
         self.diagram_frame.grid(row=4, columnspan=2, padx=10, pady=10, sticky="nsew")
         
         self.calendar_frame.load_for_today()

@@ -37,7 +37,7 @@ class UserGUI:
         self.user_project_frame = UserProjectFrame(self.master, self.username)
         self.user_project_frame.grid(row=1, column=0, padx=10, pady=10, sticky="nsew" )
         
-        self.selected_frame = UserSelectedFrame(self.master, self.user_id, None, None)
+        self.selected_frame = UserSelectedFrame(self.master, self.user_id, self.username, None, None)
         self.selected_frame.grid(row=1, column=1, padx=10, pady=10, sticky="nsew")
         
         # Event-Handler initialisieren
