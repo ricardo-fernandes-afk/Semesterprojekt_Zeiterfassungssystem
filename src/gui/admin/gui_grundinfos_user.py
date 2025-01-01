@@ -23,7 +23,7 @@ class GrundInfosUser(ctk.CTkFrame):
         eingabe_frame = ctk.CTkFrame(self, fg_color=self.colors["alt_background"])
         eingabe_frame.pack(padx=10, fill="x")
         
-        for col in range(3):
+        for col in range(4):
             eingabe_frame.grid_columnconfigure(col, weight=1)
         
         # Startdatum
@@ -112,7 +112,8 @@ class GrundInfosUser(ctk.CTkFrame):
                 cursor.close()
                 connection.close()
         self.toggle_entries(state="disabled")
-        
+        if self.master.diagram_frame:
+            self.master.diagram_frame.update_chart()
     
     def load_user_settings(self):
         if not self.user_id:

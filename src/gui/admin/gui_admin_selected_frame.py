@@ -7,6 +7,7 @@ from gui.admin.gui_stunden_uebersicht_user import StundenUebersichtUserFrame
 from features.feature_diagram_admin_project import AdminProjectDiagram
 from features.feature_diagram_vacation import VacationDiagram
 from features.feature_diagram_employment_percentage import EmploymentPercentageDiagram
+from features.feature_diagram_total_hours import DiagramTotalHours
 from gui.gui_appearance_color import appearance_color, get_default_styles
 
 class SelectedFrame(ctk.CTkFrame):
@@ -108,6 +109,9 @@ class SelectedFrame(ctk.CTkFrame):
         
         self.employment_percentage_diagram = EmploymentPercentageDiagram(self.diagram_frame, user_id=selected_user_id)
         self.employment_percentage_diagram.grid(row=0, column=1, sticky="nsew")
+        
+        self.total_hours_diagram = DiagramTotalHours(self.diagram_frame, user_id=selected_user_id)
+        self.total_hours_diagram.grid(row=0, column=2, sticky="nsew")
         
         self.diagram_frame.grid_rowconfigure(0, weight=1)
         for col in range(3):

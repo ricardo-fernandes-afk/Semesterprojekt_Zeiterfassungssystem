@@ -148,6 +148,16 @@ class TimeEntryFrame(ctk.CTkFrame):
                 cursor.close()
                 connection.close()
         self.load_hours()
+        # Diagramme aktualisieren
+        project_number = self.master.selected_project_number
+        if self.master.diagram_frame:
+            if project_number != "0000":
+                if hasattr(self.master.diagram_frame, "project_phase_diagram"):
+                    self.master.diagram_frame.project_phase_diagram.refresh_chart()
+                else:
+                    return
+            if hasattr(self.master.diagram_frame, "user_hours_diagram"):
+                self.master.diagram_frame.user_hours_diagram.refresh_diagram(self.selected_date)
 
     def save_time_entry(self):
         hours = self.hours_entry.get()

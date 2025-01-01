@@ -2,6 +2,7 @@ import customtkinter as ctk
 from features.feature_diagram_user_hours import UserHoursDiagram
 from features.feature_diagram_project_phase import ProjectPhaseDiagram
 from features.feature_diagram_vacation import VacationDiagram
+from features.feature_diagram_total_hours import DiagramTotalHours
 from gui.gui_appearance_color import appearance_color
 
 class DiagramFrame(ctk.CTkFrame):
@@ -25,6 +26,8 @@ class DiagramFrame(ctk.CTkFrame):
             self.vacation_diagram = VacationDiagram(self, self.user_id)
             self.vacation_diagram.grid(row=0, column=0, sticky="nsew")
             
+            self.total_hours_diagram = DiagramTotalHours(self, self.user_id)
+            self.total_hours_diagram.grid(row=0, column=1, sticky="nsew")      
 
         # Grid-Konfiguration
         for col in range(3):
