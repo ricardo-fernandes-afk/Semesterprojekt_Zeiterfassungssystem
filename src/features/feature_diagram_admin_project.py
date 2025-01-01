@@ -9,7 +9,7 @@ class AdminProjectDiagram(ctk.CTkFrame):
     def __init__(self, master, project_number, filter_frame=None):
         self.colors = appearance_color()
         self.styles = get_default_styles()
-        super().__init__(master, corner_radius=10, fg_color=self.colors["background_light"])
+        super().__init__(master, corner_radius=10, fg_color=self.colors["background"])
         self.project_number = project_number
         self.filter_frame = filter_frame  # Verbindung zum Filter
         self.canvas = None
@@ -147,7 +147,7 @@ class AdminProjectDiagram(ctk.CTkFrame):
             added_labels.add(user_id)
 
         ax.set_xticks(x)
-        ax.set_xticklabels(phases)
+        ax.set_xticklabels(phases, fontsize=10, fontweight="bold", color=self.colors["text_light"])
         ax.tick_params(left=False, labelleft=False, bottom=True)
         ax.spines["top"].set_visible(False)
         ax.spines["right"].set_visible(False)

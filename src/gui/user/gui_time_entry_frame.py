@@ -183,8 +183,11 @@ class TimeEntryFrame(ctk.CTkFrame):
             
             # Diagramme aktualisieren
             if self.master.diagram_frame:
-                if hasattr(self.master.diagram_frame, "project_phase_diagram"):
-                    self.master.diagram_frame.project_phase_diagram.refresh_chart()
+                if project_number != "0000":
+                    if hasattr(self.master.diagram_frame, "project_phase_diagram"):
+                        self.master.diagram_frame.project_phase_diagram.refresh_chart()
+                    else:
+                        return
                 if hasattr(self.master.diagram_frame, "user_hours_diagram"):
                     self.master.diagram_frame.user_hours_diagram.refresh_diagram(self.selected_date)
         else:

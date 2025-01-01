@@ -24,8 +24,8 @@ class UserSelectedFrame(ctk.CTkFrame):
         self.grid_rowconfigure(0, minsize=100, weight=1)
         self.grid_rowconfigure(1, minsize=50, weight=1)
         self.grid_rowconfigure(2, minsize=250, weight=1)
-        self.grid_rowconfigure(3, minsize=550, weight=2)
-        self.grid_rowconfigure(4, minsize=200, weight=2)
+        self.grid_rowconfigure(3, minsize=500, weight=2)
+        self.grid_rowconfigure(4, minsize=250, weight=2)
         for col in range(2):
             self.grid_columnconfigure(col, weight=1)
     

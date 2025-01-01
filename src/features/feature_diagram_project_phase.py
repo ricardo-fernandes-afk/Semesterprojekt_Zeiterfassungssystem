@@ -8,7 +8,7 @@ class ProjectPhaseDiagram(ctk.CTkFrame):
     def __init__(self, master, user_id, project_number):
         self.colors = appearance_color()
         self.styles = get_default_styles()
-        super().__init__(master, corner_radius=10, fg_color=self.colors["background_light"])
+        super().__init__(master, corner_radius=10, fg_color=self.colors["background"])
         self.project_number = project_number
         self.user_id = user_id
         self.canvas = None
@@ -62,8 +62,8 @@ class ProjectPhaseDiagram(ctk.CTkFrame):
         width = self.winfo_width()/100
         height = self.winfo_height()/100
         fig, ax = plt.subplots(figsize=(max(12, width), max(6, height)))
-        fig.set_facecolor(self.colors["background_light"])
-        ax.set_facecolor(self.colors["background_light"])
+        fig.set_facecolor(self.colors["background"])
+        ax.set_facecolor(self.colors["background"])
         bar_width = 0.8
         x = range(len(phases))
         
@@ -98,7 +98,8 @@ class ProjectPhaseDiagram(ctk.CTkFrame):
             )
         
         ax.set_xticks(x)
-        ax.set_xticklabels(phases)
+        ax.set_xticklabels(phases, fontsize=10, fontweight="bold", color=self.colors["text_light"])
+        ax.set_title(f"Stundenübersicht Projektphasen", fontsize=18, fontweight="bold", color=self.colors["text_light"])
         ax.tick_params(left=False, labelleft=False, bottom=True)
         ax.spines["top"].set_visible(False)
         ax.spines["right"].set_visible(False)

@@ -5,6 +5,7 @@ from gui.admin.gui_stunden_uebersicht_project import StundenUebersichtProjectFra
 from gui.admin.gui_grundinfos_user import GrundInfosUser
 from gui.admin.gui_stunden_uebersicht_user import StundenUebersichtUserFrame
 from features.feature_diagram_admin_project import AdminProjectDiagram
+from features.feature_diagram_vacation import AdminUserVacationDiagram
 from gui.gui_appearance_color import appearance_color, get_default_styles
 
 class SelectedFrame(ctk.CTkFrame):
@@ -26,9 +27,9 @@ class SelectedFrame(ctk.CTkFrame):
         
         self.grid_rowconfigure(0, minsize=100, weight=1)
         self.grid_rowconfigure(1, minsize=50, weight=1)
-        self.grid_rowconfigure(2, minsize=300, weight=1)
-        self.grid_rowconfigure(3, minsize=500, weight=3)
-        self.grid_rowconfigure(4, weight=1)
+        self.grid_rowconfigure(2, minsize=250, weight=1)
+        self.grid_rowconfigure(3, minsize=450, weight=2)
+        self.grid_rowconfigure(4, minsize=250, weight=2)
         for col in range(0,4):
             self.grid_columnconfigure(col, weight=1)
             
@@ -76,8 +77,11 @@ class SelectedFrame(ctk.CTkFrame):
         self.stunden_uebersicht_project_frame = StundenUebersichtProjectFrame(self, project_number=selected_id)
         self.stunden_uebersicht_project_frame.grid(row=3, column=1, columnspan=3, padx=10, pady=10, sticky="nsew")
         
-        self.diagram_frame = AdminProjectDiagram(self, project_number=selected_id, filter_frame=self.stunden_uebersicht_project_frame)
-        self.diagram_frame.grid(row=4, columnspan=4, padx=10, pady=10, sticky="nsew")
+        if selected_id != "0000":
+            self.diagram_frame = AdminProjectDiagram(self, project_number=selected_id, filter_frame=self.stunden_uebersicht_project_frame)
+            self.diagram_frame.grid(row=4, columnspan=4, padx=10, pady=10, sticky="nsew")
+        else:
+            self.diagram_frame = ctk.CTkFrame(self, fg_color=self.colors["alt_background"])
 
     def update_user_details(self, selected_user_id, selected_username):
         self.clear_widgets()
@@ -95,7 +99,15 @@ class SelectedFrame(ctk.CTkFrame):
         self.stunden_uebersicht_user_frame = StundenUebersichtUserFrame(self, user_id=selected_user_id)
         self.stunden_uebersicht_user_frame.grid(row=3, columnspan=4, padx=10, pady=10, sticky="nsew")
 
-        self.diagram_frame = ctk.CTkFrame(self)
+        self.diagram_frame = ctk.CTkFrame(self, fg_color=self.colors["background"])
         self.diagram_frame.grid(row=4, columnspan=4, padx=10, pady=10, sticky="nsew")
+        
+        self.vacation_diagram = AdminUserVacationDiagram(self.diagram_frame, user_id=selected_user_id)
+        self.vacation_diagram.grid(row=0, column=0, sticky="nsew")
+        
+        self.diagram_frame.grid_rowconfigure(0, weight=1)
+        self.diagram_frame.grid_columnconfigure(0, weight=1)
+        self.diagram_frame.grid_columnconfigure(1, weight=1)
+        
             
             

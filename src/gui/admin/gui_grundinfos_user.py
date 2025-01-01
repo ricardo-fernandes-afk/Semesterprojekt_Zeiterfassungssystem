@@ -20,7 +20,7 @@ class GrundInfosUser(ctk.CTkFrame):
         self.title_label.pack(padx=10, pady=(10,0))
         
         eingabe_frame = ctk.CTkFrame(self, fg_color=self.colors["alt_background"])
-        eingabe_frame.pack(padx=10, pady=10, fill="x")
+        eingabe_frame.pack(padx=10, fill="x")
         
         for col in range(3):
             eingabe_frame.grid_columnconfigure(col, weight=1)
@@ -104,6 +104,8 @@ class GrundInfosUser(ctk.CTkFrame):
             finally:
                 cursor.close()
                 connection.close()
+        self.toggle_entries(state="disabled")
+        
     
     def load_user_settings(self):
         if not self.user_id:

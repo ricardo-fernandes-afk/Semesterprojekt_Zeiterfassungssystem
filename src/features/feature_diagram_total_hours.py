@@ -5,7 +5,7 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from db.db_connection import create_connection
 from gui.gui_appearance_color import appearance_color, get_default_styles
 
-class AdminUserDiagram(ctk.CTkFrame):
+class TotalHoursDiagram(ctk.CTkFrame):
     def __init__(self, master, user_id, filter_frame=None):
         self.colors = appearance_color()
         self.styles = get_default_styles()

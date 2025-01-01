@@ -8,7 +8,7 @@ class UserHoursDiagram(ctk.CTkFrame):
     def __init__(self, master, user_id):
         self.colors = appearance_color()
         self.styles = get_default_styles()
-        super().__init__(master, corner_radius=10, fg_color=self.colors["background_light"])
+        super().__init__(master, corner_radius=10, fg_color=self.colors["background"])
         self.user_id = user_id
         self.daily_target = None  # Standardwert, falls keine Datenbankverbindung besteht
         self.current_hours = None
@@ -26,15 +26,15 @@ class UserHoursDiagram(ctk.CTkFrame):
     def init_diagram(self):
         """Initialisiert die Diagramm-Widgets, ohne sie anzuzeigen."""
         self.figure = plt.Figure(figsize=(5, 5), dpi=100)
-        self.figure.set_facecolor(self.colors["background_light"])
+        self.figure.set_facecolor(self.colors["background"])
         self.ax = self.figure.add_subplot(111)
-        self.ax.set_facecolor(self.colors["background_light"])
+        self.ax.set_facecolor(self.colors["background"])
         self.canvas = FigureCanvasTkAgg(self.figure, self)
     
     def show_diagram(self):
         """Zeigt das Diagramm an."""
         self.no_data_label.pack_forget()
-        self.canvas.get_tk_widget().pack(fill="both", pady=10, padx=10, expand=True)
+        self.canvas.get_tk_widget().pack(fill="both", expand=True)
         
     def hide_diagram(self):
         """Versteckt das Diagramm."""
@@ -138,13 +138,14 @@ class UserHoursDiagram(ctk.CTkFrame):
             self.ax.text(
                 0,
                 0,
-                f"{self.current_hours:+.1f}h",
+                f"{self.current_hours:+.1f}h\nTagesziel",
                 ha='center',
                 va='center',
                 fontsize=18,
                 fontweight='bold',
-                color=self.colors["text_dark"],
+                color=self.colors["text_light"],
             )
+
         except Exception as e:
             print(f"Fehler beim Erstellen des Diagramms: {e}")
             self.ax.text(0, 0, "Fehler", ha='center', va='center', fontsize=14)
