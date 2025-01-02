@@ -52,6 +52,8 @@ def get_default_styles():
         "text": {"font": ("Arial", 14), "text_color": colors["text_light"]},
         "small_text": {"font": ("Arial", 10), "text_color": colors["text_light"]},
         "button": {"fg_color": colors["primary"], "hover_color": colors["hover"]},
+        "button_secondary": {"fg_color": colors["secondary"], "hover_color": colors["hover_secondary"]},
+        "button_error": {"fg_color": colors["error"], "hover_color": colors["warning"]},
         "entry": {"fg_color": colors["background_light"], "text_color": colors["text_dark"], "placeholder_text_color": colors["alt_background"]},
         "combobox": {"fg_color": colors["background_light"], "button_color": colors["primary"], "button_hover_color": colors["hover"], "text_color": colors["text_dark"]},
     }

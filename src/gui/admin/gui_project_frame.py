@@ -65,8 +65,7 @@ class ProjectFrame(ctk.CTkFrame):
             master=self,
             text="Projekt Löchen",
             command=self.open_delete_project_window,
-            fg_color=self.colors["error"],
-            hover_color=self.colors["warning"],
+            **self.styles["button_error"],
         )
         delete_project_button.pack(pady=10, anchor="s")
         

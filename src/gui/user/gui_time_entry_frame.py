@@ -60,8 +60,7 @@ class TimeEntryFrame(ctk.CTkFrame):
             time_entry_frame,
             text="Löschen",
             command=self.delete_time_entry,
-            fg_color=self.colors["error"],
-            hover_color=self.colors["warning"],
+            **self.styles["button_error"],
         )
         self.delete_button.pack(pady=10, anchor="n")        
         

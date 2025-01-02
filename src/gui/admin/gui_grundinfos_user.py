@@ -67,8 +67,7 @@ class GrundInfosUser(ctk.CTkFrame):
             button_frame,
             text="Bearbeiten",
             command=self.edit_user_settings,
-            fg_color=self.colors["secondary"],
-            hover_color=self.colors["hover_secondary"],
+            **self.styles["button_secondary"],
         )
         self.edit_button.pack(side="right", padx=10)
     

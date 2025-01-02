@@ -52,8 +52,7 @@ class SIAPhasenSollStundenFrame(ctk.CTkFrame):
             sia_phase_frame,
             text="Soll-Stunden bearbeiten",
             command=self.edit_soll_stunden,
-            fg_color=self.colors["secondary"],
-            hover_color=self.colors["hover_secondary"],
+            **self.styles["button_secondary"],
         )
         self.edit_button.grid(row=2, column=2, padx=5, pady=10, sticky="w")
 

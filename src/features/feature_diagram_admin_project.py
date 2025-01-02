@@ -177,3 +177,7 @@ class AdminProjectDiagram(ctk.CTkFrame):
     
     def refresh_chart(self):
         self.update_chart()
+
+        
+        
+

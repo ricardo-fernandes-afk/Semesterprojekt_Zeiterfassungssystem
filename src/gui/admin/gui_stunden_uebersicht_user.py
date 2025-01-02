@@ -1,6 +1,7 @@
 import customtkinter as ctk
 from db.db_connection import create_connection
 from gui.gui_appearance_color import appearance_color, get_default_styles, apply_treeview_style
+from features.feature_export import export_to_excel
 import calendar
 from datetime import datetime
 from tkinter import ttk
@@ -70,7 +71,15 @@ class StundenUebersichtUserFrame(ctk.CTkFrame):
             command=self.update_projects,
             **self.styles["button"],
         )
-        filter_button.grid(row=2, columnspan=4, padx=10)
+        filter_button.grid(row=2, column=0, columnspan=2, padx=10, sticky="e")
+        
+        export_button = ctk.CTkButton(
+            filter_frame,
+            text="Exportieren",
+            command=lambda: export_to_excel("user", self.user_id),
+            **self.styles["button_secondary"],
+        )
+        export_button.grid(row=2, column=2, columnspan=2, padx=10, sticky="w")
 
         # Treeview für die Projekteübersicht
         tree_frame = ctk.CTkFrame(self, fg_color=self.colors["alt_background"])
