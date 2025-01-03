@@ -1,3 +1,30 @@
+"""
+Modul: Benutzer einem Projekt zuweisen in TimeArch.
+
+Dieses Modul stellt die grafische Benutzeroberfläche bereit, um Benutzer einem Projekt zuzuweisen oder sie daraus zu entfernen. Es umfasst Funktionen zum Laden der Benutzerliste, Zuweisen von Benutzern zu einem Projekt und Entfernen von Benutzern aus einem Projekt.
+
+Klassen:
+--------
+- UserToProjectFrame: Hauptklasse für die Verwaltung der Benutzer eines Projekts.
+
+Methoden:
+---------
+- __init__(self, master, project_number): Initialisiert das Frame mit dem Projektkontext.
+- create_widgets(self): Erstellt die Widgets zur Benutzerzuweisung und -verwaltung.
+- load_users(self): Lädt die Liste aller verfügbaren Benutzer aus der Datenbank.
+- load_project_users(self): Lädt die Liste der Benutzer, die einem bestimmten Projekt zugeordnet sind.
+- update_users_treeview(self): Aktualisiert die Anzeige der Benutzer im Projekt in der Treeview.
+- assign_user_to_project(self): Weist den ausgewählten Benutzer dem Projekt zu.
+- delete_user_from_project(self): Entfernt den ausgewählten Benutzer aus dem Projekt.
+
+Verwendung:
+-----------
+    from gui_user_to_project_frame import UserToProjectFrame
+
+    frame = UserToProjectFrame(master, project_number="P123")
+    frame.pack()
+"""
+
 import customtkinter as ctk
 from db.db_connection import create_connection
 from tkinter import messagebox, ttk
@@ -6,7 +33,19 @@ from features.feature_load_project_users import load_project_users
 from gui.gui_appearance_color import appearance_color, get_default_styles, apply_treeview_style
 
 class UserToProjectFrame(ctk.CTkFrame):
+    """
+    Eine Klasse, die die Benutzer eines Projekts verwaltet.
+
+    Ermöglicht das Hinzufügen und Entfernen von Benutzern sowie die Anzeige der aktuell zugeordneten Benutzer.
+    """
     def __init__(self, master, project_number):
+        """
+        Initialisiert den Frame für die Benutzerzuweisung.
+
+        Args:
+            master (ctk.CTk): Das übergeordnete Fenster.
+            project_number (str): Die Projektnummer, für die die Benutzer verwaltet werden sollen.
+        """
         self.colors = appearance_color()
         self.styles = get_default_styles()
         
@@ -19,6 +58,13 @@ class UserToProjectFrame(ctk.CTkFrame):
         self.load_project_users()
 
     def create_widgets(self):
+        """
+        Erstellt die Widgets für die Benutzerverwaltung.
+
+        - Fügt Dropdowns für die Benutzerliste hinzu.
+        - Erstellt Buttons für das Zuweisen und Entfernen von Benutzern.
+        - Fügt ein Treeview hinzu, um die Benutzer im Projekt anzuzeigen.
+        """
         # Label für User-Zuweisung
         self.label = ctk.CTkLabel(self, text="Benutzer zuweisen", **self.styles["subtitle"])
         self.label.pack(pady=10, padx=10)
@@ -70,18 +116,44 @@ class UserToProjectFrame(ctk.CTkFrame):
         self.delete_button.pack(pady=10, padx=10)
 
     def load_users(self):
+        """
+        Lädt die Liste aller verfügbaren Benutzer aus der Datenbank.
+
+        - Verwendet die Funktion `load_users` aus den Features.
+        - Füllt das Dropdown-Menü mit den abgerufenen Benutzern.
+
+        Fehlerbehandlung:
+        ------------------
+        - Zeigt eine Fehlermeldung an, falls die Datenbankabfrage fehlschlägt.
+        """
         # Verwende die ausgelagerte Funktion `load_users`
         users = load_users()
         self.available_users = [f"{user[0]} - {user[1]}" for user in users]
         self.user_dropdown.configure(values=self.available_users)
         
     def load_project_users(self):
+        """
+        Lädt die Liste der Benutzer, die dem aktuellen Projekt zugeordnet sind.
+
+        - Verwendet die Funktion `load_project_users` aus den Features.
+        - Aktualisiert die Treeview mit den Benutzerdaten.
+
+        Fehlerbehandlung:
+        ------------------
+        - Zeigt eine Fehlermeldung an, falls die Datenbankabfrage fehlschlägt.
+        """
         # Benutzer, die bereits dem Projekt zugeordnet sind, aus der Datenbank laden
         users = load_project_users(self.project_number)
         self.project_users = users
         self.update_users_treeview()
     
     def update_users_treeview(self):
+        """
+        Aktualisiert die Treeview mit den Benutzern, die dem Projekt zugeordnet sind.
+
+        - Löscht alle bestehenden Einträge in der Treeview.
+        - Fügt die aktuelle Liste der Projektbenutzer hinzu.
+        """
         # Die Liste der Benutzer im Projekt aktualisieren
         for item in self.users_treeview.get_children():
             self.users_treeview.delete(item)
@@ -89,6 +161,16 @@ class UserToProjectFrame(ctk.CTkFrame):
             self.users_treeview.insert("", "end", values=(user[0], user[1]))        
     
     def assign_user_to_project(self):
+        """
+        Weist den ausgewählten Benutzer dem Projekt zu.
+
+        - Führt eine Datenbankabfrage durch, um die Zuweisung zu speichern.
+        - Aktualisiert die Treeview nach der erfolgreichen Zuweisung.
+
+        Fehlerbehandlung:
+        ------------------
+        - Zeigt eine Fehlermeldung an, falls die Zuweisung fehlschlägt.
+        """
         # Weisen Sie den ausgewählten Benutzer dem aktuell ausgewählten Projekt zu
         user_selection = self.user_dropdown.get()
         if not user_selection:
@@ -115,6 +197,16 @@ class UserToProjectFrame(ctk.CTkFrame):
                 connection.close()
     
     def delete_user_from_project(self):
+        """
+        Entfernt den ausgewählten Benutzer aus dem Projekt.
+
+        - Führt eine Datenbankabfrage durch, um die Zuweisung zu löschen.
+        - Aktualisiert die Treeview nach dem erfolgreichen Entfernen.
+
+        Fehlerbehandlung:
+        ------------------
+        - Zeigt eine Fehlermeldung an, falls das Entfernen fehlschlägt.
+        """
         # Benutzer aus Projekt entfernen
         selected_item = self.users_treeview.selection()
         if not selected_item:

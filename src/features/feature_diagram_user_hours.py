@@ -1,3 +1,32 @@
+"""
+Modul: Diagramm für Benutzerstunden in TimeArch.
+
+Dieses Modul erstellt ein Kreisdiagramm, das die Tagesstunden eines Benutzers darstellt. Es visualisiert die
+Differenz zwischen dem Tagesziel und den tatsächlich erfassten Stunden.
+
+Klassen:
+--------
+- UserHoursDiagram: Erstellt und verwaltet das Diagramm für die Benutzerstunden.
+
+Funktionen innerhalb der Klasse:
+--------------------------------
+- __init__(self, master, user_id): Initialisiert das Diagramm mit Benutzerkontext.
+- init_diagram(self): Erstellt die Diagramm-Widgets und initialisiert Matplotlib.
+- show_diagram(self): Zeigt das Diagramm-Widget an.
+- hide_diagram(self): Versteckt das Diagramm-Widget.
+- load_daily_target(self): Lädt das Tagesziel (Sollstunden) aus der Datenbank.
+- load_hours_from_db(self, selected_date): Lädt die Stunden eines Benutzers für ein bestimmtes Datum aus der Datenbank.
+- update_diagram(self, hours): Aktualisiert das Diagramm basierend auf den geladenen Stunden.
+- refresh_diagram(self, selected_date=None): Aktualisiert das Diagramm basierend auf dem ausgewählten Datum.
+
+Verwendung:
+-----------
+    from feature_diagram_user_hours import UserHoursDiagram
+
+    diagram = UserHoursDiagram(master, user_id)
+    diagram.pack()
+"""
+
 import customtkinter as ctk
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
@@ -5,7 +34,20 @@ from db.db_connection import create_connection
 from gui.gui_appearance_color import appearance_color, get_default_styles
 
 class UserHoursDiagram(ctk.CTkFrame):
+    """
+    Eine Klasse, die ein Diagramm zur Visualisierung der Tagesstunden eines Benutzers erstellt.
+
+    Diese Klasse zeigt die Differenz zwischen dem Tagesziel (Sollstunden) und den tatsächlich
+    erfassten Stunden für ein bestimmtes Datum.
+    """
     def __init__(self, master, user_id):
+        """
+        Initialisiert die Diagrammklasse mit Benutzerkontext und GUI-Komponenten.
+
+        Args:
+            master (ctk.CTk): Das übergeordnete Fenster.
+            user_id (int): Die Benutzer-ID, deren Tagesstunden angezeigt werden.
+        """
         self.colors = appearance_color()
         self.styles = get_default_styles()
         super().__init__(master, corner_radius=10, fg_color=self.colors["background"])
@@ -24,7 +66,12 @@ class UserHoursDiagram(ctk.CTkFrame):
         self.load_daily_target()
                 
     def init_diagram(self):
-        """Initialisiert die Diagramm-Widgets, ohne sie anzuzeigen."""
+        """
+        Erstellt die Diagramm-Widgets und initialisiert Matplotlib.
+
+        - Setzt die Farben und das Layout für das Diagramm.
+        - Bindet das Diagramm in die GUI ein.
+        """
         self.figure = plt.Figure(figsize=(5, 5), dpi=100)
         self.figure.set_facecolor(self.colors["background"])
         self.ax = self.figure.add_subplot(111)
@@ -32,17 +79,29 @@ class UserHoursDiagram(ctk.CTkFrame):
         self.canvas = FigureCanvasTkAgg(self.figure, self)
     
     def show_diagram(self):
-        """Zeigt das Diagramm an."""
+        """
+        Zeigt das Diagramm an und versteckt den "Keine Daten"-Text.
+        """
         self.no_data_label.pack_forget()
         self.canvas.get_tk_widget().pack(fill="both", expand=True)
         
     def hide_diagram(self):
-        """Versteckt das Diagramm."""
+        """
+        Versteckt das Diagramm und zeigt den "Keine Daten"-Text.
+        """
         self.canvas.get_tk_widget().pack_forget()
         self.no_data_label.pack(fill="both", expand=True)
     
     def load_daily_target(self):
-        """Lädt das tägliche Ziel aus der Datenbank für den angemeldeten Benutzer."""
+        """
+        Lädt die Stunden eines Benutzers für ein bestimmtes Datum aus der Datenbank.
+
+        Args:
+            selected_date (str): Das ausgewählte Datum im Format YYYY-MM-DD.
+
+        - Berechnet die Differenz zwischen Sollstunden und tatsächlich erfassten Stunden.
+        - Aktualisiert das Diagramm basierend auf den geladenen Stunden.
+        """
         connection = create_connection()
         if connection:
             cursor = connection.cursor()
@@ -68,7 +127,15 @@ class UserHoursDiagram(ctk.CTkFrame):
                 connection.close()
 
     def load_hours_from_db(self, selected_date):
-        """Lädt die Stunden für das angegebene Datum aus der Datenbank und aktualisiert das Diagramm."""
+        """
+        Aktualisiert das Diagramm basierend auf den übergebenen Stunden.
+
+        Args:
+            hours (float): Die Differenz zwischen Sollstunden und tatsächlich erfassten Stunden.
+
+        - Passt die Farben des Diagramms basierend auf der Differenz an.
+        - Zeigt den Stundenwert im Diagramm an.
+        """
         connection = create_connection()
         if connection:
             cursor = connection.cursor()
@@ -95,7 +162,15 @@ class UserHoursDiagram(ctk.CTkFrame):
                 connection.close()
 
     def update_diagram(self, hours):
-        """Aktualisiert das Diagramm basierend auf den übergebenen Stunden."""
+        """
+        Aktualisiert das Diagramm basierend auf dem ausgewählten Datum.
+
+        Args:
+            selected_date (str, optional): Das Datum, für das die Stunden angezeigt werden sollen.
+
+        - Lädt die Stunden für das angegebene Datum und aktualisiert das Diagramm.
+        - Zeigt eine Fehlermeldung, falls kein Datum angegeben wird.
+        """
         if self.daily_target is None:
             print("Fehler: Daily Target nicht geladen.")
             self.ax.clear()

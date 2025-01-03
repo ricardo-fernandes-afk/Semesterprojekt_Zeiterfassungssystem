@@ -1,3 +1,28 @@
+"""
+Modul: Diagramm für Projektphasen in TimeArch.
+
+Dieses Modul erstellt ein Balkendiagramm, das Sollstunden, Gesamtstunden und die Stunden eines spezifischen Benutzers
+für jede Phase eines Projekts visualisiert. Es verwendet Matplotlib für die grafische Darstellung und ist in die GUI integriert.
+
+Klassen:
+--------
+- ProjectPhaseDiagram: Erstellt und verwaltet das Diagramm für Projektphasen.
+
+Funktionen innerhalb der Klasse:
+--------------------------------
+- __init__(self, master, user_id, project_number): Initialisiert das Diagramm mit Benutzer- und Projektdetails.
+- fetch_data(self): Ruft die benötigten Daten aus der Datenbank ab.
+- update_widgets(self): Aktualisiert das Diagramm basierend auf den abgerufenen Daten.
+- create_widgets(self): Erstellt die Diagramm-Widgets und zeigt sie an.
+- refresh_chart(self): Aktualisiert das Diagramm, wenn Änderungen vorgenommen werden.
+
+Verwendung:
+-----------
+    from feature_diagram_project_phase import ProjectPhaseDiagram
+
+    diagram = ProjectPhaseDiagram(master, user_id, project_number)
+    diagram.pack()
+"""
 import customtkinter as ctk
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
@@ -5,7 +30,21 @@ from db.db_connection import create_connection
 from gui.gui_appearance_color import appearance_color, get_default_styles
 
 class ProjectPhaseDiagram(ctk.CTkFrame):
+    """
+    Eine Klasse, die ein Diagramm für Projektphasen erstellt und verwaltet.
+
+    Die Klasse zeigt die Sollstunden, Gesamtstunden und die Stunden eines spezifischen Benutzers für jede Phase
+    eines Projekts an.
+    """
     def __init__(self, master, user_id, project_number):
+        """
+        Initialisiert die Diagrammklasse mit Benutzer- und Projektdetails.
+
+        Args:
+            master (ctk.CTk): Das übergeordnete Fenster.
+            user_id (int): Die Benutzer-ID, deren Daten angezeigt werden.
+            project_number (str): Die Projektnummer, zu der die Phasendaten angezeigt werden sollen.
+        """
         self.colors = appearance_color()
         self.styles = get_default_styles()
         super().__init__(master, corner_radius=10, fg_color=self.colors["background"])
@@ -15,6 +54,17 @@ class ProjectPhaseDiagram(ctk.CTkFrame):
         self.create_widgets()
         
     def fetch_data(self):
+        """
+        Ruft die benötigten Daten für das Diagramm aus der Datenbank ab.
+
+        Returns:
+            list: Eine Liste von Tupeln mit Phasenname, Phasennummer, Sollstunden, Gesamtstunden und Benutzerstunden.
+
+        Fehlerbehandlung:
+        ------------------
+        - Gibt None zurück, wenn die Datenbankabfrage fehlschlägt.
+        - Schließt die Datenbankverbindung nach der Abfrage.
+        """
         connection = create_connection()
         if connection:
             cursor = connection.cursor()
@@ -48,6 +98,13 @@ class ProjectPhaseDiagram(ctk.CTkFrame):
             return None
     
     def update_widgets(self):
+        """
+        Aktualisiert das Diagramm basierend auf den abgerufenen Daten.
+
+        - Ruft die Daten über `fetch_data` ab.
+        - Erstellt ein Balkendiagramm mit Sollstunden, Gesamtstunden und Benutzerstunden für jede Phase.
+        - Zeigt eine Nachricht an, wenn keine Daten gefunden werden.
+        """
         data = self.fetch_data()
         if not data:
             if self.canvas:
@@ -114,8 +171,14 @@ class ProjectPhaseDiagram(ctk.CTkFrame):
         self.canvas.draw()
     
     def create_widgets(self):
+        """
+        Erstellt die initialen Diagramm-Widgets.
+        """
         self.update_widgets()
     
     def refresh_chart(self):
+        """
+        Aktualisiert das Diagramm, um neue Daten oder Änderungen widerzuspiegeln.
+        """
         self.update_widgets()
         

@@ -1,3 +1,23 @@
+"""
+Modul: Datenexport für TimeArch.
+
+Dieses Modul exportiert Daten aus der Datenbank in eine Excel-Datei. Es unterstützt die Exporte
+von Benutzerdaten und Projektdaten und integriert zusätzliche Informationen wie Benutzereinstellungen
+oder Projektphasen.
+
+Funktionen:
+-----------
+- export_to_excel(export_type, identifier): Exportiert Daten basierend auf dem Exporttyp und der ID (Benutzer oder Projekt).
+- format_sheet(worksheet, df, start_row=2, apply_filter=False): Wendet Formatierungen auf ein Excel-Arbeitsblatt an.
+
+Verwendung:
+-----------
+    from feature_export import export_to_excel
+
+    export_to_excel("user", user_id)  # Exportiert Benutzerdaten
+    export_to_excel("project", project_number)  # Exportiert Projektdaten
+"""
+
 import pandas as pd
 from tkinter.filedialog import asksaveasfilename
 from tkinter import messagebox
@@ -9,8 +29,22 @@ def export_to_excel(export_type, identifier):
     """
     Exportiert Daten aus der Datenbank in eine Excel-Datei.
 
-    :param export_type: Typ des Exports ('user' oder 'project').
-    :param identifier: Benutzer-ID oder Projektnummer.
+    Args:
+        export_type (str): Typ des Exports ('user' oder 'project').
+        identifier (str): Benutzer-ID oder Projektnummer.
+
+    Datenbankabfragen:
+    -------------------
+    - Ruft Hauptdaten und zusätzliche Informationen ab, abhängig vom Exporttyp.
+
+    Excel-Export:
+    --------------
+    - Schreibt Daten in eine Excel-Datei mit formatierter Kopfzeile, Summenzeile und Metadatenblatt.
+    - Erstellt separate Blätter für Benutzereinstellungen oder Projektphasen.
+
+    Fehlerbehandlung:
+    ------------------
+    - Zeigt eine Fehlermeldung an, falls die Datenbankabfrage oder der Datei-Export fehlschlägt.
     """
     connection = create_connection()
     if connection:
@@ -127,7 +161,21 @@ def export_to_excel(export_type, identifier):
                 return  # Abbrechen
 
             def format_sheet(worksheet, df, start_row=2, apply_filter=False):
-                """Formatierung für Arbeitsblätter anwenden."""
+                """
+                Wendet Formatierungen auf ein Excel-Arbeitsblatt an.
+
+                Args:
+                    worksheet (openpyxl.worksheet.worksheet.Worksheet): Das zu formatierende Arbeitsblatt.
+                    df (pandas.DataFrame): Die Daten, die in das Arbeitsblatt geschrieben wurden.
+                    start_row (int, optional): Die Zeile, in der die Formatierung beginnt. Standard ist 2.
+                    apply_filter (bool, optional): Gibt an, ob ein AutoFilter auf die Kopfzeile angewendet werden soll.
+
+                Formatierungen:
+                ----------------
+                - Setzt Kopfzeilenfarben und -schriftart.
+                - Passt die Spaltenbreiten automatisch an.
+                - Fügt bei Bedarf Filter für die Kopfzeilen hinzu.
+                """
                 # Filter nur auf Hauptblatt anwenden
                 if apply_filter:
                     worksheet.auto_filter.ref = f"A{start_row}:{get_column_letter(len(df.columns))}{worksheet.max_row}"

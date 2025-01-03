@@ -1,8 +1,55 @@
+"""
+Datenbankeinrichtungsskript für TimeArch.
+
+Dieses Modul erstellt alle notwendigen Tabellen und fügt Standardwerte in die PostgreSQL-Datenbank ein.
+Es verwendet Funktionen aus `db_connection`, `feature_insert_sia_phases` und `feature_insert_admin`,
+um sicherzustellen, dass die Struktur und Standardwerte gemäß den Anforderungen von TimeArch definiert sind.
+
+Funktionen:
+------------
+- setup_database(): Erstellt alle Tabellen und fügt Standardwerte ein.
+
+Verwendung:
+------------
+    python db_setup.py
+
+Hinweis:
+--------
+- Stellen Sie sicher, dass die Verbindung zur PostgreSQL-Instanz hergestellt werden kann.
+- Die Funktion überprüft, ob Tabellen bereits existieren, bevor sie erstellt werden.
+"""
+
 from db.db_connection import create_connection
 from features.feature_insert_sia_phases import insert_sia_phases
 from features.feature_insert_admin import insert_admin
 
 def setup_database():
+    """
+    Erstellt alle notwendigen Tabellen und fügt Standardwerte in die PostgreSQL-Datenbank ein.
+
+    Tabellen:
+    ----------
+    - `users`: Speichert Benutzerkonteninformationen.
+    - `user_settings`: Speichert Einstellungen wie Arbeitszeit und Urlaub für Benutzer.
+    - `projects`: Speichert Projekte mit Nummern und Beschreibungen.
+    - `sia_phases`: Definiert Phasen gemäß SIA-Normen.
+    - `user_projects`: Speichert Zuordnungen von Benutzern zu Projekten.
+    - `project_sia_phases`: Speichert Sollstunden für spezifische Projektphasen.
+    - `time_entries`: Speichert Zeiteinträge für Benutzer.
+
+    Standardwerte:
+    ---------------
+    - Fügt das Projekt "Büro Intern" hinzu, falls es nicht existiert.
+    - Fügt SIA-Phasen basierend auf `insert_sia_phases` ein.
+    - Fügt den Standardadministrator basierend auf `insert_admin` ein.
+
+    Returns:
+        None
+
+    Hinweis:
+        - Die Verbindung wird automatisch geschlossen, nachdem die Tabellen erstellt wurden.
+        - Gibt eine Erfolgsmeldung aus, wenn die Tabellen erfolgreich erstellt wurden.
+    """
     connection = create_connection()
     if connection:
         connection.autocommit = True

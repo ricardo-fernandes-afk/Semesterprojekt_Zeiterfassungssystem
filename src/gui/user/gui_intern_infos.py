@@ -1,3 +1,26 @@
+"""
+Modul: Intern-Infos-Frame für TimeArch.
+
+Dieses Modul stellt eine grafische Benutzeroberfläche (GUI) bereit, um grundlegende Informationen über einen Benutzer anzuzeigen. Es zeigt Daten wie Arbeitsstunden pro Tag, Beschäftigungsprozentsatz, Ferientage und das Startdatum.
+
+Klassen:
+--------
+- InternInfosFrame: Hauptklasse für die Anzeige der Benutzergrundinformationen.
+
+Methoden:
+---------
+- __init__(self, master, user_id=None, username=None): Initialisiert das Frame mit Benutzer-ID und Benutzername.
+- create_widgets(self): Erstellt die Widgets zur Anzeige der Benutzergrundinformationen.
+- load_user_settings(self): Lädt die Benutzergrundinformationen aus der Datenbank und zeigt sie in der GUI an.
+
+Verwendung:
+-----------
+    from gui_intern_infos import InternInfosFrame
+
+    frame = InternInfosFrame(master, user_id=1, username="John Doe")
+    frame.pack()
+"""
+
 import customtkinter as ctk
 from datetime import date
 from tkinter import messagebox
@@ -5,7 +28,24 @@ from db.db_connection import create_connection
 from gui.gui_appearance_color import appearance_color, get_default_styles
 
 class InternInfosFrame(ctk.CTkFrame):
+    """
+    Eine Klasse, die grundlegende Benutzerinformationen anzeigt.
+
+    Funktionen:
+    - Anzeige von Arbeitsstunden pro Tag
+    - Beschäftigungsprozentsatz
+    - Ferientagen
+    - Startdatum
+    """
     def __init__(self, master, user_id=None, username=None):
+        """
+        Initialisiert das Frame mit Benutzerinformationen.
+
+        Args:
+            master (ctk.CTk): Das übergeordnete Fenster.
+            user_id (int, optional): Die Benutzer-ID, für die die Informationen angezeigt werden. Standard ist None.
+            username (str, optional): Der Benutzername, der im Titel angezeigt wird. Standard ist None.
+        """
         self.colors = appearance_color()
         self.styles = get_default_styles()
         super().__init__(master, corner_radius=10, fg_color=self.colors["alt_background"])
@@ -21,6 +61,12 @@ class InternInfosFrame(ctk.CTkFrame):
             self.load_user_settings()
         
     def create_widgets(self):
+        """
+        Erstellt die Widgets zur Anzeige der Benutzergrundinformationen.
+
+        - Zeigt Labels für Arbeitsstunden, Stellenprozent, Ferientage und Startdatum an.
+        - Platziert die Widgets in einem Grid-Layout.
+        """
         for col in range(4):
             self.grid_columnconfigure(col, weight=1)
         for row in range(2):
@@ -42,6 +88,16 @@ class InternInfosFrame(ctk.CTkFrame):
         self.vacation_hours_label.grid(row=1, column= 3, padx=10, pady=10, sticky="nsew")
     
     def load_user_settings(self):
+        """
+        Lädt die Benutzergrundinformationen aus der Datenbank.
+
+        - Ruft Daten wie Arbeitsstunden pro Tag, Beschäftigungsprozentsatz, Ferientage und Startdatum aus `user_settings` ab.
+        - Aktualisiert die Labels mit den abgerufenen Informationen.
+
+        Fehlerbehandlung:
+        ------------------
+        - Zeigt eine Fehlermeldung an, falls die Datenbankabfrage fehlschlägt.
+        """
         if not self.user_id:
             messagebox.showerror("Fehler", "Keine Benutzer-ID angegeben.")
             return

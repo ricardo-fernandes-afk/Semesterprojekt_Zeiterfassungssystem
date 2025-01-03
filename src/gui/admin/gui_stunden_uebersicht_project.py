@@ -1,4 +1,27 @@
-# Datei: gui_stunden_uebersicht_frame.py
+"""
+Modul: Stundenübersicht für Projekte in TimeArch.
+
+Dieses Modul stellt eine grafische Benutzeroberfläche zur Verwaltung und Anzeige der Stundenübersicht für ein spezifisches Projekt bereit. Es bietet Filtermöglichkeiten für Monat, Jahr, Benutzer und Phase sowie Exportfunktionen.
+
+Klassen:
+--------
+- StundenUebersichtProjectFrame: Hauptklasse zur Darstellung und Verwaltung der Stundenübersicht.
+
+Methoden:
+---------
+- __init__(self, master, project_number=None): Initialisiert das Frame mit dem Projektkontext.
+- create_widgets(self): Erstellt die Widgets für die Filter- und Stundenanzeige sowie die Exportfunktion.
+- load_filter_values(self): Lädt die Werte für die Filter (Benutzer und Phasen) aus der Datenbank.
+- update_stunden(self): Aktualisiert die Stundenübersicht basierend auf den ausgewählten Filterwerten.
+
+Verwendung:
+-----------
+    from gui_stunden_uebersicht_project import StundenUebersichtProjectFrame
+
+    frame = StundenUebersichtProjectFrame(master, project_number="P123")
+    frame.pack()
+"""
+
 import customtkinter as ctk
 from db.db_connection import create_connection
 from gui.gui_appearance_color import appearance_color, get_default_styles, apply_treeview_style
@@ -8,7 +31,19 @@ from datetime import datetime
 from tkinter import ttk
 
 class StundenUebersichtProjectFrame(ctk.CTkFrame):
+    """
+    Eine Klasse, die eine Stundenübersicht für ein Projekt darstellt und verwaltet.
+
+    Ermöglicht das Anzeigen und Filtern der Stunden eines Projekts sowie den Export der gefilterten Daten.
+    """
     def __init__(self, master, project_number=None):
+        """
+        Initialisiert das Frame für die Stundenübersicht.
+
+        Args:
+            master (ctk.CTk): Das übergeordnete Fenster.
+            project_number (str, optional): Die Projektnummer des aktuellen Projekts.
+        """
         self.colors = appearance_color()
         self.styles = get_default_styles()
         
@@ -19,6 +54,13 @@ class StundenUebersichtProjectFrame(ctk.CTkFrame):
         self.create_widgets()
 
     def create_widgets(self):
+        """
+        Erstellt die Widgets für die Stundenübersicht.
+
+        - Fügt Filter-Widgets für Monat, Jahr, Benutzer und Phase hinzu.
+        - Erstellt ein Treeview zur Anzeige der Stundenübersicht.
+        - Fügt Buttons für das Aktualisieren und Exportieren hinzu.
+        """
         # Filter-Dropdowns für Monat, Jahr, Benutzername und Phase
         filter_frame = ctk.CTkFrame(self, fg_color=self.colors["alt_background"])
         filter_frame.pack(padx=10, pady=10, fill="x")
@@ -112,6 +154,16 @@ class StundenUebersichtProjectFrame(ctk.CTkFrame):
         self.update_stunden()
 
     def load_filter_values(self):
+        """
+        Lädt die Werte für die Filter aus der Datenbank.
+
+        - Ruft alle Benutzer und Phasen ab, die mit dem Projekt verknüpft sind.
+        - Füllt die Filter-Comboboxen mit den abgerufenen Werten.
+
+        Fehlerbehandlung:
+        ------------------
+        - Zeigt eine Fehlermeldung an, falls die Datenbankabfrage fehlschlägt.
+        """
         # Benutzername-Dropdown mit Werten füllen, die nur die Benutzer des aktuellen Projekts anzeigen
         connection = create_connection()
         if connection:
@@ -142,6 +194,16 @@ class StundenUebersichtProjectFrame(ctk.CTkFrame):
                 connection.close()
 
     def update_stunden(self):
+        """
+        Aktualisiert die Stundenübersicht basierend auf den ausgewählten Filtern.
+
+        - Lädt die gefilterten Stunden aus der Datenbank.
+        - Füllt das Treeview mit den abgerufenen Daten.
+
+        Fehlerbehandlung:
+        ------------------
+        - Zeigt eine Fehlermeldung an, falls keine Daten gefunden werden oder die Abfrage fehlschlägt.
+        """
         # Alte Daten entfernen
         for item in self.stunden_treeview.get_children():
             self.stunden_treeview.delete(item)
