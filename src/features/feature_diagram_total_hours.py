@@ -110,19 +110,21 @@ class DiagramTotalHours(ctk.CTkFrame):
                 elif isinstance(start_date, str):
                     start_date = datetime.date.fromisoformat(start_date)
 
-                total_work_days = sum(1 for day in range((today - start_date).days + 1)
-                                      if (start_date + datetime.timedelta(days=day)).weekday() < 5)
+                total_work_days = [(start_date + datetime.timedelta(days=day)) for day in range((today - start_date).days + 1) if (start_date + datetime.timedelta(days=day)).weekday() < 5]
 
                 # Sollstunden berechnen
-                expected_hours = (default_hours_per_day * employment_percentage / 100) * total_work_days
+                expected_hours = (default_hours_per_day * employment_percentage / 100) * len(total_work_days)
 
                 # Tatsächliche Arbeitsstunden abrufen
                 cursor.execute("""
-                    SELECT COALESCE(SUM(hours), 0)
+                    SELECT entry_date, COALESCE(SUM(hours), 0)
                     FROM time_entries
                     WHERE user_id = %s AND entry_date >= %s
+                    GROUP BY entry_date
                 """, (self.user_id, start_date))
-                actual_hours = cursor.fetchone()[0] or 0
+                entries = dict(cursor.fetchall())
+                
+                actual_hours = sum(entries.get(day, 0) for day in total_work_days)
 
                 # Differenz berechnen
                 total_hours = actual_hours - expected_hours

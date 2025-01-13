@@ -272,6 +272,8 @@ class TimeEntryFrame(ctk.CTkFrame):
                         return
                 if hasattr(self.master.diagram_frame, "user_hours_diagram"):
                     self.master.diagram_frame.user_hours_diagram.refresh_diagram(self.selected_date)
+                if hasattr(self.master.diagram_frame, "total_hours_diagram"):
+                    self.master.diagram_frame.total_hours_diagram.update_diagram()
         else:
             messagebox.showerror("Fehler", f"Fehler beim Speichern der Stunden für {self.selected_date}.")
             
