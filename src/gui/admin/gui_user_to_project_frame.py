@@ -87,7 +87,7 @@ class UserToProjectFrame(ctk.CTkFrame):
         treeview_frame.pack(padx=10, fill="both", expand=True)
         
         columns = ("Benutzer-ID", "Benutzername")
-        self.users_treeview = ttk.Treeview(treeview_frame, columns=columns, show="headings", height=5)
+        self.users_treeview = ttk.Treeview(treeview_frame, columns=columns, show="headings", height=4)
         apply_treeview_style(self.colors)
         
         for col in columns:
