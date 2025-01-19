@@ -103,6 +103,9 @@ class UserProjectFrame(ctk.CTkFrame):
                 """
                 cursor.execute(query, (self.username,))
                 projects = cursor.fetchall()
+                
+                projects.sort(key=lambda x: x[0])
+                
                 for project in projects:
                     self.project_treeview.insert("", "end", values=project)
             except Exception as e:
