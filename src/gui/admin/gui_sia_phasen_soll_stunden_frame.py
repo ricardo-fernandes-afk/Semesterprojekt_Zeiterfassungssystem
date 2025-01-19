@@ -76,7 +76,7 @@ class SIAPhasenSollStundenFrame(ctk.CTkFrame):
             phase_label.grid(row=0, column=col, sticky="nsew")
 
             entry = ctk.CTkEntry(sia_phase_frame, placeholder_text="Soll-Stunden", **self.styles["entry"])
-            entry.grid(row=1, column=col, padx=20, sticky="nsew")
+            entry.grid(row=1, column=col, padx=10, sticky="nsew")
             self.soll_stunden_entries[phase] = entry
 
         # Spalten gleichmäßig verteilen
@@ -90,7 +90,7 @@ class SIAPhasenSollStundenFrame(ctk.CTkFrame):
             command=self.save_soll_stunden,
             **self.styles["button"],
         )
-        self.save_button.grid(row=2, column=1, padx=5, pady=10, sticky="e")
+        self.save_button.grid(row=2, column=1, padx=10, pady=10, sticky="e")
         
         # Bearbeiten-Button in der dritten Zeile
         self.edit_button = ctk.CTkButton(
@@ -99,7 +99,7 @@ class SIAPhasenSollStundenFrame(ctk.CTkFrame):
             command=self.edit_soll_stunden,
             **self.styles["button_secondary"],
         )
-        self.edit_button.grid(row=2, column=2, padx=5, pady=10, sticky="w")
+        self.edit_button.grid(row=2, column=2, padx=10, pady=10, sticky="w")
 
     def save_soll_stunden(self):
         """

@@ -79,25 +79,25 @@ class GrundInfosUser(ctk.CTkFrame):
         self.start_date_label = ctk.CTkLabel(eingabe_frame, text="Startdatum", **self.styles["text"])
         self.start_date_label.grid(row=0, column=0, padx=10, sticky="s")
         self.start_date_entry = ctk.CTkEntry(eingabe_frame, placeholder_text="YYYY-MM-DD", **self.styles["entry"])
-        self.start_date_entry.grid(row=1, column=0, padx=10)
+        self.start_date_entry.grid(row=1, column=0, padx=10, sticky="nsew")
         
         # Stunden pro Tag
         self.hours_label = ctk.CTkLabel(eingabe_frame, text="Stunden pro Tag", **self.styles["text"])
         self.hours_label.grid(row=0, column=1, padx=10, sticky="s")
         self.hours_entry = ctk.CTkEntry(eingabe_frame, placeholder_text="8.5", **self.styles["entry"])
-        self.hours_entry.grid(row=1, column=1, padx=10)
+        self.hours_entry.grid(row=1, column=1, padx=10, sticky="nsew")
         
         # Stellenprozent
         self.percentage_label = ctk.CTkLabel(eingabe_frame, text="Stellenprozent", **self.styles["text"])
         self.percentage_label.grid(row=0, column=2, padx=10, sticky="s")
         self.percentage_entry = ctk.CTkEntry(eingabe_frame, placeholder_text="100", **self.styles["entry"])
-        self.percentage_entry.grid(row=1, column=2, padx=10)
+        self.percentage_entry.grid(row=1, column=2, padx=10, sticky="nsew")
         
         # Ferientage
         self.vacation_label = ctk.CTkLabel(eingabe_frame, text="Ferientage", **self.styles["text"])
         self.vacation_label.grid(row=0, column=3, padx=10, sticky="s")
         self.vacation_entry = ctk.CTkEntry(eingabe_frame, placeholder_text="20", **self.styles["entry"])
-        self.vacation_entry.grid(row=1, column=3, padx=10)
+        self.vacation_entry.grid(row=1, column=3, padx=10, sticky="nsew")
         
         button_frame = ctk.CTkFrame(eingabe_frame, fg_color=self.colors["alt_background"])
         button_frame.grid(row=2, columnspan=4, padx=10, pady=10)
