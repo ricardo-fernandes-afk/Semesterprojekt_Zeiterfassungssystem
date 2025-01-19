@@ -152,6 +152,9 @@ class ProjectFrame(ctk.CTkFrame):
             try:
                 cursor.execute("SELECT project_number, project_name, description FROM projects")
                 projects = cursor.fetchall()
+                
+                projects.sort(key=lambda x: x[0])
+                
                 for project in projects:
                     self.project_treeview.insert("", "end", values=(project[0], project[1], project[2]))
                     
