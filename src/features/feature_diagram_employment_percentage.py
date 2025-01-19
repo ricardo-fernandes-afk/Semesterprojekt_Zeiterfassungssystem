@@ -112,11 +112,12 @@ class EmploymentPercentageDiagram(ctk.CTkFrame):
                 expected_hours = (default_hours_per_day * expected_percentage / 100) * total_work_days
 
                 # Ist-Stunden
+                current_year = datetime.date.today().year
                 cursor.execute("""
                     SELECT COALESCE(SUM(hours), 0)
                     FROM time_entries
-                    WHERE user_id = %s
-                """, (self.user_id,))
+                    WHERE user_id = %s AND EXTRACT(YEAR FROM entry_date) = %s
+                """, (self.user_id, current_year))
                 actual_hours = cursor.fetchone()[0] or 0
 
                 # Tatsächlicher Prozentsatz
