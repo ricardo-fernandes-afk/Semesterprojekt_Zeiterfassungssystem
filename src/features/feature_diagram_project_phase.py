@@ -156,8 +156,8 @@ class ProjectPhaseDiagram(ctk.CTkFrame):
         
         ax.set_xticks(x)
         ax.set_xticklabels(phases, fontsize=10, fontweight="bold", color=self.colors["text_light"])
-        ax.set_title(f"Stundenübersicht Projektphasen", fontsize=18, fontweight="bold", color=self.colors["text_light"])
         ax.tick_params(left=False, labelleft=False, bottom=True)
+        ax.legend()
         ax.spines["top"].set_visible(False)
         ax.spines["right"].set_visible(False)
         ax.spines["left"].set_visible(False)
