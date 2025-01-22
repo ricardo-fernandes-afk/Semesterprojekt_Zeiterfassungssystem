@@ -86,7 +86,7 @@ class StundenUebersichtProjectFrame(ctk.CTkFrame):
 
         self.year_combo = ctk.CTkComboBox(
             filter_frame,
-            values=[str(year) for year in range(2024, datetime.now().year + 1)],
+            values= ["Alle"] + [str(year) for year in range(2024, datetime.now().year + 1)],
             **self.styles["combobox"],
         )
         self.year_combo.set(str(self.selected_year))
@@ -210,7 +210,7 @@ class StundenUebersichtProjectFrame(ctk.CTkFrame):
         
         # Monat, Jahr, Benutzername und Phase aus den Dropdowns abrufen
         selected_month = self.month_combo.get()
-        selected_year = int(self.year_combo.get())
+        selected_year = self.year_combo.get()
         selected_user = self.user_combo.get()
         selected_phase = self.phase_combo.get()
 
@@ -225,9 +225,12 @@ class StundenUebersichtProjectFrame(ctk.CTkFrame):
                 JOIN users u ON te.user_id = u.user_id
                 LEFT JOIN sia_phases s ON te.phase_id = s.phase_id
                 WHERE te.project_number = %s
-                AND EXTRACT(YEAR FROM te.entry_date) = %s
                 """
-                params = [self.project_number, selected_year]
+                params = [self.project_number]
+                
+                if selected_year != "Alle":
+                    query += " AND EXTRACT(YEAR FROM te.entry_date) = %s"
+                    params.append(int(selected_year))
                 
                 if selected_month != "Alle":
                     query += " AND EXTRACT(MONTH FROM te.entry_date) = %s"

@@ -72,7 +72,7 @@ class AdminProjectDiagram(ctk.CTkFrame):
 
         # Filterwerte abrufen
         selected_month = self.filter_frame.month_combo.get()
-        selected_year = int(self.filter_frame.year_combo.get())
+        selected_year = self.filter_frame.year_combo.get()
         selected_user = self.filter_frame.user_combo.get()
         selected_phase = self.filter_frame.phase_combo.get()
 
@@ -94,9 +94,12 @@ class AdminProjectDiagram(ctk.CTkFrame):
                     ON sp.phase_name = psp.phase_name AND psp.project_number = %s
                 LEFT JOIN time_entries te
                     ON sp.phase_id = te.phase_id AND te.project_number = %s
-                WHERE EXTRACT(YEAR FROM te.entry_date) = %s
                 """
-                params = [self.project_number, self.project_number, selected_year]
+                params = [self.project_number, self.project_number]
+                
+                if selected_year != "Alle":
+                    query += " AND EXTRACT(YEAR FROM te.entry_date) = %s"
+                    params.append(int(selected_year))
 
                 # Monat-Filter hinzufügen
                 if selected_month != "Alle":
@@ -181,13 +184,13 @@ class AdminProjectDiagram(ctk.CTkFrame):
                 linestyle="--",
                 linewidth=2,
                 label="Sollstunden" if i == 0 else "",
-                zorder=2,
+                zorder=1,
             )
-
-        # Stunden pro Benutzer
+        
+         # Nutzerstunden innerhalb desselben Balkens gestapelt darstellen
+        y_offset = [0] * len(phases) 
         added_labels = set()
         for user_id in users:
-            y_offset = [0] * len(phases)
             for i, phase in enumerate(phases):
                 user_hours = hours_by_user[phase].get(user_id, 0)
                 ax.bar(
@@ -197,7 +200,7 @@ class AdminProjectDiagram(ctk.CTkFrame):
                     bottom=y_offset[i],
                     color=user_colors[user_id],
                     label=user_names[user_id] if user_id not in added_labels else "",
-                    zorder=1,
+                    zorder=2,
                 )
                 y_offset[i] += user_hours
             added_labels.add(user_id)
@@ -211,13 +214,8 @@ class AdminProjectDiagram(ctk.CTkFrame):
         ax.spines["bottom"].set_visible(False)
         
         handles, labels = ax.get_legend_handles_labels()
-        unique_labels = []
-        unique_handles = []
-        for handle, label in zip(handles, labels):
-            if label not in unique_labels:
-                unique_labels.append(label)
-                unique_handles.append(handle)
-        ax.legend(unique_handles, unique_labels)
+        unique_handles_labels = dict(zip(labels, handles))
+        ax.legend(unique_handles_labels.values(), unique_handles_labels.keys())
 
         if self.canvas:
             self.canvas.get_tk_widget().destroy()
