@@ -123,9 +123,7 @@ class ProjectPhaseDiagram(ctk.CTkFrame):
         ax.set_facecolor(self.colors["background"])
         bar_width = 0.8
         x = range(len(phases))
-        
-        # for i, (s,t,u) in enumerate(zip(soll, total, user)):
-        # y_offset = [0] * len(phases)
+
         ax.bar(
             x,
             soll,
