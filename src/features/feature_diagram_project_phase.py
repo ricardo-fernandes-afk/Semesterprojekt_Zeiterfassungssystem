@@ -74,7 +74,7 @@ class ProjectPhaseDiagram(ctk.CTkFrame):
                     sp.phase_name,
                     sp.phase_number,
                     psp.soll_stunden,
-                    COALESCE(SUM(te.hours), 0) AS total_hours,
+                    COALESCE(SUM(CASE WHEN te.user_id != %s THEN te.hours ELSE 0 END), 0) AS total_hours,
                     COALESCE(SUM(CASE WHEN te.user_id = %s THEN te.hours ELSE 0 END), 0) AS user_hours
                 FROM sia_phases sp
                 LEFT JOIN project_sia_phases psp
@@ -84,7 +84,7 @@ class ProjectPhaseDiagram(ctk.CTkFrame):
                 GROUP BY sp.phase_name, sp.phase_number, psp.soll_stunden
                 ORDER BY sp.phase_number;
                 '''
-                cursor.execute(query, (self.user_id, self.project_number, self.project_number))
+                cursor.execute(query, (self.user_id, self.user_id, self.project_number, self.project_number))
                 result = cursor.fetchall()
                 return result
             except Exception as e:
@@ -124,35 +124,37 @@ class ProjectPhaseDiagram(ctk.CTkFrame):
         bar_width = 0.8
         x = range(len(phases))
         
-        for i, (s,t,u) in enumerate(zip(soll, total, user)):
-            ax.bar(
-                i,
-                s,
-                bar_width,
-                color="none",
-                edgecolor=self.colors["error"],
-                linestyle="--",
-                linewidth=2,
-                label="Sollstunden" if i==0 else "",
-                zorder=3,
-            )
-            ax.bar(
-                i,
-                t,
-                bar_width,
-                color=self.colors["secondary"],
-                alpha=0.3,
-                label="Gesamtstunden" if i==0 else "",
-                zorder=1,
-            )
-            ax.bar(
-                i,
-                u,
-                bar_width,
-                color=self.colors["primary"],
-                label="Meine Leistung" if i==0 else "",
-                zorder=2,
-            )
+        # for i, (s,t,u) in enumerate(zip(soll, total, user)):
+        # y_offset = [0] * len(phases)
+        ax.bar(
+            x,
+            soll,
+            bar_width,
+            color="none",
+            edgecolor=self.colors["error"],
+            linestyle="--",
+            linewidth=2,
+            label="Sollstunden",
+            zorder=3,
+        )
+        ax.bar(
+            x,
+            total,
+            bar_width,
+            color=self.colors["secondary"],
+            alpha=0.3,
+            label="Andere",
+            zorder=2,
+        )
+        ax.bar(
+            x,
+            user,
+            bar_width,
+            color=self.colors["primary"],
+            label="Meine Leistung",
+            bottom=total,
+            zorder=1,
+        )
         
         ax.set_xticks(x)
         ax.set_xticklabels(phases, fontsize=10, fontweight="bold", color=self.colors["text_light"])
