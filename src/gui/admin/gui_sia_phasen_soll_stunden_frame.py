@@ -86,7 +86,7 @@ class SIAPhasenSollStundenFrame(ctk.CTkFrame):
         # Speichern-Button in der dritten Zeile
         self.save_button = ctk.CTkButton(
             sia_phase_frame,
-            text="Soll-Stunden speichern",
+            text="Speichern",
             command=self.save_soll_stunden,
             **self.styles["button"],
         )
@@ -95,7 +95,7 @@ class SIAPhasenSollStundenFrame(ctk.CTkFrame):
         # Bearbeiten-Button in der dritten Zeile
         self.edit_button = ctk.CTkButton(
             sia_phase_frame,
-            text="Soll-Stunden bearbeiten",
+            text="Bearbeiten",
             command=self.edit_soll_stunden,
             **self.styles["button_secondary"],
         )
