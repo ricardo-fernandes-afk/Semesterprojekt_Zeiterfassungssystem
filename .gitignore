@@ -11,6 +11,7 @@ dist/
 
 # Sensible Daten
 src/db/db_config.py
+src/db/setup_db_config.py
 .env
 
 # IDE-spezifisch
