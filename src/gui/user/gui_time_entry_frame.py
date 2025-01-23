@@ -1,3 +1,29 @@
+"""
+Modul: Zeitbuchungs-Frame für TimeArch.
+
+Dieses Modul bietet eine grafische Benutzeroberfläche zur Verwaltung von Zeitbuchungen. Benutzer können Stunden eintragen, bearbeiten und löschen. Die GUI ist mit der Datenbank verbunden und aktualisiert Diagramme, wenn Änderungen vorgenommen werden.
+
+Klassen:
+--------
+- TimeEntryFrame: Hauptklasse zur Verwaltung von Zeitbuchungen.
+
+Methoden:
+---------
+- __init__(self, master): Initialisiert das Zeitbuchungs-Frame.
+- create_widgets(self): Erstellt die Widgets zur Zeitbuchung und Anzeige vorhandener Stunden.
+- update_date(self, selected_date): Aktualisiert das ausgewählte Datum und lädt die zugehörigen Stunden.
+- load_hours(self): Lädt vorhandene Stunden für das ausgewählte Datum aus der Datenbank.
+- delete_time_entry(self): Löscht die eingetragenen Stunden für das ausgewählte Datum.
+- save_time_entry(self): Speichert die eingegebenen Stunden in der Datenbank.
+
+Verwendung:
+-----------
+    from gui_time_entry_frame import TimeEntryFrame
+
+    frame = TimeEntryFrame(master)
+    frame.pack()
+"""
+
 import customtkinter as ctk
 from tkinter import messagebox
 from features.feature_save_time_entry import save_hours
@@ -5,7 +31,22 @@ from db.db_connection import create_connection
 from gui.gui_appearance_color import appearance_color, get_default_styles
 
 class TimeEntryFrame(ctk.CTkFrame):
+    """
+    Eine Klasse zur Verwaltung von Zeitbuchungen.
+
+    Diese Klasse bietet Funktionen:
+    - Stunden eintragen
+    - Stunden anzeigen
+    - Stunden löschen
+    - Diagramme basierend auf Änderungen aktualisieren
+    """
     def __init__(self, master):
+        """
+        Initialisiert das Zeitbuchungs-Frame.
+
+        Args:
+            master (ctk.CTk): Das übergeordnete Fenster.
+        """
         self.colors=appearance_color()
         self.styles=get_default_styles()
         
@@ -14,7 +55,14 @@ class TimeEntryFrame(ctk.CTkFrame):
         self.create_widgets()
         
     def create_widgets(self):
-        
+        """
+        Erstellt die Widgets zur Zeitbuchung.
+
+        - Eingabefelder für Stunden und Notizen
+        - Dropdown für Aktivitäten
+        - Buttons zum Speichern und Löschen
+        - Label zur Anzeige vorhandener Stunden
+        """
         time_entry_frame = ctk.CTkFrame(self, fg_color=self.colors["alt_background"])
         time_entry_frame.pack(pady=10, padx=10, fill="both", expand=True)
         
@@ -69,12 +117,23 @@ class TimeEntryFrame(ctk.CTkFrame):
         self.phase_hours_label.pack(padx=10, pady=10, anchor="s")
 
     def update_date(self, selected_date):
+        """
+        Aktualisiert das ausgewählte Datum und lädt zugehörige Stunden.
+
+        Args:
+            selected_date (str): Das ausgewählte Datum im Format YYYY-MM-DD.
+        """
         self.selected_date = selected_date
         self.date_label.configure(text=f"Datum: {selected_date}")
         self.load_hours()
         
     def load_hours(self):
-        """Lädt vorhandene Stunden für das ausgewählte Datum aus der Datenbank."""
+        """
+        Lädt vorhandene Stunden für das ausgewählte Datum aus der Datenbank.
+
+        - Zeigt vorhandene Stunden, Aktivitäten und Projektinformationen im Label an.
+        - Gibt eine Fehlermeldung aus, falls die Datenbankabfrage fehlschlägt.
+        """
         if not self.selected_date:
             return
 
@@ -113,7 +172,13 @@ class TimeEntryFrame(ctk.CTkFrame):
                 connection.close()
         
     def delete_time_entry(self):
-        """Löscht die eingetragenen Stunden für das ausgewählte Datum aus der Datenbank."""
+        """
+        Löscht die eingetragenen Stunden für das ausgewählte Datum.
+
+        - Fragt den Benutzer zur Bestätigung.
+        - Löscht die Stunden aus der Tabelle `time_entries`.
+        - Aktualisiert die Anzeige nach erfolgreichem Löschen.
+        """
         if not self.selected_date:
             messagebox.showerror("Fehler", "Kein Datum ausgewählt.")
             return
@@ -159,6 +224,14 @@ class TimeEntryFrame(ctk.CTkFrame):
                 self.master.diagram_frame.user_hours_diagram.refresh_diagram(self.selected_date)
 
     def save_time_entry(self):
+        """
+        Speichert die eingegebenen Stunden in der Datenbank.
+
+        - Validiert die Eingaben (Datum, Stunden, Aktivität).
+        - Speichert die Stunden in der Tabelle `time_entries`.
+        - Aktualisiert die Anzeige und Diagramme nach erfolgreichem Speichern.
+        - Gibt eine Fehlermeldung aus, falls die Eingaben unvollständig sind oder ein Fehler auftritt.
+        """
         hours = self.hours_entry.get()
         activity = self.activity_dropdown.get()
         note = self.notes_entry.get() if self.notes_entry.get() else None
@@ -199,6 +272,8 @@ class TimeEntryFrame(ctk.CTkFrame):
                         return
                 if hasattr(self.master.diagram_frame, "user_hours_diagram"):
                     self.master.diagram_frame.user_hours_diagram.refresh_diagram(self.selected_date)
+                if hasattr(self.master.diagram_frame, "total_hours_diagram"):
+                    self.master.diagram_frame.total_hours_diagram.update_diagram()
         else:
             messagebox.showerror("Fehler", f"Fehler beim Speichern der Stunden für {self.selected_date}.")
             

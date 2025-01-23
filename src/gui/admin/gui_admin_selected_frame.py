@@ -1,3 +1,31 @@
+"""
+Modul: SelectedFrame für TimeArch.
+
+Dieses Modul stellt die grafische Benutzeroberfläche für die Anzeige und Bearbeitung von Projekten oder Benutzerdetails bereit.
+Es unterstützt die Anzeige von Projektphasen, zugehörigen Benutzern und Diagrammen sowie die Verwaltung von Benutzergrundinformationen.
+
+Klassen:
+--------
+- SelectedFrame: Hauptklasse zur Darstellung und Verwaltung von Projekten und Benutzern.
+
+Methoden:
+---------
+- __init__(self, master, user_id=None, selected_id=None, selected_name=None, description=None): Initialisiert das SelectedFrame mit den übergebenen Parametern.
+- clear_widgets(self): Entfernt alle Widgets im Frame.
+- create_widgets(self): Erstellt die Standard-Widgets (Titel und Beschreibung).
+- create_title_label(self): Erstellt das Titel-Label für das SelectedFrame.
+- create_description_label(self): Erstellt das Beschreibungs-Label für das SelectedFrame.
+- update_project_details(self, selected_id, selected_name, description=None): Aktualisiert die Details und Widgets für ein ausgewähltes Projekt.
+- update_user_details(self, selected_user_id, selected_username): Aktualisiert die Details und Widgets für einen ausgewählten Benutzer.
+
+Verwendung:
+-----------
+    from gui_admin_selected_frame import SelectedFrame
+
+    selected_frame = SelectedFrame(master, user_id, selected_id, selected_name, description)
+    selected_frame.update_project_details("P123", "Projektname", "Projektbeschreibung")
+"""
+
 import customtkinter as ctk
 from gui.admin.gui_sia_phasen_soll_stunden_frame import SIAPhasenSollStundenFrame
 from gui.admin.gui_user_to_project_frame import UserToProjectFrame
@@ -11,7 +39,22 @@ from features.feature_diagram_total_hours import DiagramTotalHours
 from gui.gui_appearance_color import appearance_color, get_default_styles
 
 class SelectedFrame(ctk.CTkFrame):
+    """
+    Eine Klasse zur Darstellung und Verwaltung der Details für Projekte und Benutzer.
+
+    Diese Klasse unterstützt die Anzeige von Projektphasen, zugehörigen Benutzern, Diagrammen und Benutzerinformationen.
+    """
     def __init__(self, master, user_id=None, selected_id=None, selected_name=None, description=None):
+        """
+        Initialisiert das SelectedFrame.
+
+        Args:
+            master (ctk.CTk): Das übergeordnete Fenster.
+            user_id (int, optional): Die Benutzer-ID, wenn ein Benutzer ausgewählt ist.
+            selected_id (str, optional): Die Projektnummer oder Benutzer-ID des ausgewählten Eintrags.
+            selected_name (str, optional): Der Name des ausgewählten Projekts oder Benutzers.
+            description (str, optional): Die Beschreibung des ausgewählten Projekts.
+        """
         self.colors = appearance_color()
         self.styles = get_default_styles()
         
@@ -37,25 +80,51 @@ class SelectedFrame(ctk.CTkFrame):
             
 
     def clear_widgets(self):
+        """
+        Entfernt alle Widgets aus dem Frame.
+        """
         for widget in self.winfo_children():
             widget.destroy()
 
     def create_widgets(self):
+        """
+        Erstellt die Standard-Widgets (Titel und Beschreibung) für das SelectedFrame.
+        """
         self.title_label = self.create_title_label()
         self.description_label = self.create_description_label()
 
     def create_title_label(self):
+        """
+        Erstellt das Titel-Label für das SelectedFrame.
+
+        Returns:
+            ctk.CTkLabel: Das erstellte Titel-Label.
+        """
         title_text = f"{self.selected_id} {self.selected_name}" if self.selected_name else "Wählen Sie ein Projekt oder einen Benutzer"
         title_label = ctk.CTkLabel(self, text=title_text, **self.styles["title"])
         title_label.grid(row=0, columnspan=4, pady=5, sticky="nsew")
         return title_label
 
     def create_description_label(self):
+        """
+        Erstellt das Beschreibungs-Label für das SelectedFrame.
+
+        Returns:
+            ctk.CTkLabel: Das erstellte Beschreibungs-Label.
+        """
         description_label = ctk.CTkLabel(self, text="", **self.styles["description"], wraplength=500)
         description_label.grid(row=1, columnspan=4, sticky="nsew")
         return description_label
 
     def update_project_details(self, selected_id, selected_name, description=None):
+        """
+        Aktualisiert die Details und Widgets für ein ausgewähltes Projekt.
+
+        Args:
+            selected_id (str): Die Projektnummer des ausgewählten Projekts.
+            selected_name (str): Der Name des ausgewählten Projekts.
+            description (str, optional): Die Beschreibung des ausgewählten Projekts.
+        """
         self.clear_widgets()
         self.create_widgets()
         
@@ -86,6 +155,13 @@ class SelectedFrame(ctk.CTkFrame):
             self.diagram_frame = ctk.CTkFrame(self, fg_color=self.colors["alt_background"])
 
     def update_user_details(self, selected_user_id, selected_username):
+        """
+        Aktualisiert die Details und Widgets für einen ausgewählten Benutzer.
+
+        Args:
+            selected_user_id (int): Die Benutzer-ID des ausgewählten Benutzers.
+            selected_username (str): Der Name des ausgewählten Benutzers.
+        """
         self.clear_widgets()
         self.create_widgets()
 

@@ -1,3 +1,27 @@
+"""
+Modul: Login-GUI für TimeArch.
+
+Dieses Modul stellt eine grafische Benutzeroberfläche für den Login bereit. Es validiert die Benutzereingaben und authentifiziert den Benutzer anhand der Datenbank. Je nach Benutzerrolle wird die entsprechende GUI gestartet (Admin oder Benutzer).
+
+Klassen:
+--------
+- LoginGUI: Hauptklasse zur Verwaltung des Login-Interfaces.
+
+Methoden:
+---------
+- __init__(self, master): Initialisiert die Login-GUI mit Benutzereingabe- und Steuerungsfeldern.
+- login(self): Authentifiziert den Benutzer anhand von Benutzername und Passwort.
+- on_closing(self): Schließt die Anwendung.
+
+Verwendung:
+-----------
+    from gui_login import LoginGUI
+
+    root = ctk.CTk()
+    app = LoginGUI(master=root)
+    root.mainloop()
+"""
+
 import customtkinter as ctk
 from tkinter import messagebox, PhotoImage
 from PIL import Image, ImageTk
@@ -5,7 +29,21 @@ from db.db_connection import create_connection
 from gui.gui_appearance_color import appearance_color, get_default_styles
 
 class LoginGUI:
+    """
+    Eine Klasse zur Verwaltung des Login-Interfaces.
+
+    Funktionen:
+    - Validierung von Benutzereingaben
+    - Authentifizierung über die Datenbank
+    - Start der entsprechenden GUI basierend auf der Benutzerrolle
+    """
     def __init__(self, master):
+        """
+        Initialisiert die Login-GUI mit Eingabe- und Steuerungsfeldern.
+
+        Args:
+            master (ctk.CTk): Das übergeordnete Fenster.
+        """
         self.master = master
         self.master.protocol("WM_DELETE_WINDOW", self.on_closing)
         colors = appearance_color()
@@ -31,6 +69,17 @@ class LoginGUI:
         self.login_button.pack(pady=10)
         
     def login(self):
+        """
+        Authentifiziert den Benutzer anhand von Benutzername und Passwort.
+
+        - Überprüft, ob alle Felder ausgefüllt sind.
+        - Führt eine Datenbankabfrage durch, um die Benutzerrolle und ID zu ermitteln.
+        - Startet die entsprechende GUI basierend auf der Benutzerrolle.
+
+        Fehlerbehandlung:
+        ------------------
+        - Zeigt Warnungen oder Fehlermeldungen bei unvollständigen Eingaben oder ungültigen Anmeldedaten an.
+        """
         username = self.username_entry.get()
         password = self.password_entry.get()
         
@@ -69,4 +118,9 @@ class LoginGUI:
                 connection.close()
     
     def on_closing(self):
+        """
+        Schließt die Anwendung.
+
+        - Zerstört das Hauptfenster.
+        """
         self.master.destroy()

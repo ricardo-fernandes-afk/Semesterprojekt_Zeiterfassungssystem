@@ -1,6 +1,17 @@
-__pycache__
+# Python-spezifisch
+__pycache__/
 *.pyc
+
+# Virtuelle Umgebung
+.venv/
+
+# Build-spezifisch
+/build/
+dist/
+
+# Sensible Daten
+src/db/db_config.py
 .env
-.vscode
-.venv
-.git
+
+# IDE-spezifisch
+.vscode/

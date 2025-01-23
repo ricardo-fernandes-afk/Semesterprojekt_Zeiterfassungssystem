@@ -1,7 +1,34 @@
+"""
+Modul: Erscheinungs- und Farbschema für TimeArch.
+
+Dieses Modul definiert das Farbschema und die Standardstile für die grafische Benutzeroberfläche (GUI) von TimeArch.
+Es bietet Funktionen zur Anwendung des Designs auf Treeview-Elemente und andere GUI-Komponenten.
+
+Funktionen:
+-----------
+- appearance_color(): Gibt ein Dictionary mit den Farben der GUI zurück.
+- apply_treeview_style(colors): Wendet die definierten Farben auf Treeview-Elemente an.
+- get_default_styles(): Gibt ein Dictionary mit Standardstilen für häufige GUI-Komponenten zurück.
+
+Verwendung:
+-----------
+    from gui_appearance_color import appearance_color, apply_treeview_style, get_default_styles
+
+    colors = appearance_color()
+    styles = get_default_styles()
+    apply_treeview_style(colors)
+"""
+
 import customtkinter as ctk
 from tkinter import ttk
 
 def appearance_color():
+    """
+    Gibt ein Farbschema für die GUI zurück.
+
+    Returns:
+        dict: Ein Dictionary mit den definierten Farben.
+    """
     # Farbschema definieren
     colors = {
         "primary": "#0F8100",       # Grün für Hauptaktionen
@@ -24,8 +51,13 @@ def appearance_color():
 
 
 def apply_treeview_style(colors):
+    """
+    Wendet das Farbschema auf Treeview-Elemente an.
+
+    Args:
+        colors (dict): Ein Dictionary mit Farben, das von `appearance_color` zurückgegeben wird.
+    """
     colors = appearance_color()
-    """Stil für Treeview-Elemente anwenden"""
     style = ttk.Style()
     style.theme_use("clam")  # Unterstützt mehr Farben
     style.configure("Treeview", 
@@ -43,8 +75,13 @@ def apply_treeview_style(colors):
 
 
 def get_default_styles():
+    """
+    Gibt Standardstile für häufig verwendete GUI-Komponenten zurück.
+
+    Returns:
+        dict: Ein Dictionary mit Stildefinitionen.
+    """
     colors = appearance_color()
-    """Standardstile für häufige Elemente definieren"""
     return {
         "title": {"font": ("Arial", 22, "bold"), "text_color": colors["text_light"]},
         "description": {"font": ("Arial", 14, "italic"), "text_color": colors["text_light"]},

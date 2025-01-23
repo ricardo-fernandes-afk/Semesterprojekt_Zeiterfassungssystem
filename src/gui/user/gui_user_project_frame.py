@@ -1,10 +1,46 @@
+"""
+Modul: Benutzer-Projekt-Frame für TimeArch.
+
+Dieses Modul bietet eine grafische Benutzeroberfläche, die die Projekte eines Benutzers anzeigt. Es verwendet ein Treeview-Widget zur Darstellung von Projektnummer, Projektname und Beschreibung.
+
+Klassen:
+--------
+- UserProjectFrame: Hauptklasse zur Anzeige der Projekte eines Benutzers.
+
+Methoden:
+---------
+- __init__(self, master, username): Initialisiert den Frame mit dem Benutzernamen und erstellt die Widgets.
+- load_user_projects(self): Lädt die Projekte des Benutzers aus der Datenbank und füllt das Treeview.
+
+Verwendung:
+-----------
+    from gui_user_project_frame import UserProjectFrame
+
+    frame = UserProjectFrame(master, username="John Doe")
+    frame.pack()
+"""
+
 import customtkinter as ctk
 from tkinter import ttk, messagebox
 from db.db_connection import create_connection
 from gui.gui_appearance_color import appearance_color, get_default_styles, apply_treeview_style
 
 class UserProjectFrame(ctk.CTkFrame):
+    """
+    Eine Klasse zur Anzeige der Projekte eines Benutzers.
+
+    Funktionen:
+    - Projekte in einem Treeview anzeigen
+    - Datenbankverbindung zum Laden der Projekte nutzen
+    """
     def __init__(self, master, username):
+        """
+        Initialisiert das Benutzer-Projekt-Frame.
+
+        Args:
+            master (ctk.CTk): Das übergeordnete Fenster.
+            username (str): Der Benutzername des aktuellen Benutzers.
+        """
         self.colors = appearance_color()
         self.styles = get_default_styles()
         apply_treeview_style(self.colors)
@@ -44,6 +80,16 @@ class UserProjectFrame(ctk.CTkFrame):
         
 
     def load_user_projects(self):
+        """
+        Lädt die Projekte des Benutzers aus der Datenbank und füllt das Treeview.
+
+        - Verwendet den Benutzernamen, um die mit dem Benutzer verknüpften Projekte zu laden.
+        - Fügt die Projektdaten in das Treeview-Widget ein.
+
+        Fehlerbehandlung:
+        ------------------
+        - Zeigt eine Fehlermeldung an, falls die Datenbankabfrage fehlschlägt.
+        """
         connection = create_connection()
         if connection:
             cursor = connection.cursor()
@@ -57,6 +103,9 @@ class UserProjectFrame(ctk.CTkFrame):
                 """
                 cursor.execute(query, (self.username,))
                 projects = cursor.fetchall()
+                
+                projects.sort(key=lambda x: x[0])
+                
                 for project in projects:
                     self.project_treeview.insert("", "end", values=project)
             except Exception as e:

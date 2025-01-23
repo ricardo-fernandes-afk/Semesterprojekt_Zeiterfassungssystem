@@ -1,9 +1,50 @@
+"""
+Modul: Projekterstellung für TimeArch.
+
+Dieses Modul ermöglicht es Administratoren, neue Projekte zu erstellen und sie in die Datenbank einzufügen.
+Die Benutzeroberfläche basiert auf CustomTkinter und integriert Funktionen zur Eingabe und Speicherung von Projektdetails.
+
+Funktionen:
+------------
+- add_project(admin_window, refresh_callback):
+    Öffnet ein neues Fenster zur Erstellung eines Projekts. Ermöglicht das Eingeben von Projektnummer, Projektnamen und Beschreibung.
+    Fügt das Projekt in die Datenbank ein.
+- save_project():
+    Speichert das Projekt in der Datenbank. Validiert die Eingaben und zeigt Fehlermeldungen an, falls erforderlich.
+    
+Verwendung:
+------------
+    from feature_add_projects import add_project
+
+    add_project(admin_window, refresh_callback)
+"""
+
 import customtkinter as ctk
 from tkinter import messagebox
 from gui.gui_appearance_color import appearance_color, get_default_styles
 from db.db_connection import create_connection
 
 def add_project(admin_window, refresh_callback):
+    """
+    Erstellt ein neues Projekt über ein Eingabefenster und fügt es in die Datenbank ein.
+
+    Args:
+        admin_window (ctk.CTk): Referenz zum Hauptfenster des Administrators.
+        refresh_callback (function): Funktion, die nach der Projekterstellung aufgerufen wird, um die Ansicht zu aktualisieren.
+
+    GUI-Komponenten:
+    -----------------
+    - Eingabefelder für Projektnummer, Projektnamen und Beschreibung.
+    - Ein Button zum Speichern des Projekts.
+
+    Datenbankintegration:
+    ----------------------
+    Fügt das Projekt in die Tabelle `projects` ein, sofern die Projektnummer und der Name angegeben sind.
+
+    Hinweis:
+    --------
+    Zeigt eine Fehlermeldung, falls die Eingaben unvollständig sind oder ein Datenbankfehler auftritt.
+    """
     colors = appearance_color()
     styles = get_default_styles()
     
@@ -31,6 +72,18 @@ def add_project(admin_window, refresh_callback):
     
     # Funktion, um das Projekt in die Datenbank einzufügen
     def save_project():
+        """
+        Speichert die Eingabedaten als neues Projekt in der Datenbank.
+
+        Datenbankintegration:
+        ----------------------
+        - Validiert die Eingaben.
+        - Fügt das Projekt in die Tabelle `projects` ein, falls keine Konflikte bestehen.
+
+        Fehlerbehandlung:
+        ------------------
+        Zeigt Fehlermeldungen an, falls Eingaben unvollständig sind oder ein Datenbankfehler auftritt.
+        """
         project_name = project_name_entry.get()
         description = description_entry.get()
         project_number = project_number_entry.get()

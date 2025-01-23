@@ -1,3 +1,31 @@
+"""
+Modul: Benutzergrundinformationen für TimeArch.
+
+Dieses Modul stellt eine grafische Benutzeroberfläche (GUI) bereit, um die Grundinformationen eines Benutzers
+anzuzeigen und zu bearbeiten. Es unterstützt die Speicherung von Einstellungen wie Arbeitsstunden pro Tag,
+Beschäftigungsprozentsatz, Ferientagen und Startdatum.
+
+Klassen:
+--------
+- GrundInfosUser: Hauptklasse für die Anzeige und Bearbeitung der Benutzergrundinformationen.
+
+Methoden:
+---------
+- __init__(self, master, user_id=None): Initialisiert das Grundinformationen-Frame mit dem übergeordneten Fenster und Benutzer-ID.
+- create_widgets(self): Erstellt die Widgets für die Anzeige und Bearbeitung der Benutzergrundinformationen.
+- save_user_settings(self): Speichert die aktualisierten Benutzerinformationen in der Datenbank.
+- load_user_settings(self): Lädt die Benutzerinformationen aus der Datenbank.
+- toggle_entries(self, state="normal"): Aktiviert oder deaktiviert die Eingabefelder.
+- edit_user_settings(self): Aktiviert die Bearbeitung der Benutzerinformationen.
+
+Verwendung:
+-----------
+    from gui_grundinfos_user import GrundInfosUser
+
+    frame = GrundInfosUser(master, user_id=1)
+    frame.pack()
+"""
+
 import customtkinter as ctk
 from datetime import date
 from tkinter import messagebox
@@ -5,7 +33,23 @@ from db.db_connection import create_connection
 from gui.gui_appearance_color import appearance_color, get_default_styles
 
 class GrundInfosUser(ctk.CTkFrame):
+    """
+    Eine Klasse, die eine grafische Oberfläche zur Verwaltung der Benutzergrundinformationen bereitstellt.
+
+    Ermöglicht das Anzeigen und Bearbeiten von:
+    - Arbeitsstunden pro Tag
+    - Beschäftigungsprozentsatz
+    - Ferientagen
+    - Startdatum
+    """
     def __init__(self, master, user_id=None):
+        """
+        Initialisiert die Benutzergrundinformationen-GUI.
+
+        Args:
+            master (ctk.CTk): Das übergeordnete Fenster.
+            user_id (int, optional): Die Benutzer-ID, deren Informationen geladen werden sollen. Standard ist None.
+        """
         self.colors = appearance_color()
         self.styles = get_default_styles()
         super().__init__(master, corner_radius=10, fg_color=self.colors["alt_background"])
@@ -16,7 +60,12 @@ class GrundInfosUser(ctk.CTkFrame):
             self.load_user_settings()   # Vorhandene Daten laden oder Standardwerte setzen
         
     def create_widgets(self):
-        
+        """
+        Erstellt die Widgets zur Anzeige und Bearbeitung der Benutzergrundinformationen.
+
+        - Enthält Eingabefelder für Startdatum, Arbeitsstunden, Stellenprozent und Ferientage.
+        - Fügt Schaltflächen für Speichern und Bearbeiten hinzu.
+        """
         self.title_label = ctk.CTkLabel(self, text="Grundinformationen", **self.styles["subtitle"])
         self.title_label.pack(padx=10, pady=(10,0))
         
@@ -30,25 +79,25 @@ class GrundInfosUser(ctk.CTkFrame):
         self.start_date_label = ctk.CTkLabel(eingabe_frame, text="Startdatum", **self.styles["text"])
         self.start_date_label.grid(row=0, column=0, padx=10, sticky="s")
         self.start_date_entry = ctk.CTkEntry(eingabe_frame, placeholder_text="YYYY-MM-DD", **self.styles["entry"])
-        self.start_date_entry.grid(row=1, column=0, padx=10)
+        self.start_date_entry.grid(row=1, column=0, padx=10, sticky="nsew")
         
         # Stunden pro Tag
         self.hours_label = ctk.CTkLabel(eingabe_frame, text="Stunden pro Tag", **self.styles["text"])
         self.hours_label.grid(row=0, column=1, padx=10, sticky="s")
         self.hours_entry = ctk.CTkEntry(eingabe_frame, placeholder_text="8.5", **self.styles["entry"])
-        self.hours_entry.grid(row=1, column=1, padx=10)
+        self.hours_entry.grid(row=1, column=1, padx=10, sticky="nsew")
         
         # Stellenprozent
         self.percentage_label = ctk.CTkLabel(eingabe_frame, text="Stellenprozent", **self.styles["text"])
         self.percentage_label.grid(row=0, column=2, padx=10, sticky="s")
         self.percentage_entry = ctk.CTkEntry(eingabe_frame, placeholder_text="100", **self.styles["entry"])
-        self.percentage_entry.grid(row=1, column=2, padx=10)
+        self.percentage_entry.grid(row=1, column=2, padx=10, sticky="nsew")
         
         # Ferientage
         self.vacation_label = ctk.CTkLabel(eingabe_frame, text="Ferientage", **self.styles["text"])
         self.vacation_label.grid(row=0, column=3, padx=10, sticky="s")
         self.vacation_entry = ctk.CTkEntry(eingabe_frame, placeholder_text="20", **self.styles["entry"])
-        self.vacation_entry.grid(row=1, column=3, padx=10)
+        self.vacation_entry.grid(row=1, column=3, padx=10, sticky="nsew")
         
         button_frame = ctk.CTkFrame(eingabe_frame, fg_color=self.colors["alt_background"])
         button_frame.grid(row=2, columnspan=4, padx=10, pady=10)
@@ -72,6 +121,17 @@ class GrundInfosUser(ctk.CTkFrame):
         self.edit_button.pack(side="right", padx=10)
     
     def save_user_settings(self):
+        """
+        Speichert die Benutzerinformationen in der Datenbank.
+
+        - Aktualisiert oder fügt neue Einträge in der Tabelle `user_settings` hinzu.
+        - Berechnet Ferientage in Stunden und speichert sie entsprechend.
+        - Zeigt eine Erfolgsmeldung bei erfolgreichem Speichern an.
+
+        Fehlerbehandlung:
+        ------------------
+        - Zeigt eine Fehlermeldung an, falls ein Fehler bei der Datenbankabfrage auftritt.
+        """
         default_hours = self.hours_entry.get() or 8.5
         percentage = self.percentage_entry.get() or 100
         vacation_days = self.vacation_entry.get() or 20
@@ -115,6 +175,16 @@ class GrundInfosUser(ctk.CTkFrame):
             self.master.diagram_frame.update_chart()
     
     def load_user_settings(self):
+        """
+        Lädt die Benutzerinformationen aus der Datenbank und zeigt sie in den Eingabefeldern an.
+
+        - Ruft Daten aus der Tabelle `user_settings` ab.
+        - Zeigt Standardwerte an, wenn keine Informationen in der Datenbank gefunden werden.
+
+        Fehlerbehandlung:
+        ------------------
+        - Zeigt eine Fehlermeldung an, falls ein Fehler bei der Datenbankabfrage auftritt.
+        """
         if not self.user_id:
             messagebox.showerror("Fehler", "Keine Benutzer-ID angegeben.")
             return
@@ -154,12 +224,23 @@ class GrundInfosUser(ctk.CTkFrame):
         self.toggle_entries(state="disabled")
     
     def toggle_entries(self, state="normal"):
+        """
+        Aktiviert oder deaktiviert die Eingabefelder.
+
+        Args:
+            state (str): Der Zustand der Eingabefelder. Standard ist "normal".
+        """
         self.start_date_entry.configure(state=state)
         self.hours_entry.configure(state=state)
         self.percentage_entry.configure(state=state)
         self.vacation_entry.configure(state=state)
     
     def edit_user_settings(self):
+        """
+        Aktiviert die Bearbeitung der Benutzerinformationen.
+
+        - Schaltet die Eingabefelder in den Bearbeitungsmodus.
+        """
         self.toggle_entries(state="normal")
         self.is_editable = True
 
