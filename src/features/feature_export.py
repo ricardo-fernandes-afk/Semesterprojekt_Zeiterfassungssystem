@@ -221,14 +221,14 @@ def export_to_excel(export_type, identifier):
 
                 # Zusätzliche Informationen hinzufügen
                 if export_type == "user":
-                    user_settings_df.to_excel(writer, index=False, sheet_name="Benutzereinstellungen", startrow=2)
-                    format_sheet(writer.sheets["Benutzereinstellungen"], user_settings_df, start_row=2)
+                    user_settings_df.to_excel(writer, index=False, sheet_name="Benutzereinstellungen", startrow=1)
+                    format_sheet(writer.sheets["Benutzereinstellungen"], user_settings_df, start_row=2, apply_filter=False)
                 elif export_type == "project":
-                    project_phases_df.to_excel(writer, index=False, sheet_name="Projektphasen", startrow=2)
-                    format_sheet(writer.sheets["Projektphasen"], project_phases_df, start_row=2)
+                    project_phases_df.to_excel(writer, index=False, sheet_name="Projektphasen", startrow=1)
+                    format_sheet(writer.sheets["Projektphasen"], project_phases_df, start_row=2, apply_filter=False)
 
-                    project_users_df.to_excel(writer, index=False, sheet_name="Projektbenutzer", startrow=2)
-                    format_sheet(writer.sheets["Projektbenutzer"], project_users_df, start_row=2)
+                    project_users_df.to_excel(writer, index=False, sheet_name="Projektbenutzer", startrow=1)
+                    format_sheet(writer.sheets["Projektbenutzer"], project_users_df, start_row=2, apply_filter=False)
 
                 # Metadaten-Blatt
                 metadata = {
@@ -238,8 +238,8 @@ def export_to_excel(export_type, identifier):
                     "Exportdatum": pd.Timestamp.now().strftime("%Y-%m-%d %H:%M:%S")
                 }
                 metadata_df = pd.DataFrame(metadata.items(), columns=["Attribut", "Wert"])
-                metadata_df.to_excel(writer, index=False, sheet_name="Metadaten", startrow=2)
-                format_sheet(writer.sheets["Metadaten"], metadata_df, start_row=2)
+                metadata_df.to_excel(writer, index=False, sheet_name="Metadaten", startrow=1)
+                format_sheet(writer.sheets["Metadaten"], metadata_df, start_row=2, apply_filter=False)
 
             messagebox.showinfo("Erfolg", f"Daten erfolgreich exportiert: {file_path}")
 
