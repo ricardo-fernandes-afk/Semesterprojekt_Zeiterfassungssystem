@@ -55,7 +55,7 @@ def insert_sia_phases(cursor):
             cursor.execute('''
                 INSERT INTO sia_phases (phase_number, phase_name)
                 VALUES (%s, %s)
-                ON CONFLICT (phase_number) DO NOTHING;
+                ON CONFLICT (phase_name) DO NOTHING;
             ''', (phase_number, phase_name))
         print("SIA phases erfolgreich hinzugefügt!")
         

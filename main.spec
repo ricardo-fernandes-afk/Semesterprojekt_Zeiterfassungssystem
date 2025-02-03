@@ -5,7 +5,7 @@ a = Analysis(
     ['src\\main.py'],
     pathex=[],
     binaries=[],
-    datas=[('src/Logo_TimeArch.ico', '.')],
+    datas=[('src/Logo_TimeArch.ico', 'src')],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},
