@@ -29,6 +29,7 @@ from gui.admin.gui_users_frame import UserFrame
 from gui.admin.gui_admin_selected_frame import SelectedFrame
 from gui.gui_appearance_color import appearance_color, get_default_styles
 from features.feature_admin_event_handlers import EventHandlers
+from features.get_resource_path import get_resource_path
 from tkinter import PhotoImage
 
 class AdminGUI:
@@ -54,14 +55,14 @@ class AdminGUI:
         self.colors = appearance_color()
         self.styles = get_default_styles()
         self.user_id = user_id
+        self.icon_path = get_resource_path("src/Logo_TimeArch.ico")
         
         # Fenster für den Admin
         self.master.geometry("1200x800")
         self.master.title("TimeArch - More Time for Visions")
         self.master.configure(bg=self.colors["background"])
         
-        icon_path = "C:/Users/ricar/OneDrive/Dokumente/VS_Projects/Semesterprojekt_Zeiterfassungssystem/docs/Logo_TimeArch.ico"
-        self.master.iconbitmap(icon_path)
+        self.master.iconbitmap(self.icon_path)
         
         # Willkommen Label für den Admin
         welcome_text = f"Willkommen, Admin {username}!"

@@ -31,6 +31,7 @@ from gui.user.gui_user_project_frame import UserProjectFrame
 from gui.user.gui_user_selected_frame import UserSelectedFrame
 from gui.gui_appearance_color import appearance_color, get_default_styles
 from features.feature_user_event_handlers import UserEventHandlers
+from features.get_resource_path import get_resource_path
 
 class UserGUI:
     """
@@ -54,6 +55,7 @@ class UserGUI:
         self.master.protocol("WM_DELETE_WINDOW", self.on_closing)
         self.username = username
         self.user_id = user_id
+        self.icon_path = get_resource_path("src/Logo_TimeArch.ico")
         colors = appearance_color()
         styles = get_default_styles()        
         
@@ -62,8 +64,7 @@ class UserGUI:
         self.master.title("TimeArch - More Time for Visions")
         self.master.configure(bg=colors['background'])
         
-        icon_path = "C:/Users/ricar/OneDrive/Dokumente/VS_Projects/Semesterprojekt_Zeiterfassungssystem/docs/Logo_TimeArch.ico"
-        self.master.iconbitmap(icon_path)
+        self.master.iconbitmap(self.icon_path)
 
         # Willkommen Label für den Admin
         welcome_text = f"Willkommen, {username}!"

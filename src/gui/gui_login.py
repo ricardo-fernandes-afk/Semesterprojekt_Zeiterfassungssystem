@@ -21,12 +21,13 @@ Verwendung:
     app = LoginGUI(master=root)
     root.mainloop()
 """
-
+import os
 import customtkinter as ctk
 from tkinter import messagebox, PhotoImage
 from PIL import Image, ImageTk
 from db.db_connection import create_connection
 from gui.gui_appearance_color import appearance_color, get_default_styles
+from features.get_resource_path import get_resource_path
 
 class LoginGUI:
     """
@@ -48,13 +49,14 @@ class LoginGUI:
         self.master.protocol("WM_DELETE_WINDOW", self.on_closing)
         colors = appearance_color()
         styles = get_default_styles()
+        icon_path = get_resource_path("src/Logo_TimeArch.ico")
         
         self.master.geometry("600x400")
         self.master.title("TimeArch - More Time for Visions")
         self.master.configure(bg=colors["background"])
         
-        icon_path = "C:/Users/ricar/OneDrive/Dokumente/VS_Projects/Semesterprojekt_Zeiterfassungssystem/docs/Logo_TimeArch.ico"
         self.master.iconbitmap(icon_path)
+        
         
         self.label = ctk.CTkLabel(self.master, text="Login", **styles["title"])
         self.label.pack(pady=12)
