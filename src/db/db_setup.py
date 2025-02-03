@@ -74,7 +74,7 @@ def setup_database():
             user_id INTEGER REFERENCES users(user_id),
             default_hours_per_day DECIMAL(4, 2) DEFAULT 8.5,
             employment_percentage INTEGER DEFAULT 100,
-            vacation_hours DECIMAL(6,2) DEFAULT 212.50
+            vacation_hours DECIMAL(6,2) DEFAULT 212.50,
             start_date DATE
             );
         ''')
