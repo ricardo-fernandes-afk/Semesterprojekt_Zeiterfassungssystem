@@ -27,6 +27,7 @@ from tkinter import messagebox, PhotoImage
 from PIL import Image, ImageTk
 from db.db_connection import create_connection
 from gui.gui_appearance_color import appearance_color, get_default_styles
+import os
 
 class LoginGUI:
     """
@@ -59,15 +60,36 @@ class LoginGUI:
         self.label = ctk.CTkLabel(self.master, text="Login", **styles["title"])
         self.label.pack(pady=12)
         
+        saved_username = self.load_saved_username()
         self.username_entry = ctk.CTkEntry(self.master, placeholder_text="Benutzername", **styles["entry"])
+        self.username_entry.insert(0, saved_username)
         self.username_entry.pack(pady=20)
         
         self.password_entry = ctk.CTkEntry(self.master, placeholder_text="Passwort", show="*", **styles["entry"])
         self.password_entry.pack(pady=10)
+        self.password_entry.bind("<Return>", lambda event: self.login())
         
         self.login_button = ctk.CTkButton(self.master, text="Login", **styles["button"], command=self.login)
         self.login_button.pack(pady=10)
         
+    @staticmethod
+    def get_user_config_path():
+        config_dir = os.path.join(os.path.expanduser("~"), ".timearch")
+        os.makedirs(config_dir, exist_ok=True)
+        return os.path.join(config_dir, "last_user.txt")
+    
+    def load_saved_username(self):
+        path = self.get_user_config_path()
+        if os.path.exists(path):
+            with open(path, "r", encoding="utf-8") as file:
+                return file.read().strip()
+        return ""
+    
+    def save_username(self, username):
+        path = self.get_user_config_path()
+        with open(path, "w", encoding="utf-8") as file:
+            file.write(username)
+
     def login(self):
         """
         Authentifiziert den Benutzer anhand von Benutzername und Passwort.
@@ -95,6 +117,8 @@ class LoginGUI:
                 if user:
                     role, user_id = user
                     messagebox.showinfo("Erfolg", f"Login erfolgreich als {role}")
+                    
+                    self.save_username(username)
                     
                     self.master.destroy()
                     
